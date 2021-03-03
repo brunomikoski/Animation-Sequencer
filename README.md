@@ -19,9 +19,30 @@ I LOVE Tween, I love DOTween even more! But having to wait for a recompilation e
 - Searchable actions allowing fast interactions and updates
 - Can be used for any type of Objects, UI or anything you want! 
 
+## Built in Steps
+ - Tween Target 
+    - DOAnchoredPosition
+    - DOMove
+    - DOScale
+    - DORotate
+    - DOFade (Canvas Group)
+    - DOFade (Graphic)
+    - DOPath
+    - DOShake (Position/Rotation/Scale)
+    - DOPunch (Position/Rotation/Scale)
+    - DOText (TextMeshPro Support)
+    - DOFill  
+ - Play Particle System
+ - Play Animation Sequencer
+
 ## How to use?
 - Animation Sequencer rely on DOTween for now, so it a requirement that you have DOTween on your project with properly created ASMdef for it (Created by the DOTween setup panel)
 - Add the Animation Sequencer to any GameObject and start your animation! 
+- Using the <kbd>+</kbd> button under the `Animation Steps` you can add a new step
+- Select <kbd>Tween Target</kbd>
+- Use the <kbd>Add Actions</kbd> to add specific tweens to your target
+- Press play on the Preview bar to view it on Editor Time.
+- To play it by code, just call use `animationSequencer.Play();`
 
 ## FAQ
 
