@@ -26,7 +26,6 @@ namespace BrunoMikoski.AnimationSequencer
         public bool IsWaitingOnDelay => stepTime < delay;
         public bool IsComplete => stepTime >= delay + Duration;
 
-        
         public virtual void Play()
         {
             isPlaying = true;
@@ -37,6 +36,8 @@ namespace BrunoMikoski.AnimationSequencer
             animationTime = 0;
             stepTime = 0;
         }
+
+        public abstract bool CanBePlayed();
 
         public virtual string GetDisplayName(int index)
         {

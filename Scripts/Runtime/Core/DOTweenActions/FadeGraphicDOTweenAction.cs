@@ -17,14 +17,18 @@ namespace BrunoMikoski.AnimationSequencer
         private float alpha;
         
 
-        public override void PrepareForPlay(GameObject target, float duration, int loops, LoopType loopType)
+        public override bool CreateTween(GameObject target, float duration, int loops, LoopType loopType)
         {
             Graphic graphic = target.GetComponent<Graphic>();
             if (graphic == null)
-                throw new Exception($"{target} does not contain {typeof(Graphic)} component");
+            {
+                Debug.LogError($"{target} does not have {TargetComponentType} component");
+                return false;
+            }
 
             TweenerCore<Color, Color, ColorOptions> graphicTween = graphic.DOFade(alpha, duration);
             SetTween(graphicTween, loops, loopType);
+            return true;
         }
     }
 }

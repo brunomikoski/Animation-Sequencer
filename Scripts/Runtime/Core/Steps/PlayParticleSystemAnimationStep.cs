@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace BrunoMikoski.AnimationSequencer
 {
@@ -7,7 +8,7 @@ namespace BrunoMikoski.AnimationSequencer
     public sealed class PlayParticleSystemAnimationStep : AnimationStepBase
     {
         [SerializeField]
-        private ParticleSystem[] particleSystems;
+        private ParticleSystem particleSystem;
 
         [SerializeField]
         private float duration = 1;
@@ -19,11 +20,17 @@ namespace BrunoMikoski.AnimationSequencer
 
         public override string DisplayName => "Play Particle System";
 
+        public ParticleSystem Target => particleSystem;
+
+        public override bool CanBePlayed()
+        {
+            return particleSystem != null;
+        }
+
         public override void Play()
         {
             base.Play();
-            for (int i = 0; i < particleSystems.Length; i++)
-                particleSystems[i].Play(false);
+            particleSystem.Play();
         }
 
         public override void StepFinished()
@@ -31,17 +38,21 @@ namespace BrunoMikoski.AnimationSequencer
             base.StepFinished();
             if (stopEmittingWhenOver)
             {
-                for (int i = 0; i < particleSystems.Length; i++)
-                    particleSystems[i].Stop(false);
+                particleSystem.Stop();
             }
+        }
+
+        public void SetTarget(ParticleSystem newTarget)
+        {
+            particleSystem = newTarget;
         }
 
         public override string GetDisplayName(int index)
         {
             string display = "NULL";
-            if (particleSystems != null)
-                display = particleSystems.Length.ToString();
-            return $"{index}. Play {display} particle systems";
+            if (particleSystem != null)
+                display = particleSystem.name;
+            return $"{index}. Play {display} particle system";
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace BrunoMikoski.AnimationSequencer
 {
@@ -136,6 +137,37 @@ namespace BrunoMikoski.AnimationSequencer
         private void Update()
         {
             UpdateStep(Time.deltaTime);
+        }
+
+
+        public List<T> GetStepsOfType<T>() where T : AnimationStepBase
+        {
+            List<T> results = new List<T>();
+            for (int i = 0; i < animationSteps.Length; i++)
+            {
+                if (animationSteps[i] is T castedStep)
+                    results.Add(castedStep);
+            }
+
+            return results;
+        }
+
+        public List<DOTweenActionBase> GetDOTweenActionsThatUseComponent<T>() where T : Component
+        {
+            List<DOTweenAnimationStep> dotweenSteps = GetStepsOfType<DOTweenAnimationStep>();
+            List<DOTweenActionBase> results = new List<DOTweenActionBase>();
+            for (int i = 0; i < dotweenSteps.Count; i++)
+            {
+                DOTweenAnimationStep doTweenAnimationStep = dotweenSteps[i];
+                for (int j = 0; j < doTweenAnimationStep.Actions.Length; j++)
+                {
+                    DOTweenActionBase actionBase = doTweenAnimationStep.Actions[j];
+                    if (actionBase.TargetComponentType == typeof(T))
+                        results.Add(actionBase);
+                }
+            }
+
+            return results;
         }
     }
 }

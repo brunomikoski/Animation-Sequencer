@@ -14,18 +14,22 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private AxisConstraint axisConstraint;
 
-        public override void PrepareForPlay(GameObject target, float duration, int loops, LoopType loopType)
+        public override bool CreateTween(GameObject target, float duration, int loops, LoopType loopType)
         {
             RectTransform rectTransform = target.transform as RectTransform;
 
             if (rectTransform == null)
-                throw new Exception($"Anchored Position Move requires {typeof(RectTransform)}");
+            {
+                Debug.LogError($"{target} does not have {TargetComponentType} component");
+                return false;
+            }
 
             TweenerCore<Vector2, Vector2, VectorOptions> anchorPosTween = rectTransform.DOAnchorPos(GetPosition(), duration);
 
             anchorPosTween.SetOptions(axisConstraint);
 
             SetTween(anchorPosTween, loops, loopType);
+            return true;
         }
 
         protected abstract Vector2 GetPosition();

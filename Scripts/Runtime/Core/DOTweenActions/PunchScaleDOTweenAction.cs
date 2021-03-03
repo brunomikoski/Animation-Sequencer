@@ -18,11 +18,12 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private float elasticity = 1f;
 
-        public override void PrepareForPlay(GameObject target, float duration, int loops, LoopType loopType)
+        public override bool CreateTween(GameObject target, float duration, int loops, LoopType loopType)
         {
             Tweener tween = target.transform.DOPunchScale(punch, duration, vibrato, elasticity);
             
             SetTween(tween, loops, loopType);
+            return true;
         }
     }
 }

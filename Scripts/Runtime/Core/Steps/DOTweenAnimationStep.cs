@@ -15,6 +15,7 @@ namespace BrunoMikoski.AnimationSequencer
         private LoopType loopType;
         [SerializeReference]
         private DOTweenActionBase[] actions;
+        public DOTweenActionBase[] Actions => actions;
 
         public override float Duration
         {
@@ -40,9 +41,15 @@ namespace BrunoMikoski.AnimationSequencer
         public override void PrepareForPlay()
         {
             base.PrepareForPlay();
+            if (target == null)
+            {
+                Debug.LogError($"{target} is null on {typeof(DOTweenAnimationStep)}");
+                return;
+            }
+            
             for (int i = 0; i < actions.Length; i++)
             {
-                actions[i].PrepareForPlay(target, duration, loopCount, loopType);
+                actions[i].CreateTween(target, duration, loopCount, loopType);
             }
         }
 

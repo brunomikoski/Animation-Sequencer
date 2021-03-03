@@ -186,7 +186,7 @@ namespace BrunoMikoski.AnimationSequencer
             {
                 AnimationStepBase sequencerControllerAnimationStep = sequencerController.AnimationSteps[i];
                 if (sequencerControllerAnimationStep is PlaySequenceAnimationStep playSequenceAnimationStep)
-                    sequencers.Add(playSequenceAnimationStep.Sequencer);
+                    sequencers.Add(playSequenceAnimationStep.Target);
             }
 
             activeSequencers = sequencers.ToArray();
@@ -202,7 +202,13 @@ namespace BrunoMikoski.AnimationSequencer
             
             sequencerController.OnSequenceFinishedPlayingEvent -= StopPreview;
             for (int i = 0; i < activeSequencers.Length; i++)
-                activeSequencers[i].Stop();
+            {
+                AnimationSequencerController animationSequencerController = activeSequencers[i];
+                if (animationSequencerController == null)
+                    continue;
+                
+                animationSequencerController.Stop();
+            }
            
             isPreviewPlaying = false;
             Repaint();
@@ -229,7 +235,6 @@ namespace BrunoMikoski.AnimationSequencer
                 
                 animationSequencerController.UpdateStep(frameDelta);
             }
-            // Repaint();
         }
 
         private void DrawBoxedArea(string title, Action additionalInspectorGUI)

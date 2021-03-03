@@ -16,15 +16,20 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private float alpha;
 
-        public override void PrepareForPlay(GameObject target, float duration, int loops, LoopType loopType)
+        public override bool CreateTween(GameObject target, float duration, int loops, LoopType loopType)
         {
             CanvasGroup canvasGroup = target.GetComponent<CanvasGroup>();
+
             if (canvasGroup == null)
-                throw new Exception($"Cannot apply fade into target {target}");
+            {
+                Debug.LogError($"{target} does not have {TargetComponentType} component");
+                return false;
+            }
 
             TweenerCore<float, float, FloatOptions> canvasTween = canvasGroup.DOFade(alpha, duration);
 
             SetTween(canvasTween, loops, loopType);
+            return true;
         }
     }
 }

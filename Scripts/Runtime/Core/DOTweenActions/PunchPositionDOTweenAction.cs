@@ -1,6 +1,7 @@
 ﻿using System;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BrunoMikoski.AnimationSequencer
 {
@@ -19,11 +20,12 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private bool snapping;
 
-        public override void PrepareForPlay(GameObject target, float duration, int loops, LoopType loopType)
+        public override bool CreateTween(GameObject target, float duration, int loops, LoopType loopType)
         {
             Tweener tween = target.transform.DOPunchPosition(punch, duration, vibrato, elasticity, snapping);
             
             SetTween(tween, loops, loopType);
+            return true;
         }
     }
 }

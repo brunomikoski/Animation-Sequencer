@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace BrunoMikoski.AnimationSequencer
 {
@@ -10,7 +11,6 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private AnimationSequencerController sequencer;
-        public AnimationSequencerController Sequencer => sequencer;
 
         public override float Duration
         {
@@ -21,12 +21,20 @@ namespace BrunoMikoski.AnimationSequencer
                 return sequencer.Duration;
             }
         }
+        
+        public AnimationSequencerController Target => sequencer;
+
+        public override bool CanBePlayed()
+        {
+            return sequencer != null;
+        }
 
         public override void PrepareForPlay()
         {
             base.PrepareForPlay();
             sequencer.PrepareForPlay();
         }
+
 
         public override void Play()
         {
@@ -40,6 +48,11 @@ namespace BrunoMikoski.AnimationSequencer
             if (sequencer != null)
                 display = sequencer.name;
             return $"{index}. Play {display} Sequence";
+        }
+
+        public void SetTarget(AnimationSequencerController newTarget)
+        {
+            sequencer = newTarget;
         }
     }
 }

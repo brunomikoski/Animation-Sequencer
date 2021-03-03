@@ -16,7 +16,8 @@ namespace BrunoMikoski.AnimationSequencer
         private AnimationCurve curve;
 
         private EaseFunction easeFunction;
-        
+
+
         public bool UseCustomCurve => ease == Ease.INTERNAL_Custom;
 
         public CustomEase(AnimationCurve curve)
@@ -33,6 +34,11 @@ namespace BrunoMikoski.AnimationSequencer
             curve = null;
         }
 
+        public CustomEase()
+        {
+            ease = Ease.InOutCirc;
+        }
+        
         public float Lerp(float from, float to, float fraction)
         {
             return Mathf.Lerp(from, to, Evaluate(fraction));

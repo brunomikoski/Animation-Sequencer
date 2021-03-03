@@ -21,11 +21,12 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private bool fadeout = true;
 
-        public override void PrepareForPlay(GameObject target, float duration, int loops, LoopType loopType)
+        public override bool CreateTween(GameObject target, float duration, int loops, LoopType loopType)
         {
             Tweener tween = target.transform.DOShakePosition(duration, strength, vibrato, randomness, snapping, fadeout);
             
             SetTween(tween, loops, loopType);
+            return true;
         }
     }
 }

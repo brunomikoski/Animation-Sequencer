@@ -2,8 +2,10 @@
 using DG.DOTweenEditor;
 using DG.Tweening;
 using DG.Tweening.Core;
+using DG.Tweening.Plugins.Core.PathCore;
 using DG.Tweening.Plugins.Options;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace BrunoMikoski.AnimationSequencer
 {
@@ -27,12 +29,15 @@ namespace BrunoMikoski.AnimationSequencer
         
         protected Tweener tweener;
 
-        public abstract void PrepareForPlay(GameObject target, float duration, int loops, LoopType loopType);
+        public abstract bool CreateTween(GameObject target, float duration, int loops, LoopType loopType);
 
         public virtual Type TargetComponentType { get; } 
 
         public void Play()
         {
+            if (tweener == null)
+                return;
+            
             if (Application.isPlaying)
             {
                 tweener.Play();
@@ -53,6 +58,17 @@ namespace BrunoMikoski.AnimationSequencer
             tween.SetEase(ease);
             tween.SetRelative(isRelative);
             tween.SetLoops(loops, loopType);
+            tween.Pause();
+            tweener = tween;
+        }
+
+        protected void SetTween(TweenerCore<Vector3,Path,PathOptions> tween)
+        {
+            if (direction == AnimationDirection.From)
+                tween.From();
+
+            tween.SetEase(ease);
+            tween.SetRelative(isRelative);
             tween.Pause();
             tweener = tween;
         }

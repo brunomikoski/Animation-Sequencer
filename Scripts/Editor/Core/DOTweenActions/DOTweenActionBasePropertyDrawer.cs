@@ -29,9 +29,9 @@ namespace BrunoMikoski.AnimationSequencer
             foreach (SerializedProperty serializedProperty in property.GetChildren())
             {
                 Rect propertyRect = position;
-                EditorGUI.PropertyField(propertyRect, serializedProperty);
+                EditorGUI.PropertyField(propertyRect, serializedProperty, true);
 
-                position.y += EditorGUI.GetPropertyHeight(serializedProperty);  
+                position.y += EditorGUI.GetPropertyHeight(serializedProperty, true);  
             }
             
             position.x -= 10;
