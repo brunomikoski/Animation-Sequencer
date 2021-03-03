@@ -6,6 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace BrunoMikoski.AnimationSequencer
 {
+    [DisallowMultipleComponent]
     public class AnimationSequencerController : MonoBehaviour
     {
         [SerializeReference]
