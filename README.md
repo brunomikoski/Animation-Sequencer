@@ -7,7 +7,7 @@
 ![example](https://user-images.githubusercontent.com/600419/109826506-c299cb00-7c32-11eb-8b0d-8c0e97c4b5b7.gif)
 
 
-I LOVE Tween, I love DOTween even more! But having to wait for a recompilation every time you tweak a single value on some animation it's frustrating! Even more complicated is properly have to create the entire animation on your head and having to wait until you reach your animation to see what you have done! That's why I created the Animation Sequencer, it is **HEAVILY INSPIRED** (~~cloned~~) by [Space Ape](https://spaceapegames.com/) [Creative Engineering: Balancing & Juicing with Animations presentation](https://youtu.be/4JoBw212Kyg) .
+I LOVE Tween, I love DOTween even more! But having to wait for a recompilation every time you tweak a single value on some animation it's frustrating! Even more complicated is properly have to create the entire animation on your head and having to wait until you reach your animation to see what you have done! That's why I created the Animation Sequencer, it is (~~cloned~~) **HEAVILY INSPIRED** from [Space Ape](https://spaceapegames.com/) amazing [Creative Engineering: Balancing & Juicing with Animations](https://youtu.be/4JoBw212Kyg) presentation.
 
 *This is still in heavy development, please use it carefully*
 
