@@ -10,12 +10,12 @@
     "sequence"
   ],
   "category": "editor extensions",
-  "homepage": "https://github.com/brunomikoski/animationsequencer",
+  "homepage": "https://github.com/brunomikoski/Animation-Sequencer",
   "repository": {
     "type": "git",
-    "url": "https://github.com/brunomikoski/animationsequencer.git"
+    "url": "https://github.com/brunomikoski/Animation-Sequencer.git"
   },
-  "bugs": "https://github.com/brunomikoski/animationsequencer/issues",
+  "bugs": "https://github.com/brunomikoski/Animation-Sequencer/issues",
   "author": {
     "name": "Bruno Mikoski",
     "url": "https://www.brunomikoski.com"
