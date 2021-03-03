@@ -48,7 +48,7 @@ I LOVE Tween, I love DOTween even more! But having to wait for a recompilation e
 
 <details>
     
-<summary>How to create a custom Step for you project?</summary> 
+<summary>How can I create my custom DOTween actions?</summary> 
 Lets say you want to create a new action to play a specific sound from your sound manager on the game, you just need to extend the `AnimationStepBase`
 
 ```c#
