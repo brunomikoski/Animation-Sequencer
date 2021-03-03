@@ -4,18 +4,18 @@
 [![](https://img.shields.io/github/followers/brunomikoski?label=Follow&style=social)](https://github.com/brunomikoski) [![](https://img.shields.io/twitter/follow/brunomikoski?style=social)](https://twitter.com/brunomikoski)
 
 
+![example](https://user-images.githubusercontent.com/600419/109826506-c299cb00-7c32-11eb-8b0d-8c0e97c4b5b7.gif)
 
 
 I LOVE Tween, I love DOTween even more! But having to wait for a recompilation every time you tweak a single value on some animation it's frustrating! Even more complicated is properly have to create the entire animation on your head and having to wait until you reach your animation to see what you have done! That's why I created the Animation Sequencer, it is **HEAVILY INSPIRED** (~~cloned~~) by [Space Ape](https://spaceapegames.com/) *UIAnimSequencer*.
 
-
+*This is still in heavy development, please use it carefully*
 
 ## Features
 - Allow you to create a complex sequence of Tweens/Actions and play on Editor Mode!
 - User Friendly interface with a lot of customization
 - Easy to extend with project specific actions
 - Chain sequences and control entire animated windows with a single interface
-- Can be used on both UI or any other object on the project.
 - Searchable actions allowing fast interactions and updates
 - Can be used for any type of Objects, UI or anything you want! 
 
@@ -26,8 +26,10 @@ I LOVE Tween, I love DOTween even more! But having to wait for a recompilation e
 ## FAQ
 
 <details>
+    
 <summary>How to create a custom Step for you project?</summary> 
 Lets say you want to create a new action to play a specific sound from your sound manager on the game, you just need to extend the `AnimationStepBase`
+
 ```c#
 [Serializable]
 public class PlayAudioClipAnimationStep : AnimationStepBase
@@ -47,10 +49,14 @@ public class PlayAudioClipAnimationStep : AnimationStepBase
         AudioManager.Play(audioClip);
     }
 }
-```  
+```
+
 </details>
 
-### I have my own DOTween extensions, can I use that? 
+<details>
+
+<summary>I have my own DOTween extensions, can I use that? </summary>
+
 Absolutely! The same as the step, you can add any new DOTween action by extending `DOTweenActionBase`. In order to avoid any performance issues all the tweens are created on the PrepareToPlay method on Awake, and are paused.
 
 ```c#
@@ -79,7 +85,16 @@ public sealed class ChangeMaterialStrengthDOTweenAction : DOTweenActionBase
 
 ![custom-tween-action](https://user-images.githubusercontent.com/600419/109774425-3965a280-7bf8-11eb-9bfe-90b0be8b8617.gif)
 
+</details>
 
+<details>
+    <summary>Using custom animation curve as easing </summary>
+    
+You can use the Custom ease to define an *AnimationCurve* for the Tween.
+    
+![custom-ease](https://user-images.githubusercontent.com/600419/109780020-7af94c00-7bfe-11eb-8f0f-52480dd97ea3.gif)
+
+</details>
 
 ## System Requirements
 Unity 2018.4.0 or later versions
