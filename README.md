@@ -91,15 +91,16 @@ public sealed class ChangeMaterialStrengthDOTweenAction : DOTweenActionBase
     [SerializeField, Range(0,1)]
     private float materialStrength = 1;
 
-    public override void PrepareForPlay(GameObject target, float duration, int loops, LoopType loopType)
-    {
+     public override bool CreateTween(GameObject target, float duration, int loops, LoopType loopType)
+     {
         Renderer renderer = target.GetComponent<Renderer>();
         if (renderer == null)
-            return;
+            return false;
 
         TweenerCore<float, float, FloatOptions> materialTween = renderer.sharedMaterial.DOFloat(materialStrength, "Strength", duration);
         
         SetTween(materialTween, loops, loopType);
+        return true;
     }
 }
 ```
