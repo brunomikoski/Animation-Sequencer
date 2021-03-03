@@ -147,7 +147,7 @@ To add it the package to your project:
 </details>
 
 <details>
-<summary>Add from GitHub | <em>not recommended, no updates through PackMan</em></summary>
+<summary>Add from GitHub | <em>not recommended, no updates :( </em></summary>
 
 You can also add it directly from GitHub on Unity 2019.4+. Note that you won't be able to receive updates through Package Manager this way, you'll have to update manually.
 
