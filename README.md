@@ -25,7 +25,8 @@ I LOVE Tween, I love DOTween even more! But having to wait for a recompilation e
 
 ## FAQ
 
-### How to create a custom Step for you project? 
+<details>
+<summary>How to create a custom Step for you project?</summary> 
 Lets say you want to create a new action to play a specific sound from your sound manager on the game, you just need to extend the `AnimationStepBase`
 ```c#
 [Serializable]
@@ -47,38 +48,37 @@ public class PlayAudioClipAnimationStep : AnimationStepBase
     }
 }
 ```  
-
+</details>
 
 ### I have my own DOTween extensions, can I use that? 
 Absolutely! The same as the step, you can add any new DOTween action by extending `DOTweenActionBase`. In order to avoid any performance issues all the tweens are created on the PrepareToPlay method on Awake, and are paused.
 
 ```c#
 [Serializable]
-public class ChangePropertyOfMaterial : DOTweenActionBase
+public sealed class ChangeMaterialStrengthDOTweenAction : DOTweenActionBase
 {
-    [SerializeField]
-    private Material material;
-    [SerializeField]
-    private float strength;
-    private TweenerCore<float, float, FloatOptions> tween;
+    public override string DisplayName => "Change Material Strength";
+        
+    public override Type TargetComponentType => typeof(Renderer);
 
-    public override string DisplayName => "Change Material";
+    [SerializeField, Range(0,1)]
+    private float materialStrength = 1;
 
-    //The Play of this step, its just playing the tween
-    public override void Play()
-    {
-        Play(tween);
-    }
-    
-    //Create the tween itself and pause it, to be used later
     public override void PrepareForPlay(GameObject target, float duration, int loops, LoopType loopType)
     {
-        tween = material.DOFloat(strength, "strength", duration);
+        Renderer renderer = target.GetComponent<Renderer>();
+        if (renderer == null)
+            return;
 
-        SetBaseTween(tween, loops, looptype);
+        TweenerCore<float, float, FloatOptions> materialTween = renderer.sharedMaterial.DOFloat(materialStrength, "Strength", duration);
+        
+        SetTween(materialTween, loops, loopType);
     }
 }
 ```
+
+![custom-tween-action](https://user-images.githubusercontent.com/600419/109774425-3965a280-7bf8-11eb-9bfe-90b0be8b8617.gif)
+
 
 
 ## System Requirements
