@@ -36,7 +36,7 @@ I LOVE Tween, I love DOTween even more! But having to wait for a recompilation e
  - Play Animation Sequencer
 
 ## How to use?
-- Animation Sequencer rely on DOTween for now, so it a requirement that you have DOTween on your project with properly created ASMdef for it (Created by the DOTween setup panel)
+- Animation Sequencer rely on DOTween for now, so it a requirement that you have `DOTween` on your project with properly created `asmdef` for it (Created by the `DOTween` setup panel)
 - Add the Animation Sequencer to any GameObject and start your animation! 
 - Using the <kbd>+</kbd> button under the `Animation Steps` you can add a new step
 - Select <kbd>Tween Target</kbd>
