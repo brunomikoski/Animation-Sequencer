@@ -1,12 +1,39 @@
 # Animation Sequencer
-[![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/brunomikoski/ScriptableObjectCollection/blob/develop/LICENSE)
-[![openupm](https://img.shields.io/npm/v/com.brunomikoski.animationsequencer?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.brunomikoski.animationsequencer/) 
 
-[![](https://img.shields.io/github/followers/brunomikoski?label=Follow&style=social)](https://github.com/brunomikoski) [![](https://img.shields.io/twitter/follow/brunomikoski?style=social)](https://twitter.com/brunomikoski)
+<p align="center">
+    <a href="https://github.com/brunomikoski/Animation-Sequencer/blob/master/LICENSE.md">
+		<img alt="GitHub license" src ="https://img.shields.io/github/license/Thundernerd/Unity3D-PackageManagerModules" />
+	</a>
 
+</p> 
+<p align="center">
+    <a href="https://openupm.com/packages/com.brunomikoski.animationsequencer/">
+        <img src="https://img.shields.io/npm/v/com.brunomikoski.animationsequencer?label=openupm&amp;registry_uri=https://package.openupm.com" />
+    </a>
 
-![example](https://user-images.githubusercontent.com/600419/109826506-c299cb00-7c32-11eb-8b0d-8c0e97c4b5b7.gif)
+  <a href="https://github.com/brunomikoski/Animation-Sequencer/issues">
+     <img alt="GitHub issues" src ="https://img.shields.io/github/issues/Thundernerd/Unity3D-PackageManagerModules" />
+  </a>
 
+  <a href="https://github.com/brunomikoski/Animation-Sequencer/pulls">
+   <img alt="GitHub pull requests" src ="https://img.shields.io/github/issues-pr/Thundernerd/Unity3D-PackageManagerModules" />
+  </a>
+  
+  <img alt="GitHub last commit" src ="https://img.shields.io/github/last-commit/Thundernerd/Unity3D-PackageManagerModules" />
+</p>
+
+<p align="center">
+    <a href="https://github.com/brunomikoski">
+        <img alt="GitHub followers" src="https://img.shields.io/github/followers/brunomikoski?style=social">
+    </a>
+    <a href="https://twitter.com/brunomikoski">
+       <img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/brunomikoski?style=social">
+    </a>
+</p>
+
+<p align="center">
+  <img alt="Example" src="https://user-images.githubusercontent.com/600419/109826506-c299cb00-7c32-11eb-8b0d-8c0e97c4b5b7.gif">
+</p>
 
 I LOVE Tween, I love DOTween even more! But having to wait for a recompilation every time you tweak a single value on some animation it's frustrating! Even more complicated is properly have to visualize the entire animation on your head and having to wait until you reach your animation to see what you have done! That's why I created the Animation Sequencer, it is (~~cloned~~) **HEAVILY INSPIRED** from [Space Ape](https://spaceapegames.com/) amazing [Creative Engineering: Balancing & Juicing with Animations](https://youtu.be/4JoBw212Kyg) presentation.
 
