@@ -23,12 +23,12 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/brunomikoski">
-        <img alt="GitHub followers" src="https://img.shields.io/github/followers/brunomikoski?style=social">
-    </a>
-    <a href="https://twitter.com/brunomikoski">
-       <img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/brunomikoski?style=social">
-    </a>
+    	<a href="https://github.com/brunomikoski">
+        	<img alt="GitHub followers" src="https://img.shields.io/github/followers/brunomikoski?style=social">
+	</a>	
+	<a href="https://twitter.com/brunomikoski">
+		<img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/brunomikoski?style=social">
+	</a>
 </p>
 
 <p align="center">
