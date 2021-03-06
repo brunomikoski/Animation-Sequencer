@@ -12,14 +12,14 @@
     </a>
 
   <a href="https://github.com/brunomikoski/Animation-Sequencer/issues">
-     <img alt="GitHub issues" src ="https://img.shields.io/github/issues/Thundernerd/Unity3D-PackageManagerModules" />
+     <img alt="GitHub issues" src ="https://img.shields.io/github/issues/brunomikoski/Animation-Sequencer" />
   </a>
 
   <a href="https://github.com/brunomikoski/Animation-Sequencer/pulls">
-   <img alt="GitHub pull requests" src ="https://img.shields.io/github/issues-pr/Thundernerd/Unity3D-PackageManagerModules" />
+   <img alt="GitHub pull requests" src ="https://img.shields.io/github/issues-pr/brunomikoski/Animation-Sequencer" />
   </a>
   
-  <img alt="GitHub last commit" src ="https://img.shields.io/github/last-commit/Thundernerd/Unity3D-PackageManagerModules" />
+  <img alt="GitHub last commit" src ="https://img.shields.io/github/last-commit/brunomikoski/Animation-Sequencer" />
 </p>
 
 <p align="center">
