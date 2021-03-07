@@ -65,5 +65,7 @@ namespace BrunoMikoski.AnimationSequencer
         {
             isPlaying = false;
         }
+
+        public abstract void Complete();
     }
 }

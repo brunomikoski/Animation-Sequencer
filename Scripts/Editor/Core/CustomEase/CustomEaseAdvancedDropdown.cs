@@ -7,7 +7,7 @@ namespace BrunoMikoski.AnimationSequencer
 {
     public sealed class CustomEaseAdvancedDropdownItem : AdvancedDropdownItem
     {
-        private int easeEnumIndex;
+        private readonly int easeEnumIndex;
         public int EaseEnumIndex => easeEnumIndex;
 
         public CustomEaseAdvancedDropdownItem(int enumIndex, string displayName) : base(displayName)

@@ -10,7 +10,7 @@ namespace BrunoMikoski.AnimationSequencer
     {
         public override string DisplayName => "Tween Target";
         [SerializeField]
-        private int loopCount = 0;
+        private int loopCount;
         [SerializeField]
         private LoopType loopType;
         [SerializeReference]
@@ -35,6 +35,14 @@ namespace BrunoMikoski.AnimationSequencer
             for (int i = 0; i < actions.Length; i++)
             {
                 actions[i].Play();
+            }
+        }
+
+        public override void Complete()
+        {
+            for (int i = 0; i < actions.Length; i++)
+            {
+                actions[i].Complete();
             }
         }
 
