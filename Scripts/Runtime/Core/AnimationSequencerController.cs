@@ -2,13 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace BrunoMikoski.AnimationSequencer
 {
     [DisallowMultipleComponent]
     public class AnimationSequencerController : MonoBehaviour
     {
+        public enum InitializeMode
+        {
+            None,
+            PrepareToPlayOnAwake,
+            PlayOnAwake
+        }
+        
         [SerializeReference]
         private AnimationStepBase[] animationSteps = new AnimationStepBase[0];
         public AnimationStepBase[] AnimationSteps => animationSteps;
@@ -16,6 +22,9 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private float duration;
         public float Duration => duration;
+
+        [SerializeField]
+        private InitializeMode initializeMode = InitializeMode.PlayOnAwake;
 
         private bool isPlaying;
         public bool IsPlaying => isPlaying;
@@ -28,13 +37,33 @@ namespace BrunoMikoski.AnimationSequencer
 
         private void Awake()
         {
-            PrepareForPlay();
+            if (initializeMode == InitializeMode.PlayOnAwake || initializeMode == InitializeMode.PrepareToPlayOnAwake)
+            {
+                PrepareForPlay();
+                if (initializeMode == InitializeMode.PlayOnAwake)
+                    Play();
+            }
         }
 
         public void Play()
         {
             PrepareForPlay();
             isPlaying = true;
+        }
+
+        public void Complete()
+        {
+            if (!isPlaying)
+                return;
+            for (int i = 0; i < animationSteps.Length; i++)
+            {
+                AnimationStepBase animationStepBase = animationSteps[i];
+                if (animationStepBase.IsComplete)
+                    continue;
+                
+                animationStepBase.Complete();
+            }
+            AnimationFinished();
         }
 
         public void Stop()
@@ -55,9 +84,9 @@ namespace BrunoMikoski.AnimationSequencer
                 yield return null;
         }
 
-        public void PrepareForPlay()
+        public void PrepareForPlay(bool force = false)
         {
-            if (preparedToPlay)
+            if (!force && preparedToPlay)
                 return;
 
             for (int i = 0; i < animationSteps.Length; i++)

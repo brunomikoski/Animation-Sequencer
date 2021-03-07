@@ -9,7 +9,6 @@ namespace BrunoMikoski.AnimationSequencer
     {
         [SerializeField]
         protected GameObject target;
-        public new GameObject Target => target;
 
         [SerializeField]
         protected float duration = 1;

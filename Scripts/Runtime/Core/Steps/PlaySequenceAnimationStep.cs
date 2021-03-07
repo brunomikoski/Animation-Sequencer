@@ -54,5 +54,10 @@ namespace BrunoMikoski.AnimationSequencer
         {
             sequencer = newTarget;
         }
+
+        public override void Complete()
+        {
+            sequencer.Complete();
+        }
     }
 }

@@ -54,5 +54,10 @@ namespace BrunoMikoski.AnimationSequencer
                 display = particleSystem.name;
             return $"{index}. Play {display} particle system";
         }
+
+        public override void Complete()
+        {
+            
+        }
     }
 }

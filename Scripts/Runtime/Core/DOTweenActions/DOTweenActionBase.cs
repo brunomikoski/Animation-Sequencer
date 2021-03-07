@@ -72,5 +72,10 @@ namespace BrunoMikoski.AnimationSequencer
             tween.Pause();
             tweener = tween;
         }
+
+        public void Complete()
+        {
+            tweener?.Complete();
+        }
     }
 }

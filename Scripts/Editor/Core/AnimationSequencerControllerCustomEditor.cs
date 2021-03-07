@@ -106,6 +106,7 @@ namespace BrunoMikoski.AnimationSequencer
         public override void OnInspectorGUI()
         {
             EditorGUI.BeginChangeCheck();
+            DrawBoxedArea("Settings", DrawSettings);
             DrawBoxedArea("Preview", DrawPreviewControls);
             bool wasGUIEnabled = GUI.enabled;
             if (sequencerController.IsPlaying)
@@ -115,6 +116,17 @@ namespace BrunoMikoski.AnimationSequencer
             GUI.enabled = wasGUIEnabled;
             if (EditorGUI.EndChangeCheck())
                 CalculateTotalAnimationTime();
+        }
+
+        private void DrawSettings()
+        {
+            SerializedProperty initializationModeSerializedProperty = serializedObject.FindProperty("initializeMode");
+            using (EditorGUI.ChangeCheckScope changedCheck = new EditorGUI.ChangeCheckScope())
+            {
+                EditorGUILayout.PropertyField(initializationModeSerializedProperty);
+                if (changedCheck.changed)
+                    serializedObject.ApplyModifiedProperties();
+            }
         }
 
         private void CalculateTotalAnimationTime()
@@ -130,7 +142,7 @@ namespace BrunoMikoski.AnimationSequencer
                 sequenceDuration += animationStep.Delay + animationStep.Duration;
             }
 
-            if (Mathf.Approximately(sequenceDuration, durationSerializedProperty.floatValue))
+            if (!Mathf.Approximately(sequenceDuration, durationSerializedProperty.floatValue))
             {
                 durationSerializedProperty.floatValue = sequenceDuration;
                 serializedObject.ApplyModifiedProperties();
@@ -147,15 +159,26 @@ namespace BrunoMikoski.AnimationSequencer
                 {
                     Play();
                 }
+                
                 EditorGUI.EndDisabledGroup();
             }
             else
             {
+                if (GUILayout.Button("Complete"))
+                {
+                    Complete();
+                }
+                
                 if (GUILayout.Button("Stop"))
                 {
                     StopPreview();
                 }
             }
+        }
+
+        private void Complete()
+        {
+            sequencerController.Complete();
         }
 
         private void Play()
@@ -169,7 +192,8 @@ namespace BrunoMikoski.AnimationSequencer
                 lastFrameTime = EditorApplication.timeSinceStartup;
                 isPreviewPlaying = true;
             }
-            
+
+            sequencerController.PrepareForPlay(true);
             sequencerController.Play();
         }
 
@@ -245,14 +269,13 @@ namespace BrunoMikoski.AnimationSequencer
                 rect.x -= 4;
                 rect.width += 8;
                 rect.y -= 4;
-                GUIStyle style = GUI.skin.GetStyle("MeTransitionHead");
-                style.normal.textColor = Color.white;
-                GUI.Label(rect, title, style);
+                GUIStyle foldoutHeader = new GUIStyle(EditorStyles.foldoutHeader);
+                    
+                EditorGUI.LabelField(rect, title, foldoutHeader);
                 EditorGUILayout.Space();
                 additionalInspectorGUI.Invoke();
             }
         }
-        
         
         private void OnDrawAnimationStep(Rect rect, int index, bool isActive, bool isFocused)
         {

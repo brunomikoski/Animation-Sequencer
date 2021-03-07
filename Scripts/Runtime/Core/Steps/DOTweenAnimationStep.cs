@@ -38,6 +38,14 @@ namespace BrunoMikoski.AnimationSequencer
             }
         }
 
+        public override void Complete()
+        {
+            for (int i = 0; i < actions.Length; i++)
+            {
+                actions[i].Complete();
+            }
+        }
+
         public override void PrepareForPlay()
         {
             base.PrepareForPlay();
