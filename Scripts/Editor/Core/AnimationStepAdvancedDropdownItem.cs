@@ -5,7 +5,7 @@ namespace BrunoMikoski.AnimationSequencer
 {
     public sealed class AnimationStepAdvancedDropdownItem : AdvancedDropdownItem
     {
-        private Type animationStepType;
+        private readonly Type animationStepType;
         public Type AnimationStepType => animationStepType;
 
         public AnimationStepAdvancedDropdownItem(AnimationStepBase animationStepBase) : base(animationStepBase.DisplayName)
