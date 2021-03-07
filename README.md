@@ -149,12 +149,11 @@ You can use the Custom ease to define an *AnimationCurve* for the Tween.
 
 <details>
    <summary>What are the differences between the initialization settings</summary>
-- None 
-   Don't do anything on the AnimationSequencer Awake method
-- PrepareToPlayOnAwake
-   This will make sure the Tweens that are from are prepared to play at the intial value on Awake.
-- PlayOnAwake
-   Will play the tween on Awake.
+	
+- <kbd>None</kbd> *Don't do anything on the AnimationSequencer Awake method*	
+- <kbd>PrepareToPlayOnAwake</kbd> *This will make sure the Tweens that are from are prepared to play at the intial value on Awake.*
+- <kbd>PlayOnAwake</kbd> Will play the tween on Awake.*
+   
 </details>
 
 ## System Requirements
