@@ -7,6 +7,7 @@
 
 </p> 
 <p align="center">
+	<a href="https://www.codacy.com/gh/brunomikoski/Animation-Sequencer/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=brunomikoski/Animation-Sequencer&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/ab4c5923ca0545c9b8c85d87adbd689a"/></a>
     <a href="https://openupm.com/packages/com.brunomikoski.animationsequencer/">
         <img src="https://img.shields.io/npm/v/com.brunomikoski.animationsequencer?label=openupm&amp;registry_uri=https://package.openupm.com" />
     </a>
