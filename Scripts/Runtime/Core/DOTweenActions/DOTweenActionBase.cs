@@ -26,6 +26,8 @@ namespace BrunoMikoski.AnimationSequencer
         protected CustomEase ease = CustomEase.InOutCirc;
         [SerializeField]
         protected bool isRelative;
+        [SerializeField]
+        protected bool canRewind = true;
         
         protected Tweener tweener;
 
@@ -55,6 +57,10 @@ namespace BrunoMikoski.AnimationSequencer
             if (direction == AnimationDirection.From)
                 tween.From();
 
+            if (canRewind)
+            {
+                tween.SetAutoKill(false);
+            }
             tween.SetEase(ease);
             tween.SetRelative(isRelative);
             tween.SetLoops(loops, loopType);
@@ -67,6 +73,10 @@ namespace BrunoMikoski.AnimationSequencer
             if (direction == AnimationDirection.From)
                 tween.From();
 
+            if (canRewind)
+            {
+                tween.SetAutoKill(false);
+            }
             tween.SetEase(ease);
             tween.SetRelative(isRelative);
             tween.Pause();
@@ -76,6 +86,16 @@ namespace BrunoMikoski.AnimationSequencer
         public void Complete()
         {
             tweener?.Complete();
+        }
+
+        public void Rewind()
+        {
+            if (!canRewind)
+            {
+                throw new Exception($"Requested rewind for non-rewind tween action {DisplayName}");
+            }
+            
+            tweener?.Rewind();
         }
     }
 }
