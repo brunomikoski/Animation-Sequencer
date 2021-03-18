@@ -27,7 +27,7 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         protected bool isRelative;
         [SerializeField]
-        protected bool canRewind = true;
+        protected bool autoKill = false;
         
         protected Tweener tweener;
 
@@ -57,10 +57,7 @@ namespace BrunoMikoski.AnimationSequencer
             if (direction == AnimationDirection.From)
                 tween.From();
 
-            if (canRewind)
-            {
-                tween.SetAutoKill(false);
-            }
+            tween.SetAutoKill(autoKill);
             tween.SetEase(ease);
             tween.SetRelative(isRelative);
             tween.SetLoops(loops, loopType);
@@ -73,10 +70,7 @@ namespace BrunoMikoski.AnimationSequencer
             if (direction == AnimationDirection.From)
                 tween.From();
 
-            if (canRewind)
-            {
-                tween.SetAutoKill(false);
-            }
+            tween.SetAutoKill(autoKill);
             tween.SetEase(ease);
             tween.SetRelative(isRelative);
             tween.Pause();
@@ -90,9 +84,9 @@ namespace BrunoMikoski.AnimationSequencer
 
         public void Rewind()
         {
-            if (!canRewind)
+            if (autoKill)
             {
-                throw new Exception($"Requested rewind for non-rewind tween action {DisplayName}");
+                throw new Exception($"Rewind not possible when autoKill enabled. Tween: {DisplayName}");
             }
             
             tweener?.Rewind();
