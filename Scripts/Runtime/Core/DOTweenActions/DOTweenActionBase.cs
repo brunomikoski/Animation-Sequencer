@@ -27,7 +27,7 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         protected bool isRelative;
         [SerializeField]
-        protected bool autoKill = false;
+        protected bool autoKill;
         
         protected Tweener tweener;
 
