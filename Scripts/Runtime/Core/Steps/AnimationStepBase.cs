@@ -37,6 +37,10 @@ namespace BrunoMikoski.AnimationSequencer
             stepTime = 0;
         }
 
+        public virtual void Rewind()
+        {
+        }
+
         public abstract bool CanBePlayed();
 
         public virtual string GetDisplayName(int index)

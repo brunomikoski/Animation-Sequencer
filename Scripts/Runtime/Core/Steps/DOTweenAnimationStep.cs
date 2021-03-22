@@ -38,6 +38,15 @@ namespace BrunoMikoski.AnimationSequencer
             }
         }
 
+        public override void Rewind()
+        {
+            base.Rewind();
+            for (int i = 0; i < actions.Length; ++i)
+            {
+                actions[i].Rewind();
+            }
+        }
+
         public override void Complete()
         {
             for (int i = 0; i < actions.Length; i++)

@@ -51,6 +51,14 @@ namespace BrunoMikoski.AnimationSequencer
             isPlaying = true;
         }
 
+        public void Rewind()
+        {
+            for (int i = 0; i < animationSteps.Length; ++i)
+            {
+                animationSteps[i].Rewind();
+            }
+        }
+
         public void Complete()
         {
             if (!isPlaying)
