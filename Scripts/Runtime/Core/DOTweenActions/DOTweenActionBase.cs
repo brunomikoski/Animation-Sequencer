@@ -1,11 +1,12 @@
 ﻿using System;
+#if UNITY_EDITOR
 using DG.DOTweenEditor;
+#endif
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Core.PathCore;
 using DG.Tweening.Plugins.Options;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace BrunoMikoski.AnimationSequencer
 {
