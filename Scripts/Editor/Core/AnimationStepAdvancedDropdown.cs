@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using BrunoMikoski.AnimationSequencer.Utility;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
@@ -27,7 +28,11 @@ namespace BrunoMikoski.AnimationSequencer
                 
                 AnimationStepBase animationStepBase = Activator.CreateInstance(animatedItemType) as AnimationStepBase;
 
-                root.AddChild(new AnimationStepAdvancedDropdownItem(animationStepBase));
+                string displayName = animatedItemType.Name;
+                if (!string.IsNullOrEmpty(animationStepBase.DisplayName))
+                    displayName = animationStepBase.DisplayName;
+
+                root.AddChild(new AnimationStepAdvancedDropdownItem(animationStepBase, displayName));
             }
 
             return root;
