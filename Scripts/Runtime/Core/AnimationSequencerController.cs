@@ -35,6 +35,9 @@ namespace BrunoMikoski.AnimationSequencer
 
         public event Action OnSequenceFinishedPlayingEvent;
 
+        public event Action<int> OnAnimationStepBeginEvent;
+        public event Action<int> OnAnimationStepFinishedEvent;
+
         private void Awake()
         {
             if (initializeMode == InitializeMode.PlayOnAwake || initializeMode == InitializeMode.PrepareToPlayOnAwake)
@@ -126,6 +129,7 @@ namespace BrunoMikoski.AnimationSequencer
                 if (!animationStepBase.IsPlaying)
                 {
                     animationStepBase.Play();
+                    DispatchOnStepBeginToPlay(animationStepBase);
                 }
                 else
                 {
@@ -134,6 +138,7 @@ namespace BrunoMikoski.AnimationSequencer
 
                     animationStepBase.StepFinished();
                     stepsToBePlayed.Remove(animationStepBase);
+                    DispatchOnStepFinished(animationStepBase);
                 }
             }
 
@@ -148,6 +153,24 @@ namespace BrunoMikoski.AnimationSequencer
                     UpdateNextSteps();
                 }
             }
+        }
+
+        private void DispatchOnStepBeginToPlay(AnimationStepBase animationStepBase)
+        {
+            int index = Array.IndexOf(animationSteps, animationStepBase);
+            if (index == -1)
+                return;
+            
+            OnAnimationStepBeginEvent?.Invoke(index);
+        }
+        
+        private void DispatchOnStepFinished(AnimationStepBase animationStepBase)
+        {
+            int index = Array.IndexOf(animationSteps, animationStepBase);
+            if (index == -1)
+                return;
+            
+            OnAnimationStepFinishedEvent?.Invoke(index);
         }
 
         private void UpdateNextSteps()
