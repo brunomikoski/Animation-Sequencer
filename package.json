@@ -1,7 +1,7 @@
 {
   "name": "com.brunomikoski.animationsequencer",
   "displayName": "Animation Sequencer",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "unity": "2018.4",
   "description": "Animation sequencer is a way to create complex animations of sequence of events by a friendly user interface",
   "keywords": [
