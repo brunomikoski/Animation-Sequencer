@@ -47,7 +47,7 @@ namespace BrunoMikoski.AnimationSequencer
             particleSystem = newTarget;
         }
 
-        public override string GetDisplayName(int index)
+        public override string GetDisplayNameForEditor(int index)
         {
             string display = "NULL";
             if (particleSystem != null)

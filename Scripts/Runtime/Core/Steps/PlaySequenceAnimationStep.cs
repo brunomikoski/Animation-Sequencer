@@ -42,7 +42,7 @@ namespace BrunoMikoski.AnimationSequencer
             sequencer.Play();
         }
 
-        public override string GetDisplayName(int index)
+        public override string GetDisplayNameForEditor(int index)
         {
             string display = "NULL";
             if (sequencer != null)

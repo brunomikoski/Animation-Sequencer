@@ -296,7 +296,7 @@ namespace BrunoMikoski.AnimationSequencer
             
             GUIContent guiContent = new GUIContent(element.displayName);
             if (animationStepBase != null)
-                guiContent = new GUIContent(animationStepBase.GetDisplayName(index + 1));
+                guiContent = new GUIContent(animationStepBase.GetDisplayNameForEditor(index + 1));
 
             if (flowType == FlowType.Join)
                 EditorGUI.indentLevel = baseIdentLevel + 1;
