@@ -15,7 +15,7 @@ namespace BrunoMikoski.AnimationSequencer
         public abstract float Duration { get; }
         public FlowType FlowType => flowType;
 
-        public virtual string DisplayName => GetType().Name;
+        public abstract string DisplayName { get; }
         
         private bool isPlaying;
         public bool IsPlaying => isPlaying;

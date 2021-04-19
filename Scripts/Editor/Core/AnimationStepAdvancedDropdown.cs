@@ -28,7 +28,11 @@ namespace BrunoMikoski.AnimationSequencer
                 
                 AnimationStepBase animationStepBase = Activator.CreateInstance(animatedItemType) as AnimationStepBase;
 
-                root.AddChild(new AnimationStepAdvancedDropdownItem(animationStepBase));
+                string displayName = animationStepBase.GetType().Name;
+                if (!string.IsNullOrEmpty(animationStepBase.DisplayName))
+                    displayName = animationStepBase.DisplayName;
+                
+                root.AddChild(new AnimationStepAdvancedDropdownItem(animationStepBase, displayName));
             }
 
             return root;
