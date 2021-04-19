@@ -10,8 +10,11 @@ namespace BrunoMikoski.AnimationSequencer
         private UnityEvent methodToCall;
         
         public override string DisplayName => "Method Call Step";
-        
-        public override float Duration { get; }
+
+        public override float Duration
+        {
+            return 0;
+        }
 
         public override bool CanBePlayed() => true;
         
