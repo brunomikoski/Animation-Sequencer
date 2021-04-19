@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.3]
 ### Added
-- you can know subscribe to events from the SequenceController for when one Step Finished or Started
+- Added Step Finished / Step Begin events that can be subscribed on the `Animation Controller`
 
 ### Changed
 - Fixed issue when a custom step would have a null `DisplayName`
