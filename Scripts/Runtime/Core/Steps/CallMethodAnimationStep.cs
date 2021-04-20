@@ -4,14 +4,14 @@ using UnityEngine.Events;
 
 namespace BrunoMikoski.AnimationSequencer
 {
-    public class CallMethodAnimationStep : AnimationStepBase
+    public sealed class CallMethodAnimationStep : AnimationStepBase
     {
         [SerializeField]
         private UnityEvent methodToCall;
         
         public override string DisplayName => "Method Call Step";
         
-        public override float Duration { get; }
+        public override float Duration => 0;
 
         public override bool CanBePlayed() => true;
         
