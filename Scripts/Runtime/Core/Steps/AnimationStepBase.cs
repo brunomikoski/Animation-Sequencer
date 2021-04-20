@@ -50,6 +50,7 @@ namespace BrunoMikoski.AnimationSequencer
 
         public virtual void StepFinished()
         {
+            Complete();
             isPlaying = false;
         }
 
