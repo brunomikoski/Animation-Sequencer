@@ -24,7 +24,8 @@ namespace BrunoMikoski.AnimationSequencer
                 EditorGUI.indentLevel--;
                 
                 position.height = EditorGUIUtility.singleLineHeight;
-                
+                position.y +=  EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+
                 foreach (SerializedProperty serializedProperty in property.GetChildren())
                 {
                     bool shouldDraw = true;
@@ -41,8 +42,8 @@ namespace BrunoMikoski.AnimationSequencer
                     if (!shouldDraw)
                         continue;
 
-                    position.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
                     EditorGUI.PropertyField(position, serializedProperty);
+                    position.y += EditorGUI.GetPropertyHeight(serializedProperty) + EditorGUIUtility.standardVerticalSpacing;
 
                 }
                 
