@@ -100,6 +100,9 @@ namespace BrunoMikoski.AnimationSequencer
             if (!force && preparedToPlay)
                 return;
 
+            stepsQueue.Clear();
+            stepsToBePlayed.Clear();
+            
             for (int i = 0; i < animationSteps.Length; i++)
                 animationSteps[i].PrepareForPlay();
             

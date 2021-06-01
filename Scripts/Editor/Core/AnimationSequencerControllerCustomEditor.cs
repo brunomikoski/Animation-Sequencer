@@ -164,21 +164,11 @@ namespace BrunoMikoski.AnimationSequencer
             }
             else
             {
-                if (GUILayout.Button("Complete"))
-                {
-                    Complete();
-                }
-                
                 if (GUILayout.Button("Stop"))
                 {
                     StopPreview();
                 }
             }
-        }
-
-        private void Complete()
-        {
-            sequencerController.Complete();
         }
 
         private void Play()
@@ -218,12 +208,6 @@ namespace BrunoMikoski.AnimationSequencer
 
         private void StopPreview()
         {
-            if (!Application.isPlaying)
-            {
-                EditorApplication.update -= EditorUpdate;
-                DOTweenEditorPreview.Stop(true);
-            }
-            
             sequencerController.OnSequenceFinishedPlayingEvent -= StopPreview;
             for (int i = 0; i < activeSequencers.Length; i++)
             {
@@ -232,9 +216,17 @@ namespace BrunoMikoski.AnimationSequencer
                     continue;
                 
                 animationSequencerController.Stop();
+                animationSequencerController.Complete();
             }
            
             isPreviewPlaying = false;
+            
+            if (!Application.isPlaying)
+            {
+                EditorApplication.update -= EditorUpdate;
+                DOTweenEditorPreview.Stop(true);
+            }
+            
             Repaint();
         }
 
