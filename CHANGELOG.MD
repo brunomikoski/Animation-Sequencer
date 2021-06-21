@@ -4,12 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.6]
+### Changed
+- Fixed issue when previewing tweens with 0 duration on editor.
+
 ## [0.1.5]
 ### Changed
 - Fixed one issue that prevent you from playing the same animation twice on editor
 - Limited the `-1 (Infinity lopps)` on editor playback, this was causing some issues so will show a Warning and limit to 3 loops if was set to -1
 - Fixed issue when trying to complete the Sequence on editor, now only Stop is available, and will complete all the sequence.
-
 
 ## [0.1.4]
 ### Added
@@ -44,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### [Unreleased]
 
+[0.1.5]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.1.6
 [0.1.5]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.1.5
 [0.1.4]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.1.4
 [0.1.3]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.1.3

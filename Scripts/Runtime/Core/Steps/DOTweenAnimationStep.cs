@@ -82,7 +82,17 @@ namespace BrunoMikoski.AnimationSequencer
             
             for (int i = 0; i < actions.Length; i++)
             {
-                actions[i].CreateTween(target, duration, LoopCount, loopType);
+                float targetDuration = duration;
+                if (!Application.isPlaying)
+                {
+                    if (Mathf.Approximately(targetDuration, 0))
+                    {
+                        //Temporary fix, waiting for a fix from DOTween side: https://github.com/Demigiant/dotween/issues/494
+                        targetDuration = float.Epsilon;
+                    }
+                }
+                
+                actions[i].CreateTween(target, targetDuration, LoopCount, loopType);
             }
         }
 
