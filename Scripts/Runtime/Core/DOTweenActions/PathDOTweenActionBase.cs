@@ -23,7 +23,7 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private PathType pathType = PathType.CatmullRom;
 
-        public override Tweener CreateTweenInternal(GameObject target, float duration)
+        protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
             TweenerCore<Vector3, Path, PathOptions> tween;
             

@@ -16,8 +16,8 @@ namespace BrunoMikoski.AnimationSequencer
         private Vector3 scale;
         [SerializeField]
         private AxisConstraint axisConstraint;
-        
-        public override Tweener CreateTweenInternal(GameObject target, float duration)
+
+        protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
             TweenerCore<Vector3, Vector3, VectorOptions> scaleTween = target.transform.DOScale(scale, duration).SetEase(ease);
             scaleTween.SetOptions(axisConstraint);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DG.DOTweenEditor;
+using DG.Tweening;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEditorInternal;
@@ -50,8 +51,6 @@ namespace BrunoMikoski.AnimationSequencer
             reorderableList.drawHeaderCallback -= OnDrawerHeader;
             Stop();
         }
-
-       
 
         private void OnDrawerHeader(Rect rect)
         {
@@ -167,19 +166,77 @@ namespace BrunoMikoski.AnimationSequencer
             }
             else
             {
-                if (GUILayout.Button("Stop"))
+                bool anyTweenUsingFromDirection = IsAnyTweenStepUsingFromDirection();
+                if (anyTweenUsingFromDirection)
                 {
-                    Stop();
+                    bool guiEnabled = GUI.enabled;
+                    GUI.enabled = false;
+                    if (GUILayout.Button("Can't stop a sequence that uses From Direction, cause issues :( ")) { }
+
+                    GUI.enabled = guiEnabled;
+                }
+                else
+                {
+                    if (GUILayout.Button("Stop"))
+                    {
+                        Stop();
+                    }
+                    
                 }
             }
+        }
+
+        private bool IsAnyTweenStepUsingFromDirection()
+        {
+            for (int i = 0; i < sequencerController.AnimationSteps.Length; i++)
+            {
+                if (sequencerController.AnimationSteps[i] is DOTweenAnimationStep doTweenAnimationStep)
+                {
+                    for (int j = 0; j < doTweenAnimationStep.Actions.Length; j++)
+                    {
+                        if (doTweenAnimationStep.Actions[j].Direction == DOTweenActionBase.AnimationDirection.From)
+                            return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private bool IsAllTweensStepsUsingFrom()
+        {
+            bool anyUsingFrom = false;
+            
+            for (int i = 0; i < sequencerController.AnimationSteps.Length; i++)
+            {
+                if (sequencerController.AnimationSteps[i] is DOTweenAnimationStep doTweenAnimationStep)
+                {
+                    for (int j = 0; j < doTweenAnimationStep.Actions.Length; j++)
+                    {
+                        if (doTweenAnimationStep.Actions[j].Direction == DOTweenActionBase.AnimationDirection.From)
+                        {
+                            anyUsingFrom = true;
+                        }
+                        else
+                        {
+                            if (anyUsingFrom)
+                                return false;
+                        }
+                    }
+                }
+            }
+
+            return anyUsingFrom;
         }
 
         private void Play()
         {
             if (!Application.isPlaying)
-            {
                 DOTweenEditorPreview.Start();
-                sequencerController.Play(OnEditorTimePlaybackFinished);
+
+            if (!Application.isPlaying)
+            {
+                sequencerController.Play(OnEditorPlaybackFinished);
             }
             else
             {
@@ -187,20 +244,34 @@ namespace BrunoMikoski.AnimationSequencer
             }
         }
 
-        private void OnEditorTimePlaybackFinished()
+        private void OnEditorPlaybackFinished()
         {
-            DOTweenEditorPreview.Stop(true);
+            Stop();
         }
 
         private void Stop()
         {
-            sequencerController.Stop();
-        
-            if (!Application.isPlaying)
+            for (int i = 0; i < sequencerController.AnimationSteps.Length; i++)
             {
-                DOTweenEditorPreview.Stop(true);
-                Repaint();
+                if (sequencerController.AnimationSteps[i] is DOTweenAnimationStep doTweenAnimationStep)
+                {
+                    for (int j = 0; j < doTweenAnimationStep.Actions.Length; j++)
+                    {
+                        Tweener cachedTween = doTweenAnimationStep.Actions[j].CachedTween;
+                        if (cachedTween == null)
+                            continue;
+
+                        if (doTweenAnimationStep.Actions[j].Direction == DOTweenActionBase.AnimationDirection.From)
+                            cachedTween.Rewind();
+                        else
+                            cachedTween.Complete();
+                    }
+                }
             }
+
+            sequencerController.Kill();
+            DOTweenEditorPreview.Stop();
+            Repaint();
         }
 
         private void DrawBoxedArea(string title, Action additionalInspectorGUI)

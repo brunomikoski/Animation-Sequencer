@@ -16,8 +16,8 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private float alpha;
 
-        
-        public override Tweener CreateTweenInternal(GameObject target, float duration)
+
+        protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
             CanvasGroup canvasGroup = target.GetComponent<CanvasGroup>();
 

@@ -22,8 +22,8 @@ namespace BrunoMikoski.AnimationSequencer
         private bool richText;
         [SerializeField]
         private ScrambleMode scrambleMode = ScrambleMode.None;
-        
-        public override Tweener CreateTweenInternal(GameObject target, float duration)
+
+        protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
             TMP_Text tmpTextComponent = target.GetComponent<TMP_Text>();
             if (tmpTextComponent == null)

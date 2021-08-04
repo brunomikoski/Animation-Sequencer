@@ -74,7 +74,10 @@ namespace BrunoMikoski.AnimationSequencer
             if (!IsPlaying)
                 return;
 
-            DOTween.Kill(playingSequence, true);
+            if (!Application.isPlaying)
+                playingSequence.Rewind();
+            
+            playingSequence.Kill();
         }
 
         public IEnumerator PlayEnumerator()
@@ -86,10 +89,15 @@ namespace BrunoMikoski.AnimationSequencer
         public Sequence GenerateSequence()
         {
             Sequence animationSequence = DOTween.Sequence();
+
+            if (!Application.isPlaying)
+                animationSequence.SetAutoKill(false);
+            
             for (int i = 0; i < animationSteps.Length; i++)
             {
                 AnimationStepBase animationStepBase = animationSteps[i];
                 Tween tween = animationStepBase.GenerateTween();
+                tween.SetAutoKill(false);
                 if (animationStepBase.FlowType == FlowType.Append)
                 {
                     animationSequence.Append(tween);
@@ -102,5 +110,12 @@ namespace BrunoMikoski.AnimationSequencer
 
             return animationSequence;
         }
+        
+        public void Kill()
+        {
+            if (playingSequence != null)
+                playingSequence.Kill();
+        }
+
     }
 }

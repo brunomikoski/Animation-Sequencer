@@ -18,7 +18,7 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private RotateMode rotationMode = RotateMode.Fast;
 
-        public override Tweener CreateTweenInternal(GameObject target, float duration)
+        protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
             TweenerCore<Quaternion, Vector3, QuaternionOptions> localTween;
             if (local)

@@ -16,12 +16,14 @@ namespace BrunoMikoski.AnimationSequencer
         private LoopType loopType;
         [SerializeReference]
         private DOTweenActionBase[] actions;
+        public DOTweenActionBase[] Actions => actions;
 
         public override float Duration => duration;
 
         public override Tween GenerateTween()
         {
             Sequence sequence = DOTween.Sequence();
+            sequence.SetAutoKill(false);
             for (int i = 0; i < actions.Length; i++)
             {
                 Tween generateTween = actions[i].GenerateTween(target, duration);

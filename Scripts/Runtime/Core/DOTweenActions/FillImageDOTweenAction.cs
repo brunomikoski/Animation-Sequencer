@@ -16,8 +16,8 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField, Range(0, 1)]
         private float fillAmount;
-        
-        public override Tweener CreateTweenInternal(GameObject target, float duration)
+
+        protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
             Image component = target.GetComponent<Image>();
             if (component == null)

@@ -16,8 +16,8 @@ namespace BrunoMikoski.AnimationSequencer
         private int vibrato = 10;
         [SerializeField]
         private float elasticity = 1f;
-        
-        public override Tweener CreateTweenInternal(GameObject target, float duration)
+
+        protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
             Tweener tween = target.transform.DOPunchScale(punch, duration, vibrato, elasticity);
 

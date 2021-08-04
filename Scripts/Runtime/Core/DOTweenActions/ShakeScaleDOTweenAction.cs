@@ -19,8 +19,8 @@ namespace BrunoMikoski.AnimationSequencer
         private float randomness = 90;
         [SerializeField]
         private bool fadeout = true;
-        
-        public override Tweener CreateTweenInternal(GameObject target, float duration)
+
+        protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
             Tweener tween = target.transform.DOShakeScale(duration, strength, vibrato, randomness, fadeout);
 

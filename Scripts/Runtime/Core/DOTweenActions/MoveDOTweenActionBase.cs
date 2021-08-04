@@ -17,8 +17,8 @@ namespace BrunoMikoski.AnimationSequencer
         private AxisConstraint axisConstraint;
 
         public override string DisplayName => "Move to Position";
-        
-        public override Tweener CreateTweenInternal(GameObject target, float duration)
+
+        protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
             TweenerCore<Vector3, Vector3, VectorOptions> moveTween;
             if (localMove)

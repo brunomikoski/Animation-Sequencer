@@ -14,7 +14,7 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private AxisConstraint axisConstraint;
 
-        public override Tweener CreateTweenInternal(GameObject target, float duration)
+        protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
             RectTransform rectTransform = target.transform as RectTransform;
 
