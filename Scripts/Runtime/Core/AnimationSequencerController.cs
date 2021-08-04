@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using DG.DOTweenEditor;
 using DG.Tweening;
 using UnityEngine;
@@ -10,7 +9,7 @@ namespace BrunoMikoski.AnimationSequencer
     [DisallowMultipleComponent]
     public class AnimationSequencerController : MonoBehaviour
     {
-        public enum InitializeMode
+        private enum InitializeMode
         {
             None,
             PlayOnAwake
@@ -26,14 +25,13 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private InitializeMode initializeMode = InitializeMode.PlayOnAwake;
+        [SerializeField]
+        private UpdateType updateType = UpdateType.Normal;
+        [SerializeField]
+        private bool timeScaleIndependent = false;
 
         private Sequence playingSequence;
         public bool IsPlaying => playingSequence != null && playingSequence.IsPlaying();
-
-        public event Action OnSequenceFinishedPlayingEvent;
-
-        public event Action<int> OnAnimationStepBeginEvent;
-        public event Action<int> OnAnimationStepFinishedEvent;
 
         private void Awake()
         {
@@ -43,23 +41,32 @@ namespace BrunoMikoski.AnimationSequencer
             }
         }
 
-        public void Play()
+        public void Play(Action callback = null)
         {
-            Stop();
-            
             playingSequence = GenerateSequence();
+            playingSequence.SetUpdate(updateType, timeScaleIndependent);
+            playingSequence.OnComplete(() => { callback?.Invoke(); });
+            
 #if UNITY_EDITOR
-            DOTweenEditorPreview.PrepareTweenForPreview(playingSequence, true, false, false);
+            DOTweenEditorPreview.PrepareTweenForPreview(playingSequence, false, false, false);
 #endif
             playingSequence.Play();
         }
 
         public void Complete()
         {
-            if(!IsPlaying)
+            if (!IsPlaying)
+                return;
+
+            DOTween.Complete(playingSequence, true);
+        }
+
+        public void Rewind()
+        {
+            if (playingSequence == null)
                 return;
             
-            DOTween.Complete(playingSequence, true);
+            DOTween.Rewind(playingSequence);
         }
 
         public void Stop()

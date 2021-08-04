@@ -48,7 +48,7 @@ namespace BrunoMikoski.AnimationSequencer
             reorderableList.onRemoveCallback -= OnClickToRemove;
             reorderableList.onReorderCallback -= OnListOrderChanged;
             reorderableList.drawHeaderCallback -= OnDrawerHeader;
-            StopPreview();
+            Stop();
         }
 
        
@@ -117,9 +117,16 @@ namespace BrunoMikoski.AnimationSequencer
         private void DrawSettings()
         {
             SerializedProperty initializationModeSerializedProperty = serializedObject.FindProperty("initializeMode");
+            SerializedProperty updateTypeSerializedProperty = serializedObject.FindProperty("updateType");
+            SerializedProperty timeScaleIndependentSerializedProperty = serializedObject.FindProperty("timeScaleIndependent");
+
             using (EditorGUI.ChangeCheckScope changedCheck = new EditorGUI.ChangeCheckScope())
             {
                 EditorGUILayout.PropertyField(initializationModeSerializedProperty);
+                EditorGUILayout.PropertyField(updateTypeSerializedProperty);
+                EditorGUILayout.PropertyField(timeScaleIndependentSerializedProperty);
+                
+                
                 if (changedCheck.changed)
                     serializedObject.ApplyModifiedProperties();
             }
@@ -162,7 +169,7 @@ namespace BrunoMikoski.AnimationSequencer
             {
                 if (GUILayout.Button("Stop"))
                 {
-                    StopPreview();
+                    Stop();
                 }
             }
         }
@@ -171,32 +178,29 @@ namespace BrunoMikoski.AnimationSequencer
         {
             if (!Application.isPlaying)
             {
-                EditorApplication.update += EditorUpdate;
                 DOTweenEditorPreview.Start();
-                // FindRelatedAnimationControllers();
-                // sequencerController.OnSequenceFinishedPlayingEvent += StopPreview;
+                sequencerController.Play(OnEditorTimePlaybackFinished);
             }
-
-            // sequencerController.PrepareForPlay(true);
-            sequencerController.Play();
+            else
+            {
+                sequencerController.Play();
+            }
         }
 
-        private void StopPreview()
+        private void OnEditorTimePlaybackFinished()
+        {
+            DOTweenEditorPreview.Stop(true);
+        }
+
+        private void Stop()
         {
             sequencerController.Stop();
-            
+        
             if (!Application.isPlaying)
             {
-                EditorApplication.update -= EditorUpdate;
                 DOTweenEditorPreview.Stop(true);
+                Repaint();
             }
-            
-            Repaint();
-        }
-
-        private void EditorUpdate()
-        {
-            Repaint();
         }
 
         private void DrawBoxedArea(string title, Action additionalInspectorGUI)

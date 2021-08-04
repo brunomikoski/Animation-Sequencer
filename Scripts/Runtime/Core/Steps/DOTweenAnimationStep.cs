@@ -11,7 +11,6 @@ namespace BrunoMikoski.AnimationSequencer
         public override string DisplayName => "Tween Target";
         [SerializeField]
         private int loopCount;
-        public int LoopCount => loopCount;
         
         [SerializeField]
         private LoopType loopType;
@@ -23,10 +22,11 @@ namespace BrunoMikoski.AnimationSequencer
         public override Tween GenerateTween()
         {
             Sequence sequence = DOTween.Sequence();
-            sequence.AppendInterval(Delay);
             for (int i = 0; i < actions.Length; i++)
             {
-                sequence.Join(actions[i].GenerateTween(target, duration));
+                Tween generateTween = actions[i].GenerateTween(target, duration);
+                generateTween.SetDelay(Delay);
+                sequence.Join(generateTween);
             }
 
             sequence.SetLoops(loopCount, loopType);
