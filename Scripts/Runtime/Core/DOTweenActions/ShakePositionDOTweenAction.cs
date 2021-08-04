@@ -20,13 +20,13 @@ namespace BrunoMikoski.AnimationSequencer
         private bool snapping;
         [SerializeField]
         private bool fadeout = true;
-
-        public override bool CreateTween(GameObject target, float duration, int loops, LoopType loopType)
+        
+        public override Tweener CreateTweenInternal(GameObject target, float duration)
         {
             Tweener tween = target.transform.DOShakePosition(duration, strength, vibrato, randomness, snapping, fadeout);
-            
-            SetTween(tween, loops, loopType);
-            return true;
+
+            return tween;
         }
+
     }
 }

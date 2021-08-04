@@ -1,4 +1,5 @@
 ﻿using System;
+using DG.Tweening;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -24,22 +25,9 @@ namespace BrunoMikoski.AnimationSequencer
         
         public AnimationSequencerController Target => sequencer;
 
-        public override bool CanBePlayed()
+        public override Tween GenerateTween()
         {
-            return sequencer != null;
-        }
-
-        public override void PrepareForPlay()
-        {
-            base.PrepareForPlay();
-            sequencer.PrepareForPlay();
-        }
-
-
-        public override void Play()
-        {
-            base.Play();
-            sequencer.Play();
+            return sequencer.GenerateSequence();
         }
 
         public override string GetDisplayNameForEditor(int index)
@@ -53,11 +41,6 @@ namespace BrunoMikoski.AnimationSequencer
         public void SetTarget(AnimationSequencerController newTarget)
         {
             sequencer = newTarget;
-        }
-
-        public override void Complete()
-        {
-            sequencer.Complete();
         }
     }
 }

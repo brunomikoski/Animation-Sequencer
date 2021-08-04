@@ -17,13 +17,12 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private AxisConstraint axisConstraint;
         
-        public override bool CreateTween(GameObject target, float duration, int loops, LoopType loopType)
+        public override Tweener CreateTweenInternal(GameObject target, float duration)
         {
             TweenerCore<Vector3, Vector3, VectorOptions> scaleTween = target.transform.DOScale(scale, duration).SetEase(ease);
             scaleTween.SetOptions(axisConstraint);
 
-            SetTween(scaleTween, loops, loopType);
-            return true;
+            return scaleTween;
         }
     }
 }

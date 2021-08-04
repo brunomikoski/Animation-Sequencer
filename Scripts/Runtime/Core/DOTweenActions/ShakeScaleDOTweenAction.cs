@@ -7,6 +7,7 @@ namespace BrunoMikoski.AnimationSequencer
     [Serializable]
     public sealed class ShakeScaleDOTweenAction : DOTweenActionBase
     {
+
         public override Type TargetComponentType => typeof(Transform);
         public override string DisplayName => "Shake Scale";
 
@@ -19,12 +20,11 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private bool fadeout = true;
         
-        public override bool CreateTween(GameObject target, float duration, int loops, LoopType loopType)
+        public override Tweener CreateTweenInternal(GameObject target, float duration)
         {
             Tweener tween = target.transform.DOShakeScale(duration, strength, vibrato, randomness, fadeout);
-            
-            SetTween(tween, loops, loopType);
-            return true;
+
+            return tween;
         }
     }
 }

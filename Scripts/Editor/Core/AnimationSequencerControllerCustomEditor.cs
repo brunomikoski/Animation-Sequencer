@@ -14,10 +14,6 @@ namespace BrunoMikoski.AnimationSequencer
         private ReorderableList reorderableList;
         
         private AnimationSequencerController sequencerController;
-        private bool isPreviewPlaying;
-        private double lastFrameTime;
-        private float frameDelta;
-        private AnimationSequencerController[] activeSequencers = new AnimationSequencerController[0];
 
         private static AnimationStepAdvancedDropdown cachedAnimationStepsDropdown;
         private static AnimationStepAdvancedDropdown AnimationStepAdvancedDropdown
@@ -151,7 +147,7 @@ namespace BrunoMikoski.AnimationSequencer
 
         private void DrawPreviewControls()
         {
-            if (!isPreviewPlaying)
+            if (!sequencerController.IsPlaying)
             {
                 GameObject sequencerGameObject = sequencerController.gameObject;
                 EditorGUI.BeginDisabledGroup(!sequencerGameObject.activeSelf || !sequencerGameObject.activeInHierarchy);
@@ -177,49 +173,17 @@ namespace BrunoMikoski.AnimationSequencer
             {
                 EditorApplication.update += EditorUpdate;
                 DOTweenEditorPreview.Start();
-                FindRelatedAnimationControllers();
-                sequencerController.OnSequenceFinishedPlayingEvent += StopPreview;
-                lastFrameTime = EditorApplication.timeSinceStartup;
-                isPreviewPlaying = true;
+                // FindRelatedAnimationControllers();
+                // sequencerController.OnSequenceFinishedPlayingEvent += StopPreview;
             }
 
-            sequencerController.PrepareForPlay(true);
+            // sequencerController.PrepareForPlay(true);
             sequencerController.Play();
-        }
-
-        private void FindRelatedAnimationControllers()
-        {
-            if (Application.isPlaying)
-                return;
-
-            List<AnimationSequencerController> sequencers = new List<AnimationSequencerController>
-            {
-                sequencerController
-            };
-            for (int i = 0; i < sequencerController.AnimationSteps.Length; i++)
-            {
-                AnimationStepBase sequencerControllerAnimationStep = sequencerController.AnimationSteps[i];
-                if (sequencerControllerAnimationStep is PlaySequenceAnimationStep playSequenceAnimationStep)
-                    sequencers.Add(playSequenceAnimationStep.Target);
-            }
-
-            activeSequencers = sequencers.ToArray();
         }
 
         private void StopPreview()
         {
-            sequencerController.OnSequenceFinishedPlayingEvent -= StopPreview;
-            for (int i = 0; i < activeSequencers.Length; i++)
-            {
-                AnimationSequencerController animationSequencerController = activeSequencers[i];
-                if (animationSequencerController == null)
-                    continue;
-                
-                animationSequencerController.Stop();
-                animationSequencerController.Complete();
-            }
-           
-            isPreviewPlaying = false;
+            sequencerController.Stop();
             
             if (!Application.isPlaying)
             {
@@ -232,25 +196,7 @@ namespace BrunoMikoski.AnimationSequencer
 
         private void EditorUpdate()
         {
-            UpdatePreview();
-        }
-
-        private void UpdatePreview()
-        {
-            if (!isPreviewPlaying)
-                return;
-            
-            frameDelta = (float) (EditorApplication.timeSinceStartup - lastFrameTime);
-            lastFrameTime = EditorApplication.timeSinceStartup;
-
-            for (int i = 0; i < activeSequencers.Length; i++)
-            {
-                AnimationSequencerController animationSequencerController = activeSequencers[i];
-                if (animationSequencerController == null)
-                    continue;
-                
-                animationSequencerController.UpdateStep(frameDelta);
-            }
+            Repaint();
         }
 
         private void DrawBoxedArea(string title, Action additionalInspectorGUI)

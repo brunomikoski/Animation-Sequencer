@@ -30,67 +30,21 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         protected bool autoKill;
         
-        protected Tweener tweener;
+        public abstract Tweener CreateTweenInternal(GameObject target, float duration);
+        
+        public virtual Type TargetComponentType { get; }
 
-        public abstract bool CreateTween(GameObject target, float duration, int loops, LoopType loopType);
 
-        public virtual Type TargetComponentType { get; } 
-
-        public void Play()
+        public Tween GenerateTween(GameObject target, float duration)
         {
-            if (tweener == null)
-                return;
-            
-            if (Application.isPlaying)
-            {
-                tweener.Play();
-            }
-            else
-            {
-#if UNITY_EDITOR
-                DOTweenEditorPreview.PrepareTweenForPreview(tweener);
-#endif
-            }
-        }
-
-        protected void SetTween(Tweener tween, int loops, LoopType loopType)
-        {
+            var tween = CreateTweenInternal(target, duration);
             if (direction == AnimationDirection.From)
                 tween.From();
 
             tween.SetAutoKill(autoKill);
             tween.SetEase(ease);
             tween.SetRelative(isRelative);
-            tween.SetLoops(loops, loopType);
-            tween.Pause();
-            tweener = tween;
-        }
-
-        protected void SetTween(TweenerCore<Vector3,Path,PathOptions> tween)
-        {
-            if (direction == AnimationDirection.From)
-                tween.From();
-
-            tween.SetAutoKill(autoKill);
-            tween.SetEase(ease);
-            tween.SetRelative(isRelative);
-            tween.Pause();
-            tweener = tween;
-        }
-
-        public void Complete()
-        {
-            tweener?.Complete();
-        }
-
-        public void Rewind()
-        {
-            if (autoKill)
-            {
-                throw new Exception($"Rewind not possible when autoKill enabled. Tween: {DisplayName}");
-            }
-            
-            tweener?.Rewind();
+            return tween;
         }
     }
 }

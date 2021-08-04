@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -22,20 +23,20 @@ namespace BrunoMikoski.AnimationSequencer
 
         public ParticleSystem Target => particleSystem;
 
-        public override bool CanBePlayed()
+        public override Tween GenerateTween()
         {
-            return particleSystem != null;
+            Sequence sequence = DOTween.Sequence();
+            sequence.AppendCallback(() =>
+            {
+                particleSystem.Play();
+            });
+            sequence.AppendInterval(duration);
+            sequence.AppendCallback(FinishParticles);
+            return sequence;
         }
 
-        public override void Play()
+        private void FinishParticles()
         {
-            base.Play();
-            particleSystem.Play();
-        }
-
-        public override void StepFinished()
-        {
-            base.StepFinished();
             if (stopEmittingWhenOver)
             {
                 particleSystem.Stop();
@@ -55,9 +56,5 @@ namespace BrunoMikoski.AnimationSequencer
             return $"{index}. Play {display} particle system";
         }
 
-        public override void Complete()
-        {
-            
-        }
     }
 }

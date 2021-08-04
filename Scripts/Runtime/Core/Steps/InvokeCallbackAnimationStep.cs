@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,9 +15,11 @@ namespace BrunoMikoski.AnimationSequencer
         
         public override float Duration => 0;
 
-        public override bool CanBePlayed()
+        public override Tween GenerateTween()
         {
-            return true;
+            Sequence sequence = DOTween.Sequence();
+            sequence.AppendCallback(() => callback.Invoke());
+            return sequence;
         }
 
         public override string GetDisplayNameForEditor(int index)
@@ -31,11 +34,6 @@ namespace BrunoMikoski.AnimationSequencer
             }
             
             return $"{index}. {DisplayName}: {persistentTargetNames}";
-        }
-
-        public override void Complete()
-        {
-            callback?.Invoke();
         }
     }
 }

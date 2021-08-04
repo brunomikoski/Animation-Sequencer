@@ -8,82 +8,30 @@ namespace BrunoMikoski.AnimationSequencer
     [Serializable]
     public sealed class DOTweenAnimationStep : GameObjectAnimationStep
     {
-        private const int EDITOR_MAX_LOOPS = 3;
         public override string DisplayName => "Tween Target";
         [SerializeField]
         private int loopCount;
-        public int LoopCount
-        {
-            get
-            {
-                if (Application.isPlaying)
-                    return loopCount;
-                return loopCount == -1 ? EDITOR_MAX_LOOPS : loopCount;
-            }
-        }
+        public int LoopCount => loopCount;
+        
         [SerializeField]
         private LoopType loopType;
         [SerializeReference]
         private DOTweenActionBase[] actions;
-        public DOTweenActionBase[] Actions => actions;
 
-        public override float Duration
-        {
-            get
-            {
-                if (LoopCount == 0)
-                    return duration;
-                if (LoopCount == -1)
-                    return float.MaxValue;
-                return duration * LoopCount;
-            }
-        }
+        public override float Duration => duration;
 
-        public override void Play()
+        public override Tween GenerateTween()
         {
-            base.Play();
+            Sequence sequence = DOTween.Sequence();
+            sequence.AppendInterval(Delay);
             for (int i = 0; i < actions.Length; i++)
             {
-                actions[i].Play();
-            }
-        }
-
-        public override void Rewind()
-        {
-            base.Rewind();
-            for (int i = 0; i < actions.Length; ++i)
-            {
-                actions[i].Rewind();
-            }
-        }
-
-        public override void Complete()
-        {
-            for (int i = 0; i < actions.Length; i++)
-            {
-                actions[i].Complete();
-            }
-        }
-
-        public override void PrepareForPlay()
-        {
-            base.PrepareForPlay();
-            if (target == null)
-            {
-                Debug.LogError($"Null target on {typeof(DOTweenAnimationStep)}, ignoring it.");
-                return;
+                sequence.Join(actions[i].GenerateTween(target, duration));
             }
 
-            if (!Application.isPlaying)
-            {
-                if (loopCount == -1)
-                    Debug.LogWarning($"Infinity Loops are not editor friendly, changing loops into {EDITOR_MAX_LOOPS} for Editor Mode only. Target:{target}");
-            }
-            
-            for (int i = 0; i < actions.Length; i++)
-            {
-                actions[i].CreateTween(target, duration, LoopCount, loopType);
-            }
+            sequence.SetLoops(loopCount, loopType);
+
+            return sequence;
         }
 
         public override string GetDisplayNameForEditor(int index)

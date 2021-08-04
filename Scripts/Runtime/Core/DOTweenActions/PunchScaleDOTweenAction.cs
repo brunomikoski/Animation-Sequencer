@@ -8,7 +8,6 @@ namespace BrunoMikoski.AnimationSequencer
     public sealed class PunchScaleDOTweenAction : DOTweenActionBase
     {
         public override string DisplayName => "Punch Scale";
-        
         public override Type TargetComponentType => typeof(Transform);
 
         [SerializeField]
@@ -17,13 +16,13 @@ namespace BrunoMikoski.AnimationSequencer
         private int vibrato = 10;
         [SerializeField]
         private float elasticity = 1f;
-
-        public override bool CreateTween(GameObject target, float duration, int loops, LoopType loopType)
+        
+        public override Tweener CreateTweenInternal(GameObject target, float duration)
         {
             Tweener tween = target.transform.DOPunchScale(punch, duration, vibrato, elasticity);
-            
-            SetTween(tween, loops, loopType);
-            return true;
+
+            return tween;
         }
+
     }
 }
