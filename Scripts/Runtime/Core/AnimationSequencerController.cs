@@ -2,6 +2,7 @@
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace BrunoMikoski.AnimationSequencer
 {
@@ -11,7 +12,8 @@ namespace BrunoMikoski.AnimationSequencer
         private enum InitializeMode
         {
             None,
-            PlayOnAwake
+            PlayOnAwake,
+            PauseOnAwake
         }
         
         [SerializeReference]
@@ -35,24 +37,38 @@ namespace BrunoMikoski.AnimationSequencer
 
         public bool IsPlaying => playingSequence != null && playingSequence.IsPlaying();
 
+        [SerializeField]
+        private UnityEvent onStartEvent = new UnityEvent();
+        public UnityEvent OnStartEvent => onStartEvent;
+        [SerializeField]
+        private UnityEvent onFinishedEvent = new UnityEvent();
+        public UnityEvent OnFinishedEvent => onFinishedEvent;
+        [SerializeField]
+        private UnityEvent onProgressEvent = new UnityEvent();
+        public UnityEvent OnProgressEvent => onProgressEvent;
+        
+
         private void Awake()
         {
-            if (initializeMode == InitializeMode.PlayOnAwake)
+            if (initializeMode == InitializeMode.PlayOnAwake || initializeMode == InitializeMode.PauseOnAwake)
             {
                 Play();
+                if (initializeMode == InitializeMode.PauseOnAwake)
+                    playingSequence.Pause();
             }
         }
 
         public void Play(Action callback = null)
         {
+            DOTween.Kill(this);
+            playingSequence?.Kill();
+
+            if (callback != null) 
+                onStartEvent.AddListener(callback.Invoke);
+
             playingSequence = GenerateSequence();
-            playingSequence.SetUpdate(updateType, timeScaleIndependent);
-            playingSequence.OnComplete(() => { callback?.Invoke(); });
-            playingSequence.SetAutoKill(autoKill);
-            
             playingSequence.Play();
         }
-
         
         public void TogglePause()
         {
@@ -118,6 +134,24 @@ namespace BrunoMikoski.AnimationSequencer
             {
                 animationSteps[i].AddTweenToSequence(sequence);
             }
+
+            sequence.SetTarget(this);
+            sequence.SetUpdate(updateType, timeScaleIndependent);
+            sequence.OnComplete(() =>
+            {
+                onStartEvent.Invoke();
+            });
+            sequence.OnUpdate(() =>
+            {
+                onProgressEvent.Invoke();
+            });
+            sequence.OnComplete(() =>
+            {
+                onFinishedEvent.Invoke();
+            });
+            
+            sequence.SetAutoKill(autoKill);
+            
             return sequence;
         }
     }
