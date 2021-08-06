@@ -1,7 +1,6 @@
 ﻿using System;
 using DG.Tweening;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace BrunoMikoski.AnimationSequencer
 {
@@ -22,12 +21,10 @@ namespace BrunoMikoski.AnimationSequencer
                 return sequencer.Duration;
             }
         }
-        
-        public AnimationSequencerController Target => sequencer;
 
-        public override Tween GenerateTween()
+        public override void AddTweenToSequence(Sequence animationSequence)
         {
-            return sequencer.GenerateSequence();
+            sequencer.GenerateSequence(animationSequence);
         }
 
         public override string GetDisplayNameForEditor(int index)

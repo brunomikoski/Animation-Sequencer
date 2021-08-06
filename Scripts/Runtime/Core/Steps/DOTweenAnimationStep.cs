@@ -16,24 +16,25 @@ namespace BrunoMikoski.AnimationSequencer
         private LoopType loopType;
         [SerializeReference]
         private DOTweenActionBase[] actions;
-        public DOTweenActionBase[] Actions => actions;
 
         public override float Duration => duration;
 
-        public override Tween GenerateTween()
+        public override void AddTweenToSequence(Sequence animationSequence)
         {
             Sequence sequence = DOTween.Sequence();
-            sequence.SetAutoKill(false);
+            sequence.AppendInterval(Delay);
             for (int i = 0; i < actions.Length; i++)
             {
-                Tween generateTween = actions[i].GenerateTween(target, duration);
-                generateTween.SetDelay(Delay);
-                sequence.Join(generateTween);
+                Tween tween = actions[i].GenerateTween(target, duration);
+                tween.SetLoops(loopCount, loopType);
+                sequence.Join(tween);
             }
+            
+            if (FlowType == FlowType.Join)
+                animationSequence.Join(sequence);
+            else
+                animationSequence.Append(sequence);
 
-            sequence.SetLoops(loopCount, loopType);
-
-            return sequence;
         }
 
         public override string GetDisplayNameForEditor(int index)

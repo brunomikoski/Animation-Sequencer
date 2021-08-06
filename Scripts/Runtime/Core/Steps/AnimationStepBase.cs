@@ -21,7 +21,7 @@ namespace BrunoMikoski.AnimationSequencer
         //TODO find a way to discover if one step is playing or not.
         public bool IsPlaying => false;
         
-        public abstract Tween GenerateTween();
+        public abstract void AddTweenToSequence(Sequence animationSequence);
 
         public virtual string GetDisplayNameForEditor(int index)
         {

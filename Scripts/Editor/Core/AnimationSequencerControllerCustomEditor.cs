@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using DG.DOTweenEditor;
 using DG.Tweening;
 using UnityEditor;
@@ -37,7 +36,6 @@ namespace BrunoMikoski.AnimationSequencer
             reorderableList.onRemoveCallback += OnClickToRemove;
             reorderableList.onReorderCallback += OnListOrderChanged;
             reorderableList.drawHeaderCallback += OnDrawerHeader;
-            CalculateTotalAnimationTime();
             Repaint();
         }
 
@@ -49,7 +47,9 @@ namespace BrunoMikoski.AnimationSequencer
             reorderableList.onRemoveCallback -= OnClickToRemove;
             reorderableList.onReorderCallback -= OnListOrderChanged;
             reorderableList.drawHeaderCallback -= OnDrawerHeader;
-            Stop();
+
+            if (!Application.isPlaying)
+                DOTweenEditorPreview.Stop();
         }
 
         private void OnDrawerHeader(Rect rect)
@@ -100,17 +100,15 @@ namespace BrunoMikoski.AnimationSequencer
 
         public override void OnInspectorGUI()
         {
-            EditorGUI.BeginChangeCheck();
             DrawBoxedArea("Settings", DrawSettings);
             DrawBoxedArea("Preview", DrawPreviewControls);
             bool wasGUIEnabled = GUI.enabled;
-            if (sequencerController.IsPlaying)
+            if (DOTweenEditorPreview.isPreviewing)
                 GUI.enabled = false;
-            
+
             reorderableList.DoLayoutList();
+
             GUI.enabled = wasGUIEnabled;
-            if (EditorGUI.EndChangeCheck())
-                CalculateTotalAnimationTime();
         }
 
         private void DrawSettings()
@@ -118,160 +116,144 @@ namespace BrunoMikoski.AnimationSequencer
             SerializedProperty initializationModeSerializedProperty = serializedObject.FindProperty("initializeMode");
             SerializedProperty updateTypeSerializedProperty = serializedObject.FindProperty("updateType");
             SerializedProperty timeScaleIndependentSerializedProperty = serializedObject.FindProperty("timeScaleIndependent");
+            SerializedProperty autoKillSerializedProperty = serializedObject.FindProperty("autoKill");
 
             using (EditorGUI.ChangeCheckScope changedCheck = new EditorGUI.ChangeCheckScope())
             {
                 EditorGUILayout.PropertyField(initializationModeSerializedProperty);
                 EditorGUILayout.PropertyField(updateTypeSerializedProperty);
                 EditorGUILayout.PropertyField(timeScaleIndependentSerializedProperty);
-                
+                EditorGUILayout.PropertyField(autoKillSerializedProperty);
                 
                 if (changedCheck.changed)
                     serializedObject.ApplyModifiedProperties();
             }
         }
 
-        private void CalculateTotalAnimationTime()
-        {
-            SerializedProperty durationSerializedProperty = serializedObject.FindProperty("duration");
-            if (durationSerializedProperty == null)
-                return;
-
-            float sequenceDuration = 0;
-            for (int i = 0; i < sequencerController.AnimationSteps.Length; i++)
-            {
-                AnimationStepBase animationStep = sequencerController.AnimationSteps[i];
-                sequenceDuration += animationStep.Delay + animationStep.Duration;
-            }
-
-            if (!Mathf.Approximately(sequenceDuration, durationSerializedProperty.floatValue))
-            {
-                durationSerializedProperty.floatValue = sequenceDuration;
-                serializedObject.ApplyModifiedProperties();
-            }
-        }
-
         private void DrawPreviewControls()
         {
-            if (!sequencerController.IsPlaying)
+            EditorGUILayout.BeginHorizontal();
+
+            GUILayout.FlexibleSpace();
+            bool guiEnabled = GUI.enabled;
+            GUI.enabled = DOTweenEditorPreview.isPreviewing;
+            if (GUILayout.Button(DOTweenActionEditorGUIUtility.BackButtonGUIContent, GUILayout.Width(40), GUILayout.Height(40)))
             {
-                GameObject sequencerGameObject = sequencerController.gameObject;
-                EditorGUI.BeginDisabledGroup(!sequencerGameObject.activeSelf || !sequencerGameObject.activeInHierarchy);
-                if (GUILayout.Button("Play"))
+                sequencerController.Rewind();
+            }
+
+            GUI.enabled = true;
+
+            if (!DOTweenEditorPreview.isPreviewing)
+            {
+                if (GUILayout.Button(DOTweenActionEditorGUIUtility.PlayButtonGUIContent, GUILayout.Width(40), GUILayout.Height(40)))
                 {
-                    Play();
+                    DOTweenEditorPreview.Start();
+                    sequencerController.Play();
+                    DOTweenEditorPreview.PrepareTweenForPreview(sequencerController.PlayingSequence);
                 }
-                
-                EditorGUI.EndDisabledGroup();
             }
             else
             {
-                bool anyTweenUsingFromDirection = IsAnyTweenStepUsingFromDirection();
-                if (anyTweenUsingFromDirection)
+                if (!sequencerController.IsPlaying)
                 {
-                    bool guiEnabled = GUI.enabled;
-                    GUI.enabled = false;
-                    if (GUILayout.Button("Can't stop a sequence that uses From Direction, cause issues :( ")) { }
-
-                    GUI.enabled = guiEnabled;
+                    if (GUILayout.Button(DOTweenActionEditorGUIUtility.PlayButtonGUIContent, GUILayout.Width(40), GUILayout.Height(40)))
+                    {
+                        sequencerController.TogglePause();
+                    }
                 }
                 else
                 {
-                    if (GUILayout.Button("Stop"))
+                    if (GUILayout.Button(DOTweenActionEditorGUIUtility.PauseButtonGUIContent, GUILayout.Width(40), GUILayout.Height(40)))
                     {
-                        Stop();
-                    }
-                    
+                        sequencerController.TogglePause();
+                    }  
                 }
             }
-        }
-
-        private bool IsAnyTweenStepUsingFromDirection()
-        {
-            for (int i = 0; i < sequencerController.AnimationSteps.Length; i++)
+           
+            GUI.enabled = DOTweenEditorPreview.isPreviewing;
+            if (GUILayout.Button(DOTweenActionEditorGUIUtility.ForwardButtonGUIContent, GUILayout.Width(40), GUILayout.Height(40)))
             {
-                if (sequencerController.AnimationSteps[i] is DOTweenAnimationStep doTweenAnimationStep)
-                {
-                    for (int j = 0; j < doTweenAnimationStep.Actions.Length; j++)
-                    {
-                        if (doTweenAnimationStep.Actions[j].Direction == DOTweenActionBase.AnimationDirection.From)
-                            return true;
-                    }
-                }
+                sequencerController.Complete();
             }
 
-            return false;
-        }
-
-        private bool IsAllTweensStepsUsingFrom()
-        {
-            bool anyUsingFrom = false;
+            float elapsedPercentage = 0;
+            if (sequencerController.PlayingSequence != null)
+                elapsedPercentage = sequencerController.PlayingSequence.ElapsedPercentage();
             
-            for (int i = 0; i < sequencerController.AnimationSteps.Length; i++)
+            if (!DOTweenEditorPreview.isPreviewing || sequencerController.PlayingSequence.IsPlaying() &&
+                !Mathf.Approximately(elapsedPercentage, 0) || !Mathf.Approximately(elapsedPercentage, 1))
             {
-                if (sequencerController.AnimationSteps[i] is DOTweenAnimationStep doTweenAnimationStep)
+                GUI.enabled = false;
+            }
+            
+            if (GUILayout.Button(DOTweenActionEditorGUIUtility.StopButtonGUIContent,GUILayout.Width(40), GUILayout.Height(40)))
+            {
+                DOTweenEditorPreview.Stop();
+            }
+
+            GUI.enabled = guiEnabled;
+            GUILayout.FlexibleSpace();
+
+            EditorGUILayout.EndHorizontal();
+
+            DrawTimeScaleSlider();
+            DrawProgressSlider();
+        }
+
+        private void DrawProgressSlider()
+        {
+            GUILayout.FlexibleSpace();
+            bool guiEnabled = GUI.enabled;
+
+            GUI.enabled = sequencerController.PlayingSequence != null && DOTweenEditorPreview.isPreviewing;
+
+            EditorGUI.BeginChangeCheck();
+            float tweenProgress = 1;
+
+            if (sequencerController.PlayingSequence != null)
+                tweenProgress = sequencerController.PlayingSequence.ElapsedPercentage();
+
+            EditorGUILayout.LabelField("Progress");
+            tweenProgress = EditorGUILayout.Slider(tweenProgress, 0, 1);
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                if (sequencerController.PlayingSequence != null)
                 {
-                    for (int j = 0; j < doTweenAnimationStep.Actions.Length; j++)
-                    {
-                        if (doTweenAnimationStep.Actions[j].Direction == DOTweenActionBase.AnimationDirection.From)
-                        {
-                            anyUsingFrom = true;
-                        }
-                        else
-                        {
-                            if (anyUsingFrom)
-                                return false;
-                        }
-                    }
+                    sequencerController.PlayingSequence.Goto(tweenProgress *
+                                                          sequencerController.PlayingSequence.Duration());
                 }
             }
 
-            return anyUsingFrom;
+            GUI.enabled = guiEnabled;
+            GUILayout.FlexibleSpace();
         }
 
-        private void Play()
+        private void DrawTimeScaleSlider()
         {
-            if (!Application.isPlaying)
-                DOTweenEditorPreview.Start();
+            GUILayout.FlexibleSpace();
+            bool guiEnabled = GUI.enabled;
 
-            if (!Application.isPlaying)
+            GUI.enabled = sequencerController.PlayingSequence != null && DOTweenEditorPreview.isPreviewing;
+
+            EditorGUI.BeginChangeCheck();
+            float tweenTimescale = 1;
+
+            if (sequencerController.PlayingSequence != null)
+                tweenTimescale = sequencerController.PlayingSequence.timeScale;
+
+            EditorGUILayout.LabelField("TimeScale");
+            tweenTimescale = EditorGUILayout.Slider(tweenTimescale, 0, 2);
+
+            if (EditorGUI.EndChangeCheck())
             {
-                sequencerController.Play(OnEditorPlaybackFinished);
-            }
-            else
-            {
-                sequencerController.Play();
-            }
-        }
-
-        private void OnEditorPlaybackFinished()
-        {
-            Stop();
-        }
-
-        private void Stop()
-        {
-            for (int i = 0; i < sequencerController.AnimationSteps.Length; i++)
-            {
-                if (sequencerController.AnimationSteps[i] is DOTweenAnimationStep doTweenAnimationStep)
-                {
-                    for (int j = 0; j < doTweenAnimationStep.Actions.Length; j++)
-                    {
-                        Tweener cachedTween = doTweenAnimationStep.Actions[j].CachedTween;
-                        if (cachedTween == null)
-                            continue;
-
-                        if (doTweenAnimationStep.Actions[j].Direction == DOTweenActionBase.AnimationDirection.From)
-                            cachedTween.Rewind();
-                        else
-                            cachedTween.Complete();
-                    }
-                }
+                if (sequencerController.PlayingSequence != null)
+                    sequencerController.PlayingSequence.timeScale = tweenTimescale;
             }
 
-            sequencerController.Kill();
-            DOTweenEditorPreview.Stop();
-            Repaint();
+            GUI.enabled = guiEnabled;
+            GUILayout.FlexibleSpace();
         }
 
         private void DrawBoxedArea(string title, Action additionalInspectorGUI)

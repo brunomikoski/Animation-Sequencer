@@ -93,10 +93,14 @@ namespace BrunoMikoski.AnimationSequencer
 
                     bool guiEnabled = GUI.enabled;
                     DrawDeleteActionButton(position, property, i);
-                    GUI.enabled = IsValidTargetForRequiredComponent(targetSerializedProperty, actionSerializedProperty);
+
+                    if (GUI.enabled)
+                    {
+                        bool isValidTargetForRequiredComponent = IsValidTargetForRequiredComponent(targetSerializedProperty, actionSerializedProperty);
+                        GUI.enabled = isValidTargetForRequiredComponent;
+                    }
                     
                     EditorGUI.PropertyField(position, actionSerializedProperty);
-                    
                     
                     position.y += actionSerializedProperty.GetPropertyDrawerHeight();
                     

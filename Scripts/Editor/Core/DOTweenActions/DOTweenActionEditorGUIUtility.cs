@@ -115,5 +115,76 @@ namespace BrunoMikoski.AnimationSequencer
             }
             return false;
         }
+
+        private static GUIContent cachedBackButtonGUIContent;
+        internal static GUIContent BackButtonGUIContent
+        {
+            get
+            {
+                if (cachedBackButtonGUIContent == null)
+                {
+                    cachedBackButtonGUIContent = EditorGUIUtility.IconContent("d_beginButton");
+                    cachedBackButtonGUIContent.tooltip = "Rewind";
+                }
+
+                return cachedBackButtonGUIContent;
+            }
+        }
+        
+        private static GUIContent cachedStopButtonGUIContent;
+        internal static GUIContent StopButtonGUIContent
+        {
+            get
+            {
+                if (cachedStopButtonGUIContent == null)
+                {
+                    cachedStopButtonGUIContent = EditorGUIUtility.IconContent("d_winbtn_mac_close@2x");
+                    cachedStopButtonGUIContent.tooltip = "Stop";
+                }
+                return cachedStopButtonGUIContent;
+            }
+        }
+        
+        private static GUIContent cachedForwardButtonGUIContent;
+        internal static GUIContent ForwardButtonGUIContent
+        {
+            get
+            {
+                if (cachedForwardButtonGUIContent == null)
+                {
+                    cachedForwardButtonGUIContent = EditorGUIUtility.IconContent("d_endButton");
+                    cachedForwardButtonGUIContent.tooltip = "Fast Forward";
+                }
+                return cachedForwardButtonGUIContent;
+            }
+        }
+        
+        private static GUIContent cachedPauseButtonGUIContent;
+        internal static GUIContent PauseButtonGUIContent
+        {
+            get
+            {
+                if (cachedPauseButtonGUIContent == null)
+                {
+                    cachedPauseButtonGUIContent = EditorGUIUtility.IconContent("PauseButton On");
+                    cachedPauseButtonGUIContent.tooltip = "Pause";
+                }
+                return cachedPauseButtonGUIContent;
+            }
+        }
+        
+        private static GUIContent cachedPlayButtonGUIContent;
+        internal static GUIContent PlayButtonGUIContent
+        {
+            get
+            {
+                if (cachedPlayButtonGUIContent == null)
+                {
+                    cachedPlayButtonGUIContent = EditorGUIUtility.IconContent("PlayButton On");
+                    cachedPlayButtonGUIContent.tooltip = "Play";
+                }
+                return cachedPlayButtonGUIContent;
+            }
+        }
     }
 }

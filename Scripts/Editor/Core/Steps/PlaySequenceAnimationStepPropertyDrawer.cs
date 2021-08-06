@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace BrunoMikoski.AnimationSequencer
@@ -23,17 +22,6 @@ namespace BrunoMikoski.AnimationSequencer
                 
                 position.height = EditorGUIUtility.singleLineHeight;
                 position.y += base.GetPropertyHeight(property, label)+ EditorGUIUtility.standardVerticalSpacing;
-                EditorGUI.BeginDisabledGroup(true);
-                SerializedProperty sequencerSerializedProperty = property.FindPropertyRelative("sequencer");
-
-                string duration = "???";
-                if (sequencerSerializedProperty.objectReferenceValue != null)
-                {
-                    AnimationSequencerController sequencer = sequencerSerializedProperty.objectReferenceValue as AnimationSequencerController;
-                    duration = sequencer.Duration.ToString(CultureInfo.InvariantCulture);
-                }
-                EditorGUI.TextField(position, "Duration", duration);
-                EditorGUI.EndDisabledGroup();
             }
             property.SetPropertyDrawerHeight(position.y - originY + EditorGUIUtility.singleLineHeight);
         }

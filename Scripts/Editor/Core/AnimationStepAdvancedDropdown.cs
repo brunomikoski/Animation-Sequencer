@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using BrunoMikoski.AnimationSequencer.Utility;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;

@@ -16,15 +16,11 @@ namespace BrunoMikoski.AnimationSequencer
         
         [SerializeField]
         protected AnimationDirection direction;
-        public AnimationDirection Direction => direction;
 
         [SerializeField]
         protected CustomEase ease = CustomEase.InOutCirc;
         [SerializeField]
         protected bool isRelative;
-
-        private Tweener cachedTween;
-        public Tweener CachedTween => cachedTween;
 
         public virtual Type TargetComponentType { get; }
         public abstract string DisplayName { get; }
@@ -39,7 +35,6 @@ namespace BrunoMikoski.AnimationSequencer
 
             tween.SetEase(ease);
             tween.SetRelative(isRelative);
-            cachedTween = tween;
             return tween;
         }
     }

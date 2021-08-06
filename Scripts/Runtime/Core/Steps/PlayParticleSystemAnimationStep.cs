@@ -1,7 +1,6 @@
 using System;
 using DG.Tweening;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace BrunoMikoski.AnimationSequencer
 {
@@ -23,16 +22,15 @@ namespace BrunoMikoski.AnimationSequencer
 
         public ParticleSystem Target => particleSystem;
 
-        public override Tween GenerateTween()
+        public override void AddTweenToSequence(Sequence animationSequence)
         {
-            Sequence sequence = DOTween.Sequence();
-            sequence.AppendCallback(() =>
+            animationSequence.AppendCallback(() =>
             {
                 particleSystem.Play();
             });
-            sequence.AppendInterval(duration);
-            sequence.AppendCallback(FinishParticles);
-            return sequence;
+            
+            animationSequence.AppendInterval(duration);
+            animationSequence.AppendCallback(FinishParticles);
         }
 
         private void FinishParticles()

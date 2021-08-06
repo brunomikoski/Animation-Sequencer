@@ -15,11 +15,9 @@ namespace BrunoMikoski.AnimationSequencer
         
         public override float Duration => 0;
 
-        public override Tween GenerateTween()
+        public override void AddTweenToSequence(Sequence animationSequence)
         {
-            Sequence sequence = DOTween.Sequence();
-            sequence.AppendCallback(() => callback.Invoke());
-            return sequence;
+            animationSequence.AppendCallback(() => callback.Invoke());
         }
 
         public override string GetDisplayNameForEditor(int index)

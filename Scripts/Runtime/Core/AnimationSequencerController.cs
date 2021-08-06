@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using DG.DOTweenEditor;
 using DG.Tweening;
 using UnityEngine;
 
@@ -17,7 +16,6 @@ namespace BrunoMikoski.AnimationSequencer
         
         [SerializeReference]
         private AnimationStepBase[] animationSteps = new AnimationStepBase[0];
-        public AnimationStepBase[] AnimationSteps => animationSteps;
 
         [SerializeField]
         private float duration;
@@ -29,8 +27,12 @@ namespace BrunoMikoski.AnimationSequencer
         private UpdateType updateType = UpdateType.Normal;
         [SerializeField]
         private bool timeScaleIndependent = false;
+        [SerializeField]
+        private bool autoKill = false;
 
         private Sequence playingSequence;
+        public Sequence PlayingSequence => playingSequence;
+
         public bool IsPlaying => playingSequence != null && playingSequence.IsPlaying();
 
         private void Awake()
@@ -46,38 +48,59 @@ namespace BrunoMikoski.AnimationSequencer
             playingSequence = GenerateSequence();
             playingSequence.SetUpdate(updateType, timeScaleIndependent);
             playingSequence.OnComplete(() => { callback?.Invoke(); });
+            playingSequence.SetAutoKill(autoKill);
             
-#if UNITY_EDITOR
-            DOTweenEditorPreview.PrepareTweenForPreview(playingSequence, false, false, false);
-#endif
             playingSequence.Play();
         }
 
-        public void Complete()
-        {
-            if (!IsPlaying)
-                return;
-
-            DOTween.Complete(playingSequence, true);
-        }
-
-        public void Rewind()
+        
+        public void TogglePause()
         {
             if (playingSequence == null)
                 return;
             
-            DOTween.Rewind(playingSequence);
+            playingSequence.TogglePause();
         }
 
-        public void Stop()
+        public void Pause()
         {
             if (!IsPlaying)
                 return;
 
-            if (!Application.isPlaying)
-                playingSequence.Rewind();
+            playingSequence.Pause();
+        }
+        
+        public void Resume()
+        {
+            if (playingSequence == null)
+                return;
+
+            playingSequence.Play();
+        }
+
+        
+        public void Complete(bool withCallbacks = true)
+        {
+            if (playingSequence == null)
+                return;
+
+            playingSequence.Complete(withCallbacks);
+        }
+
+        public void Rewind(bool includeDelay = true)
+        {
+            if (playingSequence == null)
+                return;
             
-            playingSequence.Kill();
+            playingSequence.Rewind(includeDelay);
+        }
+        
+        public void Kill(bool complete = false)
+        {
+            if (!IsPlaying)
+                return;
+
+            playingSequence.Kill(complete);
         }
 
         public IEnumerator PlayEnumerator()
@@ -86,36 +109,16 @@ namespace BrunoMikoski.AnimationSequencer
             yield return playingSequence.WaitForCompletion();
         }
 
-        public Sequence GenerateSequence()
+        public Sequence GenerateSequence(Sequence sequence = null)
         {
-            Sequence animationSequence = DOTween.Sequence();
-
-            if (!Application.isPlaying)
-                animationSequence.SetAutoKill(false);
+            if (sequence == null)
+                sequence = DOTween.Sequence();
             
             for (int i = 0; i < animationSteps.Length; i++)
             {
-                AnimationStepBase animationStepBase = animationSteps[i];
-                Tween tween = animationStepBase.GenerateTween();
-                tween.SetAutoKill(false);
-                if (animationStepBase.FlowType == FlowType.Append)
-                {
-                    animationSequence.Append(tween);
-                }
-                else
-                {
-                    animationSequence.Join(tween);
-                }
+                animationSteps[i].AddTweenToSequence(sequence);
             }
-
-            return animationSequence;
+            return sequence;
         }
-        
-        public void Kill()
-        {
-            if (playingSequence != null)
-                playingSequence.Kill();
-        }
-
     }
 }
