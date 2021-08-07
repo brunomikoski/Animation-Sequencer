@@ -1,4 +1,5 @@
 ﻿using System;
+using DG.Tweening;
 using UnityEngine;
 
 namespace BrunoMikoski.AnimationSequencer
@@ -17,60 +18,14 @@ namespace BrunoMikoski.AnimationSequencer
 
         public abstract string DisplayName { get; }
         
-        private bool isPlaying;
-        public bool IsPlaying => isPlaying;
+        //TODO find a way to discover if one step is playing or not.
+        public bool IsPlaying => false;
         
-        private float animationTime;
-        private float stepTime;
-
-        public bool IsWaitingOnDelay => stepTime < delay;
-        public bool IsComplete => stepTime >= delay + Duration;
-
-        public virtual void Play()
-        {
-            isPlaying = true;
-        }
-
-        public virtual void PrepareForPlay()
-        {
-            animationTime = 0;
-            stepTime = 0;
-        }
-
-        public virtual void Rewind()
-        {
-        }
-
-        public abstract bool CanBePlayed();
+        public abstract void AddTweenToSequence(Sequence animationSequence);
 
         public virtual string GetDisplayNameForEditor(int index)
         {
             return $"{index}. {this}";
         }
-
-        public virtual void StepFinished()
-        {
-            Complete();
-            isPlaying = false;
-        }
-
-        public void UpdateStep(float deltaTime)
-        {
-            stepTime += deltaTime;
-            if (isPlaying)
-                animationTime += deltaTime;
-        }
-
-        public void WillBePlayed()
-        {
-            stepTime = 0;
-        }
-
-        public virtual void Stop()
-        {
-            isPlaying = false;
-        }
-
-        public abstract void Complete();
     }
 }

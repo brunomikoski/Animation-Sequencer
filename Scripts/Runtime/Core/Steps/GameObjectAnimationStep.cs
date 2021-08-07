@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace BrunoMikoski.AnimationSequencer
 {
@@ -9,15 +8,11 @@ namespace BrunoMikoski.AnimationSequencer
     {
         [SerializeField]
         protected GameObject target;
+        public GameObject Target => target;
 
         [SerializeField]
         protected float duration = 1;
         public override float Duration => duration;
-
-        public override bool CanBePlayed()
-        {
-            return target != null;
-        }
 
         public void SetTarget(GameObject newTarget)
         {

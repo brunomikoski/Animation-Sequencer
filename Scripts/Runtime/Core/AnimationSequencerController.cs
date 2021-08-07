@@ -1,237 +1,177 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace BrunoMikoski.AnimationSequencer
 {
     [DisallowMultipleComponent]
     public class AnimationSequencerController : MonoBehaviour
     {
-        public enum InitializeMode
+        private enum PlayType
         {
-            None,
-            PrepareToPlayOnAwake,
-            PlayOnAwake
+            Play,
+            Backward,
+            Forward
         }
         
         [SerializeReference]
         private AnimationStepBase[] animationSteps = new AnimationStepBase[0];
-        public AnimationStepBase[] AnimationSteps => animationSteps;
 
         [SerializeField]
         private float duration;
         public float Duration => duration;
 
         [SerializeField]
-        private InitializeMode initializeMode = InitializeMode.PlayOnAwake;
+        private UpdateType updateType = UpdateType.Normal;
+        [SerializeField]
+        private bool timeScaleIndependent = false;
+        [SerializeField]
+        private bool autoKill = false;
+        [SerializeField]
+        private bool playOnAwake;
+        [SerializeField]
+        private bool pauseOnAwake;
+        [SerializeField]
+        private PlayType playType = PlayType.Play;
+        
 
-        private bool isPlaying;
-        public bool IsPlaying => isPlaying;
+        private Sequence playingSequence;
+        public Sequence PlayingSequence => playingSequence;
 
-        private readonly List<AnimationStepBase> stepsToBePlayed = new List<AnimationStepBase>();
-        private readonly List<AnimationStepBase> stepsQueue = new List<AnimationStepBase>();
-        private bool preparedToPlay;
+        public bool IsPlaying => playingSequence != null && playingSequence.IsPlaying();
 
-        public event Action OnSequenceFinishedPlayingEvent;
-
-        public event Action<int> OnAnimationStepBeginEvent;
-        public event Action<int> OnAnimationStepFinishedEvent;
+        [SerializeField]
+        private UnityEvent onStartEvent = new UnityEvent();
+        public UnityEvent OnStartEvent => onStartEvent;
+        [SerializeField]
+        private UnityEvent onFinishedEvent = new UnityEvent();
+        public UnityEvent OnFinishedEvent => onFinishedEvent;
+        [SerializeField]
+        private UnityEvent onProgressEvent = new UnityEvent();
+        public UnityEvent OnProgressEvent => onProgressEvent;
+        
 
         private void Awake()
         {
-            if (initializeMode == InitializeMode.PlayOnAwake || initializeMode == InitializeMode.PrepareToPlayOnAwake)
+            if (playOnAwake)
             {
-                PrepareForPlay();
-                if (initializeMode == InitializeMode.PlayOnAwake)
-                    Play();
+                Play();
+                if (pauseOnAwake)
+                    playingSequence.Pause();
             }
         }
 
-        public void Play()
+        public void Play(Action onCompleteCallback = null)
         {
-            PrepareForPlay();
-            isPlaying = true;
-        }
+            DOTween.Kill(this);
+            playingSequence?.Kill();
 
-        public void Rewind()
-        {
-            for (int i = 0; i < animationSteps.Length; ++i)
+            if (onCompleteCallback != null) 
+                onFinishedEvent.AddListener(onCompleteCallback.Invoke);
+
+            playingSequence = GenerateSequence();
+            
+            switch (playType)
             {
-                animationSteps[i].Rewind();
+                case PlayType.Backward:
+                    playingSequence.PlayBackwards();
+                    break;
+
+                case PlayType.Forward:
+                    playingSequence.PlayForward();
+                    break;
+
+                default:
+                    playingSequence.Play();
+                    break;
             }
         }
-
-        public void Complete()
+        
+        public void TogglePause()
         {
-            if (!isPlaying)
-                return;
-            for (int i = 0; i < animationSteps.Length; i++)
-            {
-                AnimationStepBase animationStepBase = animationSteps[i];
-                if (animationStepBase.IsComplete)
-                    continue;
-                
-                animationStepBase.Complete();
-            }
-            AnimationFinished();
-        }
-
-        public void Stop()
-        {
-            if (!isPlaying)
+            if (playingSequence == null)
                 return;
             
-            isPlaying = false;
-            preparedToPlay = false;
-            for (int i = 0; i < animationSteps.Length; i++)
-                animationSteps[i].Stop();
+            playingSequence.TogglePause();
+        }
+
+        public void Pause()
+        {
+            if (!IsPlaying)
+                return;
+
+            playingSequence.Pause();
+        }
+        
+        public void Resume()
+        {
+            if (playingSequence == null)
+                return;
+
+            playingSequence.Play();
+        }
+
+        
+        public void Complete(bool withCallbacks = true)
+        {
+            if (playingSequence == null)
+                return;
+
+            playingSequence.Complete(withCallbacks);
+        }
+
+        public void Rewind(bool includeDelay = true)
+        {
+            if (playingSequence == null)
+                return;
+            
+            playingSequence.Rewind(includeDelay);
+        }
+        
+        public void Kill(bool complete = false)
+        {
+            if (!IsPlaying)
+                return;
+
+            playingSequence.Kill(complete);
         }
 
         public IEnumerator PlayEnumerator()
         {
             Play();
-            while (isPlaying)
-                yield return null;
+            yield return playingSequence.WaitForCompletion();
         }
 
-        public void PrepareForPlay(bool force = false)
+        public Sequence GenerateSequence(Sequence sequence = null)
         {
-            if (!force && preparedToPlay)
-                return;
-
-            stepsQueue.Clear();
-            stepsToBePlayed.Clear();
+            if (sequence == null)
+                sequence = DOTween.Sequence();
             
             for (int i = 0; i < animationSteps.Length; i++)
-                animationSteps[i].PrepareForPlay();
+            {
+                animationSteps[i].AddTweenToSequence(sequence);
+            }
+
+            sequence.SetTarget(this);
+            sequence.SetUpdate(updateType, timeScaleIndependent);
+            sequence.OnComplete(() =>
+            {
+                onStartEvent.Invoke();
+            });
+            sequence.OnUpdate(() =>
+            {
+                onProgressEvent.Invoke();
+            });
+            sequence.OnComplete(() =>
+            {
+                onFinishedEvent.Invoke();
+            });
             
-            stepsQueue.AddRange(animationSteps);
-            preparedToPlay = true;
-        }
-
-        private void AnimationFinished()
-        {
-            Stop();
-            OnSequenceFinishedPlayingEvent?.Invoke();
-        }
-
-        public void UpdateStep(float deltaTime)
-        {
-            if (!isPlaying)
-                return;
-
-            for (int i = stepsToBePlayed.Count - 1; i >= 0; i--)
-            {
-                AnimationStepBase animationStepBase = stepsToBePlayed[i];
-                animationStepBase.UpdateStep(deltaTime);
-                
-                if (animationStepBase.IsWaitingOnDelay)
-                    continue;
-
-                if (!animationStepBase.IsPlaying)
-                {
-                    animationStepBase.Play();
-                    DispatchOnStepBeginToPlay(animationStepBase);
-                }
-                else
-                {
-                    if (!animationStepBase.IsComplete)
-                        continue;
-
-                    animationStepBase.StepFinished();
-                    stepsToBePlayed.Remove(animationStepBase);
-                    DispatchOnStepFinished(animationStepBase);
-                }
-            }
-
-            if (stepsToBePlayed.Count == 0)
-            {
-                if (stepsQueue.Count == 0)
-                {
-                    AnimationFinished();
-                }
-                else
-                {
-                    UpdateNextSteps();
-                }
-            }
-        }
-
-        private void DispatchOnStepBeginToPlay(AnimationStepBase animationStepBase)
-        {
-            int index = Array.IndexOf(animationSteps, animationStepBase);
-            if (index == -1)
-                return;
+            sequence.SetAutoKill(autoKill);
             
-            OnAnimationStepBeginEvent?.Invoke(index);
-        }
-        
-        private void DispatchOnStepFinished(AnimationStepBase animationStepBase)
-        {
-            int index = Array.IndexOf(animationSteps, animationStepBase);
-            if (index == -1)
-                return;
-            
-            OnAnimationStepFinishedEvent?.Invoke(index);
-        }
-
-        private void UpdateNextSteps()
-        {
-            for (int i = 0; i < stepsQueue.Count; i++)
-            {
-                AnimationStepBase possibleStepToPlay = stepsQueue[i];
-                if (possibleStepToPlay.FlowType == FlowType.Append && stepsToBePlayed.Count == 0
-                    || possibleStepToPlay.FlowType == FlowType.Join && stepsToBePlayed.Count > 0)
-                {
-                    stepsToBePlayed.Add(possibleStepToPlay);
-                }
-                else
-                    break;
-            }
-
-            for (int i = 0; i < stepsToBePlayed.Count; i++)
-            {
-                AnimationStepBase animationStepBase = stepsToBePlayed[i];
-                animationStepBase.WillBePlayed();
-                stepsQueue.Remove(animationStepBase);
-            }
-        }
-
-        private void Update()
-        {
-            UpdateStep(Time.deltaTime);
-        }
-
-
-        public List<T> GetStepsOfType<T>() where T : AnimationStepBase
-        {
-            List<T> results = new List<T>();
-            for (int i = 0; i < animationSteps.Length; i++)
-            {
-                if (animationSteps[i] is T castedStep)
-                    results.Add(castedStep);
-            }
-
-            return results;
-        }
-
-        public List<DOTweenActionBase> GetDOTweenActionsThatUseComponent<T>() where T : Component
-        {
-            List<DOTweenAnimationStep> dotweenSteps = GetStepsOfType<DOTweenAnimationStep>();
-            List<DOTweenActionBase> results = new List<DOTweenActionBase>();
-            for (int i = 0; i < dotweenSteps.Count; i++)
-            {
-                DOTweenAnimationStep doTweenAnimationStep = dotweenSteps[i];
-                for (int j = 0; j < doTweenAnimationStep.Actions.Length; j++)
-                {
-                    DOTweenActionBase actionBase = doTweenAnimationStep.Actions[j];
-                    if (actionBase.TargetComponentType == typeof(T))
-                        results.Add(actionBase);
-                }
-            }
-
-            return results;
+            return sequence;
         }
     }
 }

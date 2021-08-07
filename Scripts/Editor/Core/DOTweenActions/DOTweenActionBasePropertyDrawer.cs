@@ -13,7 +13,7 @@ namespace BrunoMikoski.AnimationSequencer
 
             Type type = property.GetTypeFromManagedFullTypeName();
             
-            GUIContent displayName = DOTweenActionEditorGUIUtility.GetTypeDisplayName(type);
+            GUIContent displayName = AnimationSequenceEditorGUIUtility.GetTypeDisplayName(type);
 
             position.x += 10;
             position.width -= 20;

@@ -1,9 +1,9 @@
 {
   "name": "com.brunomikoski.animationsequencer",
   "displayName": "Animation Sequencer",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "unity": "2018.4",
-  "description": "Animation sequencer is a way to create complex animations of sequence of events by a friendly user interface",
+  "description": "Animation sequencer is a way to create complex animations of sequence of events by a friendly user interface. Requires DOTween v1.2.632",
   "keywords": [
     "ui",
     "dotween",

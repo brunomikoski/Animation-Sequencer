@@ -12,6 +12,7 @@ namespace BrunoMikoski.AnimationSequencer
     {
         [SerializeField]
         private Ease ease;
+        public Ease Ease => ease;
         [SerializeField]
         private AnimationCurve curve;
 

@@ -1,6 +1,6 @@
 ﻿using System;
+using DG.Tweening;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace BrunoMikoski.AnimationSequencer
 {
@@ -21,25 +21,10 @@ namespace BrunoMikoski.AnimationSequencer
                 return sequencer.Duration;
             }
         }
-        
-        public AnimationSequencerController Target => sequencer;
 
-        public override bool CanBePlayed()
+        public override void AddTweenToSequence(Sequence animationSequence)
         {
-            return sequencer != null;
-        }
-
-        public override void PrepareForPlay()
-        {
-            base.PrepareForPlay();
-            sequencer.PrepareForPlay();
-        }
-
-
-        public override void Play()
-        {
-            base.Play();
-            sequencer.Play();
+            sequencer.GenerateSequence(animationSequence);
         }
 
         public override string GetDisplayNameForEditor(int index)
@@ -53,11 +38,6 @@ namespace BrunoMikoski.AnimationSequencer
         public void SetTarget(AnimationSequencerController newTarget)
         {
             sequencer = newTarget;
-        }
-
-        public override void Complete()
-        {
-            sequencer.Complete();
         }
     }
 }

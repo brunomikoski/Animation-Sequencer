@@ -16,14 +16,13 @@ namespace BrunoMikoski.AnimationSequencer
         private int vibrato = 10;
         [SerializeField]
         private float elasticity = 1f;
-        
 
-        public override bool CreateTween(GameObject target, float duration, int loops, LoopType loopType)
-        {
+        protected override Tweener GenerateTween_Internal(GameObject target, float duration)
+        {  
             Tweener tween = target.transform.DOPunchRotation(punch, duration, vibrato, elasticity);
-            
-            SetTween(tween, loops, loopType);
-            return true;
+
+            return tween;
         }
+
     }
 }

@@ -18,18 +18,18 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private RotateMode rotationMode = RotateMode.Fast;
 
-        public override bool CreateTween(GameObject target, float duration, int loops, LoopType loopType)
+        protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
             TweenerCore<Quaternion, Vector3, QuaternionOptions> localTween;
             if (local)
                 localTween = target.transform.DOLocalRotate(GetRotation(), duration, rotationMode);
             else
                 localTween = target.transform.DORotate(GetRotation(), duration, rotationMode);
-            
-            SetTween(localTween, loops, loopType);
-            return true;
+
+            return localTween;
         }
 
+        
         protected abstract Vector3 GetRotation();
     }
 }

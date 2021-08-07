@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,15 +9,15 @@ namespace BrunoMikoski.AnimationSequencer
     public sealed class InvokeCallbackAnimationStep : AnimationStepBase
     {
         [SerializeField]
-        private UnityEvent callback;
+        private UnityEvent callback = new UnityEvent();
         
         public override string DisplayName => "Invoke Callback Step";
         
         public override float Duration => 0;
 
-        public override bool CanBePlayed()
+        public override void AddTweenToSequence(Sequence animationSequence)
         {
-            return true;
+            animationSequence.AppendCallback(() => callback.Invoke());
         }
 
         public override string GetDisplayNameForEditor(int index)
@@ -31,11 +32,6 @@ namespace BrunoMikoski.AnimationSequencer
             }
             
             return $"{index}. {DisplayName}: {persistentTargetNames}";
-        }
-
-        public override void Complete()
-        {
-            callback?.Invoke();
         }
     }
 }

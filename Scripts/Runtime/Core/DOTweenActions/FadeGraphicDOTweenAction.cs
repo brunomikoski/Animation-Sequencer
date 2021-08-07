@@ -15,20 +15,19 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private float alpha;
-        
 
-        public override bool CreateTween(GameObject target, float duration, int loops, LoopType loopType)
+        protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
             Graphic graphic = target.GetComponent<Graphic>();
             if (graphic == null)
             {
                 Debug.LogError($"{target} does not have {TargetComponentType} component");
-                return false;
+                return null;
             }
 
             TweenerCore<Color, Color, ColorOptions> graphicTween = graphic.DOFade(alpha, duration);
-            SetTween(graphicTween, loops, loopType);
-            return true;
+            return graphicTween;
         }
+
     }
 }

@@ -23,7 +23,7 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private PathType pathType = PathType.CatmullRom;
 
-        public override bool CreateTween(GameObject target, float duration, int loops, LoopType loopType)
+        protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
             TweenerCore<Vector3, Path, PathOptions> tween;
             
@@ -31,10 +31,10 @@ namespace BrunoMikoski.AnimationSequencer
                 tween = target.transform.DOPath(GetPathPositions(), duration, pathType, pathMode, resolution, gizmoColor);
             else
                 tween = target.transform.DOLocalPath(GetPathPositions(), duration, pathType, pathMode, resolution, gizmoColor);
-            
-            SetTween(tween);
-            return true;
+
+            return tween;
         }
+
 
         protected abstract Vector3[] GetPathPositions();
     }

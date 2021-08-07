@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace BrunoMikoski.AnimationSequencer
 {
-    public static class DOTweenActionEditorGUIUtility
+    public static class AnimationSequenceEditorGUIUtility
     {
         private static Dictionary<Type, GUIContent> cachedTypeToDisplayName;
         public static Dictionary<Type, GUIContent> TypeToDisplayName
@@ -114,6 +114,91 @@ namespace BrunoMikoski.AnimationSequencer
                 return targetGameObject.GetComponent(requiredComponent) != null;
             }
             return false;
+        }
+
+        private static GUIContent cachedBackButtonGUIContent;
+        internal static GUIContent BackButtonGUIContent
+        {
+            get
+            {
+                if (cachedBackButtonGUIContent == null)
+                {
+                    cachedBackButtonGUIContent = EditorGUIUtility.IconContent("d_beginButton");
+                    cachedBackButtonGUIContent.tooltip = "Rewind";
+                }
+
+                return cachedBackButtonGUIContent;
+            }
+        }
+        
+        private static GUIContent cachedStopButtonGUIContent;
+        internal static GUIContent StopButtonGUIContent
+        {
+            get
+            {
+                if (cachedStopButtonGUIContent == null)
+                {
+                    cachedStopButtonGUIContent = EditorGUIUtility.IconContent("animationdopesheetkeyframe");
+                    cachedStopButtonGUIContent.tooltip = "Stop";
+                }
+                return cachedStopButtonGUIContent;
+            }
+        }
+        
+        private static GUIContent cachedForwardButtonGUIContent;
+        internal static GUIContent ForwardButtonGUIContent
+        {
+            get
+            {
+                if (cachedForwardButtonGUIContent == null)
+                {
+                    cachedForwardButtonGUIContent = EditorGUIUtility.IconContent("d_endButton");
+                    cachedForwardButtonGUIContent.tooltip = "Fast Forward";
+                }
+                return cachedForwardButtonGUIContent;
+            }
+        }
+        
+        private static GUIContent cachedPauseButtonGUIContent;
+        internal static GUIContent PauseButtonGUIContent
+        {
+            get
+            {
+                if (cachedPauseButtonGUIContent == null)
+                {
+                    cachedPauseButtonGUIContent = EditorGUIUtility.IconContent("PauseButton On");
+                    cachedPauseButtonGUIContent.tooltip = "Pause";
+                }
+                return cachedPauseButtonGUIContent;
+            }
+        }
+        
+        private static GUIContent cachedPlayButtonGUIContent;
+        internal static GUIContent PlayButtonGUIContent
+        {
+            get
+            {
+                if (cachedPlayButtonGUIContent == null)
+                {
+                    cachedPlayButtonGUIContent = EditorGUIUtility.IconContent("PlayButton On");
+                    cachedPlayButtonGUIContent.tooltip = "Play";
+                }
+                return cachedPlayButtonGUIContent;
+            }
+        }
+        
+        private static GUIContent cachedSaveAsDefaultGUIContent;
+        internal static GUIContent SaveAsDefaultButtonGUIContent
+        {
+            get
+            {
+                if (cachedSaveAsDefaultGUIContent == null)
+                {
+                    cachedSaveAsDefaultGUIContent = EditorGUIUtility.IconContent("d_SaveAs");
+                    cachedSaveAsDefaultGUIContent.tooltip = "Save as Default";
+                }
+                return cachedSaveAsDefaultGUIContent;
+            }
         }
     }
 }

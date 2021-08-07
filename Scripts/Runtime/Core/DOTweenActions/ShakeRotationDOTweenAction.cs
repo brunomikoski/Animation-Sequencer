@@ -7,6 +7,7 @@ namespace BrunoMikoski.AnimationSequencer
     [Serializable]
     public sealed class ShakeRotationDOTweenAction : DOTweenActionBase
     {
+
         public override Type TargetComponentType => typeof(Transform);
         public override string DisplayName => "Shake Rotation";
 
@@ -19,12 +20,12 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private bool fadeout = true;
 
-        public override bool CreateTween(GameObject target, float duration, int loops, LoopType loopType)
+        protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
             Tweener tween = target.transform.DOShakeRotation(duration, strength, vibrato, randomness, fadeout);
-            
-            SetTween(tween, loops, loopType);
-            return true;
+
+            return tween;
         }
+
     }
 }

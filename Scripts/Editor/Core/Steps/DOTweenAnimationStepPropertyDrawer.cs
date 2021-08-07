@@ -18,25 +18,75 @@ namespace BrunoMikoski.AnimationSequencer
             SerializedProperty arrayElement = actionsSerializedProperty.GetArrayElementAtIndex(actionsSerializedProperty.arraySize - 1);
             arrayElement.managedReferenceValue = Activator.CreateInstance(targetType);
             
+            
             if (actionsSerializedProperty.arraySize > 1)
             {
                 SerializedProperty previousElement = actionsSerializedProperty.GetArrayElementAtIndex(actionsSerializedProperty.arraySize - 2);
-                SerializedProperty previousDirection = previousElement.FindPropertyRelative("direction");
-                if (previousDirection != null)
+
+                if (AnimationControllerDefaults.Instance.PreferUsingPreviousDirection)
                 {
-                    SerializedProperty currentDirection = arrayElement.FindPropertyRelative("direction");
-                    if (currentDirection != null)
-                        currentDirection.enumValueIndex = previousDirection.enumValueIndex;
+                    SerializedProperty previousDirection = previousElement.FindPropertyRelative("direction");
+                    if (previousDirection != null)
+                    {
+                        SerializedProperty currentDirection = arrayElement.FindPropertyRelative("direction");
+                        if (currentDirection != null)
+                            currentDirection.enumValueIndex = previousDirection.enumValueIndex;
+                    }
                 }
 
-                SerializedProperty previousEase = previousElement.FindPropertyRelative("ease").FindPropertyRelative("ease");
-                if (previousEase != null)
+                if (AnimationControllerDefaults.Instance.PreferUsingPreviousActionEasing)
+                {
+                    SerializedProperty previousEase = previousElement.FindPropertyRelative("ease").FindPropertyRelative("ease");
+                    if (previousEase != null)
+                    {
+                        SerializedProperty currentEase = arrayElement.FindPropertyRelative("ease").FindPropertyRelative("ease");
+                        if (currentEase != null)
+                            currentEase.enumValueIndex = previousEase.enumValueIndex;
+                    }
+                }
+                else
                 {
                     SerializedProperty currentEase = arrayElement.FindPropertyRelative("ease").FindPropertyRelative("ease");
                     if (currentEase != null)
-                        currentEase.enumValueIndex = previousEase.enumValueIndex;
+                        currentEase.enumValueIndex = (int) AnimationControllerDefaults.Instance.DefaultEasing.Ease;
                 }
+                
+                
+                if (AnimationControllerDefaults.Instance.PreferUsingPreviousRelativeValue)
+                {
+                    SerializedProperty previousEase = previousElement.FindPropertyRelative("isRelative");
+                    if (previousEase != null)
+                    {
+                        SerializedProperty currentEase = arrayElement.FindPropertyRelative("isRelative");
+                        if (currentEase != null)
+                            currentEase.boolValue = previousEase.boolValue;
+                    }
+                }
+                else
+                {
+                    SerializedProperty currentEase = arrayElement.FindPropertyRelative("ease").FindPropertyRelative("ease");
+                    if (currentEase != null)
+                        currentEase.enumValueIndex = (int) AnimationControllerDefaults.Instance.DefaultEasing.Ease;
+                }
+                
+                
             }
+            else
+            {
+                SerializedProperty currentEase = arrayElement.FindPropertyRelative("ease").FindPropertyRelative("ease");
+                if (currentEase != null)
+                    currentEase.enumValueIndex = (int) AnimationControllerDefaults.Instance.DefaultEasing.Ease;
+                
+                
+                SerializedProperty currentDirection = arrayElement.FindPropertyRelative("direction");
+                if (currentDirection != null)
+                    currentDirection.enumValueIndex =  (int) AnimationControllerDefaults.Instance.DefaultDirection;
+                
+                SerializedProperty isRelativeSerializedProperty = arrayElement.FindPropertyRelative("isRelative");
+                if (isRelativeSerializedProperty != null)
+                    isRelativeSerializedProperty.boolValue = AnimationControllerDefaults.Instance.UseRelative;
+            }
+            
 
             actionsSerializedProperty.serializedObject.ApplyModifiedProperties();
         }
@@ -75,7 +125,7 @@ namespace BrunoMikoski.AnimationSequencer
                 position.height = EditorGUIUtility.singleLineHeight;
                 if (GUI.Button(position, "Add Actions"))
                 {
-                    DOTweenActionEditorGUIUtility.DOTweenActionsDropdown.Show(position, actionsSerializedProperty, targetSerializedProperty.objectReferenceValue,
+                    AnimationSequenceEditorGUIUtility.DOTweenActionsDropdown.Show(position, actionsSerializedProperty, targetSerializedProperty.objectReferenceValue,
                         item =>
                         {
                             AddNewActionOfType(actionsSerializedProperty, item.BaseDOTweenActionType);
@@ -93,10 +143,14 @@ namespace BrunoMikoski.AnimationSequencer
 
                     bool guiEnabled = GUI.enabled;
                     DrawDeleteActionButton(position, property, i);
-                    GUI.enabled = IsValidTargetForRequiredComponent(targetSerializedProperty, actionSerializedProperty);
+
+                    if (GUI.enabled)
+                    {
+                        bool isValidTargetForRequiredComponent = IsValidTargetForRequiredComponent(targetSerializedProperty, actionSerializedProperty);
+                        GUI.enabled = isValidTargetForRequiredComponent;
+                    }
                     
                     EditorGUI.PropertyField(position, actionSerializedProperty);
-                    
                     
                     position.y += actionSerializedProperty.GetPropertyDrawerHeight();
                     
@@ -122,7 +176,7 @@ namespace BrunoMikoski.AnimationSequencer
                 return false;
 
             Type type = actionSerializedProperty.GetTypeFromManagedFullTypeName();
-            return DOTweenActionEditorGUIUtility.CanActionBeAppliedToTarget(type, targetSerializedProperty.objectReferenceValue as GameObject); 
+            return AnimationSequenceEditorGUIUtility.CanActionBeAppliedToTarget(type, targetSerializedProperty.objectReferenceValue as GameObject); 
         }
 
         private static void DrawDeleteActionButton(Rect position, SerializedProperty property, int targetIndex)
