@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0]
+Thanks for all the [suggestions](https://github.com/brunomikoski/Animation-Sequencer/issues/16) @nindim
+### Changed
+- Refactored the system to use Sequences as core, instead of proprietary implementation
+- Changed the preview controls
+- Fixed chain of sequences to be played properly on editor.
+- Changed how the DOTweenEditorPreview works
+
+### Added
+- Added UnityEvents callback to be exposed on the editor.
+- Added TimeScale slider to control preview
+- Added progress slider to scrubing through the sequence
+- Added new exposed settings (`UpdateType` `TimeScale Independent`, `Auto Kill`)
+- Added new play type
+- Added `AnimationControllerDefaults` where you can set some default values and behaviours
+
+### Requirement
+- Requires latest DOTween version (v1.2.632)
+
 ## [0.1.5]
 ### Changed
 - Fixed one issue that prevent you from playing the same animation twice on editor
@@ -44,6 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### [Unreleased]
 
+[0.2.0]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.2.0
 [0.1.5]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.1.5
 [0.1.4]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.1.4
 [0.1.3]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.1.3
