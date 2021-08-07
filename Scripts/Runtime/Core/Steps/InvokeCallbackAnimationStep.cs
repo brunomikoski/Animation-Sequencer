@@ -9,7 +9,7 @@ namespace BrunoMikoski.AnimationSequencer
     public sealed class InvokeCallbackAnimationStep : AnimationStepBase
     {
         [SerializeField]
-        private UnityEvent callback;
+        private UnityEvent callback = new UnityEvent();
         
         public override string DisplayName => "Invoke Callback Step";
         

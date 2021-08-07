@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using DG.DOTweenEditor;
 using DG.Tweening;
 using UnityEditor;
@@ -60,7 +58,7 @@ namespace BrunoMikoski.AnimationSequencer
 
         private void OnDrawerHeader(Rect rect)
         {
-            EditorGUI.LabelField(rect, "Animation Steps", EditorStyles.foldoutHeader);
+            EditorGUI.LabelField(rect, "Animation Steps");
         }
         
         private void AddNewAnimationStepOfType(Type targetAnimationType)
@@ -143,17 +141,23 @@ namespace BrunoMikoski.AnimationSequencer
 
         private void DrawSettings()
         {
-            SerializedProperty initializationModeSerializedProperty = serializedObject.FindProperty("initializeMode");
+            SerializedProperty playOnAwakeSerializedProperty = serializedObject.FindProperty("playOnAwake");
+            SerializedProperty pauseOnAwakeSerializedProperty = serializedObject.FindProperty("pauseOnAwake");
             SerializedProperty updateTypeSerializedProperty = serializedObject.FindProperty("updateType");
             SerializedProperty timeScaleIndependentSerializedProperty = serializedObject.FindProperty("timeScaleIndependent");
             SerializedProperty autoKillSerializedProperty = serializedObject.FindProperty("autoKill");
+            SerializedProperty sequenceDirectionSerializedProperty = serializedObject.FindProperty("playType");
 
             using (EditorGUI.ChangeCheckScope changedCheck = new EditorGUI.ChangeCheckScope())
             {
-                EditorGUILayout.PropertyField(initializationModeSerializedProperty);
-                EditorGUILayout.PropertyField(updateTypeSerializedProperty);
+                EditorGUILayout.PropertyField(playOnAwakeSerializedProperty);
+                if (playOnAwakeSerializedProperty.boolValue)
+                    EditorGUILayout.PropertyField(pauseOnAwakeSerializedProperty);
+                
                 EditorGUILayout.PropertyField(timeScaleIndependentSerializedProperty);
                 EditorGUILayout.PropertyField(autoKillSerializedProperty);
+                EditorGUILayout.PropertyField(sequenceDirectionSerializedProperty);
+                EditorGUILayout.PropertyField(updateTypeSerializedProperty);
                 
                 if (changedCheck.changed)
                     serializedObject.ApplyModifiedProperties();
@@ -171,7 +175,7 @@ namespace BrunoMikoski.AnimationSequencer
 
             GUIStyle previewButtonStyle = new GUIStyle(GUI.skin.button);
             previewButtonStyle.fixedWidth = previewButtonStyle.fixedHeight = 40;
-            if (GUILayout.Button(DOTweenActionEditorGUIUtility.BackButtonGUIContent, previewButtonStyle))
+            if (GUILayout.Button(AnimationSequenceEditorGUIUtility.BackButtonGUIContent, previewButtonStyle))
             {
                 sequencerController.Rewind();
             }
@@ -179,7 +183,7 @@ namespace BrunoMikoski.AnimationSequencer
             GUI.enabled = true;
             if (!DOTweenEditorPreview.isPreviewing && !Application.isPlaying)
             {
-                if (GUILayout.Button(DOTweenActionEditorGUIUtility.PlayButtonGUIContent, previewButtonStyle))
+                if (GUILayout.Button(AnimationSequenceEditorGUIUtility.PlayButtonGUIContent, previewButtonStyle))
                 {
                     if (!Application.isPlaying)
                         DOTweenEditorPreview.Start();
@@ -194,7 +198,7 @@ namespace BrunoMikoski.AnimationSequencer
             {
                 if (!sequencerController.IsPlaying)
                 {
-                    if (GUILayout.Button(DOTweenActionEditorGUIUtility.PlayButtonGUIContent, previewButtonStyle))
+                    if (GUILayout.Button(AnimationSequenceEditorGUIUtility.PlayButtonGUIContent, previewButtonStyle))
                     {
                         if (sequencerController.PlayingSequence == null)
                         {
@@ -208,7 +212,7 @@ namespace BrunoMikoski.AnimationSequencer
                 }
                 else
                 {
-                    if (GUILayout.Button(DOTweenActionEditorGUIUtility.PauseButtonGUIContent, previewButtonStyle))
+                    if (GUILayout.Button(AnimationSequenceEditorGUIUtility.PauseButtonGUIContent, previewButtonStyle))
                     {
                         sequencerController.TogglePause();
                     }
@@ -216,7 +220,7 @@ namespace BrunoMikoski.AnimationSequencer
             }
 
             GUI.enabled = sequencerController.PlayingSequence != null && Application.isPlaying || DOTweenEditorPreview.isPreviewing;
-            if (GUILayout.Button(DOTweenActionEditorGUIUtility.ForwardButtonGUIContent, previewButtonStyle))
+            if (GUILayout.Button(AnimationSequenceEditorGUIUtility.ForwardButtonGUIContent, previewButtonStyle))
             {
                 sequencerController.Complete();
             }
@@ -233,7 +237,7 @@ namespace BrunoMikoski.AnimationSequencer
 
             if (!Application.isPlaying)
             {
-                if (GUILayout.Button(DOTweenActionEditorGUIUtility.StopButtonGUIContent, previewButtonStyle))
+                if (GUILayout.Button(AnimationSequenceEditorGUIUtility.StopButtonGUIContent, previewButtonStyle))
                 {
                     DOTweenEditorPreview.Stop();
                 }

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace BrunoMikoski.AnimationSequencer
 {
-    public static class DOTweenActionEditorGUIUtility
+    public static class AnimationSequenceEditorGUIUtility
     {
         private static Dictionary<Type, GUIContent> cachedTypeToDisplayName;
         public static Dictionary<Type, GUIContent> TypeToDisplayName
@@ -184,6 +184,20 @@ namespace BrunoMikoski.AnimationSequencer
                     cachedPlayButtonGUIContent.tooltip = "Play";
                 }
                 return cachedPlayButtonGUIContent;
+            }
+        }
+        
+        private static GUIContent cachedSaveAsDefaultGUIContent;
+        internal static GUIContent SaveAsDefaultButtonGUIContent
+        {
+            get
+            {
+                if (cachedSaveAsDefaultGUIContent == null)
+                {
+                    cachedSaveAsDefaultGUIContent = EditorGUIUtility.IconContent("d_SaveAs");
+                    cachedSaveAsDefaultGUIContent.tooltip = "Save as Default";
+                }
+                return cachedSaveAsDefaultGUIContent;
             }
         }
     }

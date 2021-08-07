@@ -9,11 +9,11 @@ namespace BrunoMikoski.AnimationSequencer
     [DisallowMultipleComponent]
     public class AnimationSequencerController : MonoBehaviour
     {
-        private enum InitializeMode
+        private enum PlayType
         {
-            None,
-            PlayOnAwake,
-            PauseOnAwake
+            Play,
+            Backward,
+            Forward
         }
         
         [SerializeReference]
@@ -24,13 +24,18 @@ namespace BrunoMikoski.AnimationSequencer
         public float Duration => duration;
 
         [SerializeField]
-        private InitializeMode initializeMode = InitializeMode.PlayOnAwake;
-        [SerializeField]
         private UpdateType updateType = UpdateType.Normal;
         [SerializeField]
         private bool timeScaleIndependent = false;
         [SerializeField]
         private bool autoKill = false;
+        [SerializeField]
+        private bool playOnAwake;
+        [SerializeField]
+        private bool pauseOnAwake;
+        [SerializeField]
+        private PlayType playType = PlayType.Play;
+        
 
         private Sequence playingSequence;
         public Sequence PlayingSequence => playingSequence;
@@ -50,24 +55,38 @@ namespace BrunoMikoski.AnimationSequencer
 
         private void Awake()
         {
-            if (initializeMode == InitializeMode.PlayOnAwake || initializeMode == InitializeMode.PauseOnAwake)
+            if (playOnAwake)
             {
                 Play();
-                if (initializeMode == InitializeMode.PauseOnAwake)
+                if (pauseOnAwake)
                     playingSequence.Pause();
             }
         }
 
-        public void Play(Action callback = null)
+        public void Play(Action onCompleteCallback = null)
         {
             DOTween.Kill(this);
             playingSequence?.Kill();
 
-            if (callback != null) 
-                onStartEvent.AddListener(callback.Invoke);
+            if (onCompleteCallback != null) 
+                onFinishedEvent.AddListener(onCompleteCallback.Invoke);
 
             playingSequence = GenerateSequence();
-            playingSequence.Play();
+            
+            switch (playType)
+            {
+                case PlayType.Backward:
+                    playingSequence.PlayBackwards();
+                    break;
+
+                case PlayType.Forward:
+                    playingSequence.PlayForward();
+                    break;
+
+                default:
+                    playingSequence.Play();
+                    break;
+            }
         }
         
         public void TogglePause()
