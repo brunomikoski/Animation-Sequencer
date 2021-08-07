@@ -138,7 +138,7 @@ namespace BrunoMikoski.AnimationSequencer
             {
                 if (cachedStopButtonGUIContent == null)
                 {
-                    cachedStopButtonGUIContent = EditorGUIUtility.IconContent("d_winbtn_mac_close@2x");
+                    cachedStopButtonGUIContent = EditorGUIUtility.IconContent("animationdopesheetkeyframe");
                     cachedStopButtonGUIContent.tooltip = "Stop";
                 }
                 return cachedStopButtonGUIContent;

@@ -167,90 +167,90 @@ namespace BrunoMikoski.AnimationSequencer
             GUILayout.FlexibleSpace();
             
             bool guiEnabled = GUI.enabled;
-                GUI.enabled = DOTweenEditorPreview.isPreviewing;
-                if (GUILayout.Button(DOTweenActionEditorGUIUtility.BackButtonGUIContent, GUILayout.Width(40),
-                    GUILayout.Height(40)))
-                {
-                    sequencerController.Rewind();
-                }
+            GUI.enabled = sequencerController.PlayingSequence != null && Application.isPlaying || DOTweenEditorPreview.isPreviewing;
 
-                GUI.enabled = true;
+            GUIStyle previewButtonStyle = new GUIStyle(GUI.skin.button);
+            previewButtonStyle.fixedWidth = previewButtonStyle.fixedHeight = 40;
+            if (GUILayout.Button(DOTweenActionEditorGUIUtility.BackButtonGUIContent, previewButtonStyle))
+            {
+                sequencerController.Rewind();
+            }
 
-                if (!DOTweenEditorPreview.isPreviewing && !Application.isPlaying)
+            GUI.enabled = true;
+            if (!DOTweenEditorPreview.isPreviewing && !Application.isPlaying)
+            {
+                if (GUILayout.Button(DOTweenActionEditorGUIUtility.PlayButtonGUIContent, previewButtonStyle))
                 {
-                    if (GUILayout.Button(DOTweenActionEditorGUIUtility.PlayButtonGUIContent, GUILayout.Width(40),
-                        GUILayout.Height(40)))
-                    {
-                        if (!Application.isPlaying)
-                            DOTweenEditorPreview.Start();
-                        sequencerController.Play();
-                        if (!Application.isPlaying)
-                            DOTweenEditorPreview.PrepareTweenForPreview(sequencerController.PlayingSequence);
-                    }
+                    if (!Application.isPlaying)
+                        DOTweenEditorPreview.Start();
+                    
+                    sequencerController.Play();
+                    
+                    if (!Application.isPlaying)
+                        DOTweenEditorPreview.PrepareTweenForPreview(sequencerController.PlayingSequence);
                 }
-                else
+            }
+            else
+            {
+                if (!sequencerController.IsPlaying)
                 {
-                    if (!sequencerController.IsPlaying)
+                    if (GUILayout.Button(DOTweenActionEditorGUIUtility.PlayButtonGUIContent, previewButtonStyle))
                     {
-                        if (GUILayout.Button(DOTweenActionEditorGUIUtility.PlayButtonGUIContent, GUILayout.Width(40),
-                            GUILayout.Height(40)))
+                        if (sequencerController.PlayingSequence == null)
                         {
-                            if (!sequencerController.IsPlaying)
-                            {
-                                sequencerController.Play();
-                            }
-                            else
-                            {
-                                sequencerController.TogglePause();
-                            }
+                            sequencerController.Play();
                         }
-                    }
-                    else
-                    {
-                        if (GUILayout.Button(DOTweenActionEditorGUIUtility.PauseButtonGUIContent, GUILayout.Width(40),
-                            GUILayout.Height(40)))
+                        else
                         {
                             sequencerController.TogglePause();
                         }
                     }
                 }
-
-                GUI.enabled = DOTweenEditorPreview.isPreviewing;
-                if (GUILayout.Button(DOTweenActionEditorGUIUtility.ForwardButtonGUIContent, GUILayout.Width(40),
-                    GUILayout.Height(40)))
+                else
                 {
-                    sequencerController.Complete();
+                    if (GUILayout.Button(DOTweenActionEditorGUIUtility.PauseButtonGUIContent, previewButtonStyle))
+                    {
+                        sequencerController.TogglePause();
+                    }
                 }
+            }
 
-                float elapsedPercentage = 0;
-                if (sequencerController.PlayingSequence != null)
-                    elapsedPercentage = sequencerController.PlayingSequence.ElapsedPercentage();
+            GUI.enabled = sequencerController.PlayingSequence != null && Application.isPlaying || DOTweenEditorPreview.isPreviewing;
+            if (GUILayout.Button(DOTweenActionEditorGUIUtility.ForwardButtonGUIContent, previewButtonStyle))
+            {
+                sequencerController.Complete();
+            }
 
-                if (!DOTweenEditorPreview.isPreviewing || sequencerController.PlayingSequence.IsPlaying() &&
-                    !Mathf.Approximately(elapsedPercentage, 0) || !Mathf.Approximately(elapsedPercentage, 1))
+            float elapsedPercentage = 0;
+            if (sequencerController.PlayingSequence != null)
+                elapsedPercentage = sequencerController.PlayingSequence.ElapsedPercentage();
+            if (!DOTweenEditorPreview.isPreviewing
+                || sequencerController.PlayingSequence.IsPlaying() && !Mathf.Approximately(elapsedPercentage, 0)
+                || !Mathf.Approximately(elapsedPercentage, 1))
+            {
+                GUI.enabled = false;
+            }
+
+            if (!Application.isPlaying)
+            {
+                if (GUILayout.Button(DOTweenActionEditorGUIUtility.StopButtonGUIContent, previewButtonStyle))
                 {
-                    GUI.enabled = false;
+                    DOTweenEditorPreview.Stop();
                 }
+            }
 
-                if (GUILayout.Button(DOTweenActionEditorGUIUtility.StopButtonGUIContent, GUILayout.Width(40),
-                    GUILayout.Height(40)))
-                {
-                    if (!Application.isPlaying)
-                        DOTweenEditorPreview.Stop();
-                }
-
-                GUI.enabled = guiEnabled;
-
+            GUI.enabled = guiEnabled;
             GUILayout.FlexibleSpace();
-
             EditorGUILayout.EndHorizontal();
-
             DrawTimeScaleSlider();
             DrawProgressSlider();
-
             if (DOTweenEditorPreview.isPreviewing)
             {
-                EditorGUILayout.HelpBox("Please be aware that deselecting this game object will break the tween and your object will be broken, don't have the scene, or make changes on the preview before stopping it", MessageType.Info);
+                EditorGUILayout.HelpBox(
+                    "Please don't unselect this object or enter play mode before stopping Preview mode at the correct "
+                    + "position (0% or 100% depending on the direction of the tween). Also don't save the scene!",
+                    MessageType.Info
+                );
             }
         }
 
