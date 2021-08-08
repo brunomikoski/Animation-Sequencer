@@ -35,7 +35,7 @@ namespace BrunoMikoski.AnimationSequencer
                     Debug.LogError($"{target} does not have {TargetComponentType} component");
                     return null;
                 }
-S            }
+            }
 
             TweenerCore<string, string, StringOptions> tween = tmpTextComponent.DOText(text, duration, richText, scrambleMode);
             return tween;
