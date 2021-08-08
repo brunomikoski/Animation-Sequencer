@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1]
+### Added
+- Added ColorGraphic step.
+- While previewing if you press play again with a finished tween, will rewind it first
+
+### Changed
+- Added cache of the target components to improve performance.
+- The Sequence will be killed if the animation controller is destroyed
+
 ## [0.2.0]
 Thanks for all the [suggestions](https://github.com/brunomikoski/Animation-Sequencer/issues/16) @nindim
 ### Changed

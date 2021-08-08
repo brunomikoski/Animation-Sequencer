@@ -8,13 +8,13 @@ using UnityEngine.UI;
 namespace BrunoMikoski.AnimationSequencer
 {
     [Serializable]
-    public sealed class FadeGraphicDOTweenAction : DOTweenActionBase
+    public sealed class ColorGraphicDOTWeen : DOTweenActionBase
     {
         public override Type TargetComponentType => typeof(Graphic);
-        public override string DisplayName => "Fade Graphic";
+        public override string DisplayName => "Color Graphic";
 
         [SerializeField]
-        private float alpha;
+        private Color color;
         
         private Graphic targetGraphic;
 
@@ -30,9 +30,9 @@ namespace BrunoMikoski.AnimationSequencer
                 }
             }
 
-            TweenerCore<Color, Color, ColorOptions> graphicTween = targetGraphic.DOFade(alpha, duration);
+            TweenerCore<Color, Color, ColorOptions> graphicTween = targetGraphic.DOColor(color, duration);
             return graphicTween;
         }
-
     }
 }
+

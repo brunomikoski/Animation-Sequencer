@@ -22,15 +22,20 @@ namespace BrunoMikoski.AnimationSequencer
         private bool richText;
         [SerializeField]
         private ScrambleMode scrambleMode = ScrambleMode.None;
+        
+        private TMP_Text tmpTextComponent;
 
         protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
-            TMP_Text tmpTextComponent = target.GetComponent<TMP_Text>();
             if (tmpTextComponent == null)
             {
-                Debug.LogError($"{target} does not have {TargetComponentType} component");
-                return null;
-            }
+                tmpTextComponent = target.GetComponent<TMP_Text>();
+                if (tmpTextComponent == null)
+                {
+                    Debug.LogError($"{target} does not have {TargetComponentType} component");
+                    return null;
+                }
+S            }
 
             TweenerCore<string, string, StringOptions> tween = tmpTextComponent.DOText(text, duration, richText, scrambleMode);
             return tween;

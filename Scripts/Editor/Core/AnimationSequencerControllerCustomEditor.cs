@@ -206,6 +206,9 @@ namespace BrunoMikoski.AnimationSequencer
                         }
                         else
                         {
+                            if (sequencerController.PlayingSequence.IsComplete())
+                                sequencerController.Rewind();
+                            
                             sequencerController.TogglePause();
                         }
                     }

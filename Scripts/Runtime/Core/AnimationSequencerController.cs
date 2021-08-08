@@ -63,6 +63,12 @@ namespace BrunoMikoski.AnimationSequencer
             }
         }
 
+        private void OnDestroy()
+        {
+            DOTween.Kill(this);
+            playingSequence?.Kill();
+        }
+
         public void Play(Action onCompleteCallback = null)
         {
             DOTween.Kill(this);

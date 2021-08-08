@@ -13,15 +13,20 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private AxisConstraint axisConstraint;
+        
+        private RectTransform rectTransform;
 
         protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
-            RectTransform rectTransform = target.transform as RectTransform;
-
             if (rectTransform == null)
             {
-                Debug.LogError($"{target} does not have {TargetComponentType} component");
-                return null;
+                rectTransform = target.transform as RectTransform;
+
+                if (rectTransform == null)
+                {
+                    Debug.LogError($"{target} does not have {TargetComponentType} component");
+                    return null;
+                }
             }
 
             TweenerCore<Vector2, Vector2, VectorOptions> anchorPosTween = rectTransform.DOAnchorPos(GetPosition(), duration);
