@@ -80,8 +80,13 @@ I LOVE Tween, I love DOTween even more! But having to wait for a recompilation e
 ## FAQ
 
 <details>
+<summary>I'm seeing a bunch of errors  like `error CS1929: 'CanvasGroup' does not contain a definition for 'DOFade'`</summary> 
+This means that you don't have the DOTween setup complete with Asmdef files, make sure you do it by the menu: `Tools/Demigiant/DOTween Utility Panel`
+	
+</details>
+<details>
     
-<summary>How can I create my custom DOTween actions?</summary> 
+<summary>How can I create my custom actions?</summary> 
 Lets say you want to create a new action to play a specific sound from your sound manager on the game, you just need to extend the `AnimationStepBase`
 
 ```c#
