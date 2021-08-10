@@ -115,7 +115,8 @@ namespace BrunoMikoski.AnimationSequencer
                 SerializedProperty loopCountSerializedProperty = property.FindPropertyRelative("loopCount");
                 EditorGUI.PropertyField(position, loopCountSerializedProperty);
                 position.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
-                if (loopCountSerializedProperty.intValue == -1 || loopCountSerializedProperty.intValue > 0)
+                loopCountSerializedProperty.intValue = Mathf.Clamp(loopCountSerializedProperty.intValue, 0, int.MaxValue);
+                if (loopCountSerializedProperty.intValue > 0)
                 {
                     SerializedProperty loopTypeSerializedProperty = property.FindPropertyRelative("loopType");
                     EditorGUI.PropertyField(position, loopTypeSerializedProperty);

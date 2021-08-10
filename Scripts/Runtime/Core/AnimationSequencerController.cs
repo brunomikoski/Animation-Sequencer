@@ -35,7 +35,11 @@ namespace BrunoMikoski.AnimationSequencer
         private bool pauseOnAwake;
         [SerializeField]
         private PlayType playType = PlayType.Play;
-        
+
+        [SerializeField]
+        private int loops = 0;
+        [SerializeField]
+        private LoopType loopType = LoopType.Restart;
 
         private Sequence playingSequence;
         public Sequence PlayingSequence => playingSequence;
@@ -176,7 +180,16 @@ namespace BrunoMikoski.AnimationSequencer
             });
             
             sequence.SetAutoKill(autoKill);
-            
+
+            int targetLoops = loops;
+
+            if (!Application.isPlaying)
+            {
+                if (loops == -1)
+                    targetLoops = 10;
+            }
+
+            sequence.SetLoops(targetLoops, loopType);
             return sequence;
         }
     }

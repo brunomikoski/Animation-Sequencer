@@ -6,11 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2.1]
 ### Added
-- Added ColorGraphic step.
+- Added ColorGraphic DOTween step.
 - While previewing if you press play again with a finished tween, will rewind it first
-
+- Added loops settings for the entire sequence.
+- More warnings and help information boxes while previewing
+- Added Sequence Settings Panel to control DOTween Sequence Settings only 
+ 
 ### Changed
-- Added cache of the target components to improve performance.
+- Disabled infinity loops to be added to DOTween Steps, [More Information](https://github.com/brunomikoski/Animation-Sequencer/issues/19#issuecomment-895668338)
+- Cached components on Tween Step to improve performance.
 - The Sequence will be killed if the animation controller is destroyed
 
 ## [0.2.0]
@@ -72,6 +76,7 @@ Thanks for all the [suggestions](https://github.com/brunomikoski/Animation-Seque
 
 ### [Unreleased]
 
+[0.2.1~~~~~~~~]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.2.1
 [0.2.0]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.2.0
 [0.1.5]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.1.5
 [0.1.4]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.1.4
