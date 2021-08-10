@@ -29,6 +29,7 @@ namespace BrunoMikoski.AnimationSequencer
         private bool showPreview = true;
         private bool showSettings = false;
         private bool showCallbacks = false;
+        private bool showSequenceSettings = false;
 
         private void OnEnable()
         {
@@ -104,9 +105,10 @@ namespace BrunoMikoski.AnimationSequencer
 
         public override void OnInspectorGUI()
         {
-            DrawFoldoutArea("Settings", ref showSettings, DrawSettings);
-            DrawFoldoutArea("Preview", ref showPreview, DrawPreviewControls);
+            DrawFoldoutArea("Animation Sequence Settings", ref showSettings, DrawSettings);
             DrawFoldoutArea("Callback", ref showCallbacks, DrawCallbacks);
+            DrawFoldoutArea("Preview", ref showPreview, DrawPreviewControls);
+            DrawFoldoutArea("Sequence Settings", ref showSequenceSettings, DrawSequenceSettings);
             bool wasGUIEnabled = GUI.enabled;
             if (DOTweenEditorPreview.isPreviewing)
                 GUI.enabled = false;
@@ -143,10 +145,6 @@ namespace BrunoMikoski.AnimationSequencer
         {
             SerializedProperty playOnAwakeSerializedProperty = serializedObject.FindProperty("playOnAwake");
             SerializedProperty pauseOnAwakeSerializedProperty = serializedObject.FindProperty("pauseOnAwake");
-            SerializedProperty updateTypeSerializedProperty = serializedObject.FindProperty("updateType");
-            SerializedProperty timeScaleIndependentSerializedProperty = serializedObject.FindProperty("timeScaleIndependent");
-            SerializedProperty autoKillSerializedProperty = serializedObject.FindProperty("autoKill");
-            SerializedProperty sequenceDirectionSerializedProperty = serializedObject.FindProperty("playType");
 
             using (EditorGUI.ChangeCheckScope changedCheck = new EditorGUI.ChangeCheckScope())
             {
@@ -154,14 +152,60 @@ namespace BrunoMikoski.AnimationSequencer
                 if (playOnAwakeSerializedProperty.boolValue)
                     EditorGUILayout.PropertyField(pauseOnAwakeSerializedProperty);
                 
+                if (changedCheck.changed)
+                    serializedObject.ApplyModifiedProperties();
+            }
+        }
+        
+        private void DrawSequenceSettings()
+        {
+            bool wasEnabled = GUI.enabled; 
+            if (DOTweenEditorPreview.isPreviewing)
+                GUI.enabled = false;
+            
+            SerializedProperty updateTypeSerializedProperty = serializedObject.FindProperty("updateType");
+            SerializedProperty timeScaleIndependentSerializedProperty = serializedObject.FindProperty("timeScaleIndependent");
+            SerializedProperty autoKillSerializedProperty = serializedObject.FindProperty("autoKill");
+            SerializedProperty sequenceDirectionSerializedProperty = serializedObject.FindProperty("playType");
+            SerializedProperty loopsSerializedProperty = serializedObject.FindProperty("loops");
+            SerializedProperty loopTypeSerializedProperty = serializedObject.FindProperty("loopType");
+
+            using (EditorGUI.ChangeCheckScope changedCheck = new EditorGUI.ChangeCheckScope())
+            {
                 EditorGUILayout.PropertyField(timeScaleIndependentSerializedProperty);
                 EditorGUILayout.PropertyField(autoKillSerializedProperty);
                 EditorGUILayout.PropertyField(sequenceDirectionSerializedProperty);
                 EditorGUILayout.PropertyField(updateTypeSerializedProperty);
-                
+
+                EditorGUILayout.PropertyField(loopsSerializedProperty);
+
+                if (loopsSerializedProperty.intValue != 0)
+                {
+                    EditorGUILayout.PropertyField(loopTypeSerializedProperty);
+
+                    if (loopTypeSerializedProperty.enumValueIndex != 0 && !Application.isPlaying)
+                    {
+                        EditorGUILayout.HelpBox(
+                            "Anything but Restart loop type, can cause issues when stopping the preview on the editor," +
+                            " strongly advice to save the prefab so you can easily revert it ", MessageType.Warning);
+                    }
+                }
+
+                if (loopsSerializedProperty.intValue == -1 && !Application.isPlaying)
+                {
+                    EditorGUILayout.HelpBox(
+                        "Infinity loops breaks the editor, in editor time the maximum of 10 loops will be set",
+                        MessageType.Warning);
+                }
+ 
                 if (changedCheck.changed)
+                {
+                    loopsSerializedProperty.intValue = Mathf.Clamp(loopsSerializedProperty.intValue, -1, int.MaxValue);
                     serializedObject.ApplyModifiedProperties();
+                }
             }
+
+            GUI.enabled = wasEnabled;
         }
 
         private void DrawPreviewControls()
@@ -206,6 +250,9 @@ namespace BrunoMikoski.AnimationSequencer
                         }
                         else
                         {
+                            if (sequencerController.PlayingSequence.IsComplete())
+                                sequencerController.Rewind();
+                            
                             sequencerController.TogglePause();
                         }
                     }

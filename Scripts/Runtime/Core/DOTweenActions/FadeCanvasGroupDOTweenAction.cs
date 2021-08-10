@@ -15,16 +15,19 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private float alpha;
-
+        private CanvasGroup canvasGroup;
 
         protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
-            CanvasGroup canvasGroup = target.GetComponent<CanvasGroup>();
-
             if (canvasGroup == null)
             {
-                Debug.LogError($"{target} does not have {TargetComponentType} component");
-                return null;
+                canvasGroup = target.GetComponent<CanvasGroup>();
+
+                if (canvasGroup == null)
+                {
+                    Debug.LogError($"{target} does not have {TargetComponentType} component");
+                    return null;
+                }
             }
 
             TweenerCore<float, float, FloatOptions> canvasTween = canvasGroup.DOFade(alpha, duration);
