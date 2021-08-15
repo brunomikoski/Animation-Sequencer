@@ -13,7 +13,6 @@ namespace BrunoMikoski.AnimationSequencer
         private FlowType flowType;
 
         public float Delay => delay;
-        public abstract float Duration { get; }
         public FlowType FlowType => flowType;
 
         public abstract string DisplayName { get; }

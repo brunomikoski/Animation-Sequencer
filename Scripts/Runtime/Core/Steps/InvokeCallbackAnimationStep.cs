@@ -13,7 +13,6 @@ namespace BrunoMikoski.AnimationSequencer
         
         public override string DisplayName => "Invoke Callback Step";
         
-        public override float Duration => 0;
 
         public override void AddTweenToSequence(Sequence animationSequence)
         {

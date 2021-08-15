@@ -12,16 +12,6 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private AnimationSequencerController sequencer;
 
-        public override float Duration
-        {
-            get
-            {
-                if (sequencer == null)
-                    return 0;
-                return sequencer.Duration;
-            }
-        }
-
         public override void AddTweenToSequence(Sequence animationSequence)
         {
             sequencer.GenerateSequence(animationSequence);

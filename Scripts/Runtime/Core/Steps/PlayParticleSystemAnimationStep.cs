@@ -13,14 +13,11 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private float duration = 1;
 
-        public override float Duration => duration;
 
         [SerializeField]
         private bool stopEmittingWhenOver;
 
         public override string DisplayName => "Play Particle System";
-
-        public ParticleSystem Target => particleSystem;
 
         public override void AddTweenToSequence(Sequence animationSequence)
         {
