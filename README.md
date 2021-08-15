@@ -87,27 +87,31 @@ This means that you don't have the DOTween setup complete with Asmdef files, mak
 <details>
     
 <summary>How can I create my custom actions?</summary> 
-Lets say you want to create a new action to play a specific sound from your sound manager on the game, you just need to extend the `AnimationStepBase`
+To create a custom action there's a few things you need to do, first your class needs to be `[Serializable]` in order to be properly displayed on inspector.
+Now you need to make sure whatever you are doing, you are connecting it with the Sequence, like the example bellow.
+Also notice that in this case I'm adding the Duration its getting the lenght from the clip
 
 ```c#
 [Serializable]
-public class PlayAudioClipAnimationStep : AnimationStepBase
-{
-    [SerializeField]
-    private AudioClip audioClip;
+ public class PlayLegacyAnimation : AnimationStepBase
+ {
+     public override string DisplayName => "Play Legacy Animation";
 
-    //Duration of this step, in this case will return the length of the clip.
-    public override float Duration => audioClip.length;
-    //This is the name that will be displayed on the + button on the Animation Sequencer
-    public override string DisplayName => "Play Audio Clip";
+     [SerializeField]
+     private Animation animation;
 
-    //Here is actually the action of this step
-    public override void Play()
-    {
-        base.Play();
-        AudioManager.Play(audioClip);
-    }
-}
+     public override void AddTweenToSequence(Sequence animationSequence)
+     {
+         animationSequence.AppendInterval(Delay);
+         animationSequence.AppendCallback(
+             () =>
+             {
+                 animation.Play();
+             }
+         );
+         animationSequence.AppendInterval(animation.clip.length);
+     }
+ }
 ```
 
 </details>

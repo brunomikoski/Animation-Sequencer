@@ -17,12 +17,9 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeReference]
         private DOTweenActionBase[] actions;
 
-        public override float Duration => duration;
-
         public override void AddTweenToSequence(Sequence animationSequence)
         {
             Sequence sequence = DOTween.Sequence();
-            sequence.AppendInterval(Delay);
             for (int i = 0; i < actions.Length; i++)
             {
                 Tween tween = actions[i].GenerateTween(target, duration);

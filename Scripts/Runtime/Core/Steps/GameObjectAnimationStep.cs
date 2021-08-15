@@ -12,7 +12,6 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         protected float duration = 1;
-        public override float Duration => duration;
 
         public void SetTarget(GameObject newTarget)
         {
