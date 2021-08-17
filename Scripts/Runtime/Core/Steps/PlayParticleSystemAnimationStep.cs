@@ -21,6 +21,7 @@ namespace BrunoMikoski.AnimationSequencer
 
         public override void AddTweenToSequence(Sequence animationSequence)
         {
+            animationSequence.SetDelay(Delay);
             animationSequence.AppendCallback(() =>
             {
                 particleSystem.Play();

@@ -163,7 +163,6 @@ namespace BrunoMikoski.AnimationSequencer
             {
                 AnimationStepBase animationStepBase = animationSteps[i];
                 
-                sequence.AppendInterval(animationStepBase.Delay);
                 animationStepBase.AddTweenToSequence(sequence);
             }
 
