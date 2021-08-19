@@ -14,7 +14,12 @@ namespace BrunoMikoski.AnimationSequencer
 
         public override void AddTweenToSequence(Sequence animationSequence)
         {
-            sequencer.GenerateSequence(animationSequence);
+            Sequence sequence = sequencer.GenerateSequence();
+            sequence.AppendInterval(Delay);
+            if (FlowType == FlowType.Join)
+                animationSequence.Join(sequence);
+            else
+                animationSequence.Append(sequence);
         }
 
         public override string GetDisplayNameForEditor(int index)

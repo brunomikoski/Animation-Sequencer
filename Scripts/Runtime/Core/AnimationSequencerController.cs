@@ -154,10 +154,9 @@ namespace BrunoMikoski.AnimationSequencer
             yield return playingSequence.WaitForCompletion();
         }
 
-        public Sequence GenerateSequence(Sequence sequence = null)
+        public Sequence GenerateSequence()
         {
-            if (sequence == null)
-                sequence = DOTween.Sequence();
+            Sequence sequence = DOTween.Sequence();
             
             for (int i = 0; i < animationSteps.Length; i++)
             {
