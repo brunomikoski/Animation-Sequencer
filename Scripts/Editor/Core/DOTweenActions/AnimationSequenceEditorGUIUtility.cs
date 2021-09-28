@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using BrunoMikoski.AnimationSequencer.Utility;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
@@ -69,7 +68,7 @@ namespace BrunoMikoski.AnimationSequencer
             cachedTypeToInstance = new Dictionary<Type, GUIContent>();
             typeToInstanceCache = new Dictionary<Type, DOTweenActionBase>();
             
-            List<Type> types = TypeUtility.GetAllSubclasses(typeof(DOTweenActionBase));
+            TypeCache.TypeCollection types = TypeCache.GetTypesDerivedFrom(typeof(DOTweenActionBase));
             for (int i = 0; i < types.Count; i++)
             {
                 Type type = types[i];

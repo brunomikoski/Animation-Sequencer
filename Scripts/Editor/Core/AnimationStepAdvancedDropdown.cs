@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using BrunoMikoski.AnimationSequencer.Utility;
+using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
@@ -19,7 +19,7 @@ namespace BrunoMikoski.AnimationSequencer
         {
             AdvancedDropdownItem root = new AdvancedDropdownItem("Animation Step");
 
-            List<Type> availableTypesOfAnimationStep = TypeUtility.GetAllSubclasses(typeof(AnimationStepBase));
+            TypeCache.TypeCollection availableTypesOfAnimationStep = TypeCache.GetTypesDerivedFrom(typeof(AnimationStepBase));
             foreach (Type animatedItemType in availableTypesOfAnimationStep)
             {
                 if (animatedItemType.IsAbstract)
