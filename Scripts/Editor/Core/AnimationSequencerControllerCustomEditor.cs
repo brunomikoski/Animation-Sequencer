@@ -348,7 +348,7 @@ namespace BrunoMikoski.AnimationSequencer
             EditorGUI.BeginChangeCheck();
             float tweenProgress = 0;
 
-            if (sequencerController.PlayingSequence != null)
+            if (sequencerController.PlayingSequence != null && sequencerController.PlayingSequence.IsActive())
                 tweenProgress = sequencerController.PlayingSequence.ElapsedPercentage();
             else
                 tweenProgress = 0;

@@ -41,7 +41,7 @@ namespace BrunoMikoski.AnimationSequencer
         private Sequence playingSequence;
         public Sequence PlayingSequence => playingSequence;
 
-        public bool IsPlaying => playingSequence != null && playingSequence.IsPlaying();
+        public bool IsPlaying => playingSequence != null && playingSequence.IsActive() && playingSequence.IsPlaying();
 
         [SerializeField]
         private UnityEvent onStartEvent = new UnityEvent();
