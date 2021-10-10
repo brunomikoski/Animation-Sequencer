@@ -17,11 +17,6 @@ namespace BrunoMikoski.AnimationSequencer
         
         [SerializeReference]
         private AnimationStepBase[] animationSteps = new AnimationStepBase[0];
-
-        [SerializeField]
-        private float duration;
-        public float Duration => duration;
-
         [SerializeField]
         private UpdateType updateType = UpdateType.Normal;
         [SerializeField]
@@ -32,17 +27,10 @@ namespace BrunoMikoski.AnimationSequencer
         private bool pauseOnAwake;
         [SerializeField]
         private PlayType playType = PlayType.Forward;
-
         [SerializeField]
         private int loops = 0;
         [SerializeField]
         private LoopType loopType = LoopType.Restart;
-
-        private Sequence playingSequence;
-        public Sequence PlayingSequence => playingSequence;
-
-        public bool IsPlaying => playingSequence != null && playingSequence.IsActive() && playingSequence.IsPlaying();
-
         [SerializeField]
         private UnityEvent onStartEvent = new UnityEvent();
         public UnityEvent OnStartEvent => onStartEvent;
@@ -52,7 +40,12 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private UnityEvent onProgressEvent = new UnityEvent();
         public UnityEvent OnProgressEvent => onProgressEvent;
-        
+
+        private Sequence playingSequence;
+        public Sequence PlayingSequence => playingSequence;
+
+        public bool IsPlaying => playingSequence != null && playingSequence.IsActive() && playingSequence.IsPlaying();
+        public bool IsPaused => playingSequence != null && playingSequence.IsActive() && !playingSequence.IsPlaying();
 
         private void Awake()
         {
@@ -205,7 +198,7 @@ namespace BrunoMikoski.AnimationSequencer
 
         public void ResetToInitialState()
         {
-            for (var i = 0; i < animationSteps.Length; i++)
+            for (int i = animationSteps.Length - 1; i >= 0; i--)
             {
                 animationSteps[i].ResetToInitialState();
             }

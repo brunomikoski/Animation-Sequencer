@@ -37,7 +37,7 @@ namespace BrunoMikoski.AnimationSequencer
 
         public override void ResetToInitialState()
         {
-            for (var i = 0; i < actions.Length; i++)
+            for (int i = actions.Length - 1; i >= 0; i--)
             {
                 actions[i].ResetToInitialState();
             }
