@@ -22,6 +22,8 @@ namespace BrunoMikoski.AnimationSequencer
         
         public abstract void AddTweenToSequence(Sequence animationSequence);
 
+        public abstract void ResetToInitialState();
+
         public virtual string GetDisplayNameForEditor(int index)
         {
             return $"{index}. {this}";

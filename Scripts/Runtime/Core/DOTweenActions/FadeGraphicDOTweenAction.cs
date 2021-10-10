@@ -17,6 +17,7 @@ namespace BrunoMikoski.AnimationSequencer
         private float alpha;
         
         private Graphic targetGraphic;
+        private float previousAlpha;
 
         protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
@@ -30,9 +31,19 @@ namespace BrunoMikoski.AnimationSequencer
                 }
             }
 
+            previousAlpha = targetGraphic.color.a;
             TweenerCore<Color, Color, ColorOptions> graphicTween = targetGraphic.DOFade(alpha, duration);
             return graphicTween;
         }
 
+        public override void ResetToInitialState()
+        {
+            if (targetGraphic == null)
+                return;
+
+            Color color = targetGraphic.color;
+            color.a = previousAlpha;
+            targetGraphic.color = color;
+        }
     }
 }

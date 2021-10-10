@@ -22,6 +22,11 @@ namespace BrunoMikoski.AnimationSequencer
                 animationSequence.Append(sequence);
         }
 
+        public override void ResetToInitialState()
+        {
+            sequencer.ResetToInitialState();
+        }
+
         public override string GetDisplayNameForEditor(int index)
         {
             string display = "NULL";

@@ -17,12 +17,26 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private AxisConstraint axisConstraint;
 
+        private Vector3? previousState;
+        private GameObject previousTarget;
+
         protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
+            previousState = target.transform.localScale;
+            previousTarget = target;
+            
             TweenerCore<Vector3, Vector3, VectorOptions> scaleTween = target.transform.DOScale(scale, duration).SetEase(ease);
             scaleTween.SetOptions(axisConstraint);
 
             return scaleTween;
+        }
+
+        public override void ResetToInitialState()
+        {
+            if (!previousState.HasValue)
+                return;
+
+            previousTarget.transform.localScale = previousState.Value;
         }
     }
 }

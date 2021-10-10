@@ -15,6 +15,7 @@ namespace BrunoMikoski.AnimationSequencer
         private AxisConstraint axisConstraint;
         
         private RectTransform rectTransform;
+        private Vector2 previousAnchorPosition;
 
         protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
@@ -29,6 +30,7 @@ namespace BrunoMikoski.AnimationSequencer
                 }
             }
 
+            previousAnchorPosition = rectTransform.anchoredPosition;
             TweenerCore<Vector2, Vector2, VectorOptions> anchorPosTween = rectTransform.DOAnchorPos(GetPosition(), duration);
 
             anchorPosTween.SetOptions(axisConstraint);
@@ -37,5 +39,13 @@ namespace BrunoMikoski.AnimationSequencer
         }
 
         protected abstract Vector2 GetPosition();
+
+        public override void ResetToInitialState()
+        {
+            if (rectTransform == null)
+                return;
+
+            rectTransform.anchoredPosition = previousAnchorPosition;
+        }
     }
 }

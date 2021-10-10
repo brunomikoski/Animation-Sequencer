@@ -20,6 +20,10 @@ namespace BrunoMikoski.AnimationSequencer
             animationSequence.AppendCallback(() => callback.Invoke());
         }
 
+        public override void ResetToInitialState()
+        {
+        }
+
         public override string GetDisplayNameForEditor(int index)
         {
             string persistentTargetNames = String.Empty;

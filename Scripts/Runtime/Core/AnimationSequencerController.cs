@@ -11,9 +11,8 @@ namespace BrunoMikoski.AnimationSequencer
     {
         private enum PlayType
         {
-            Play,
-            Backward,
-            Forward
+            Forward,
+            Backward
         }
         
         [SerializeReference]
@@ -28,13 +27,11 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private bool timeScaleIndependent = false;
         [SerializeField]
-        private bool autoKill = false;
-        [SerializeField]
         private bool playOnAwake;
         [SerializeField]
         private bool pauseOnAwake;
         [SerializeField]
-        private PlayType playType = PlayType.Play;
+        private PlayType playType = PlayType.Forward;
 
         [SerializeField]
         private int loops = 0;
@@ -76,7 +73,7 @@ namespace BrunoMikoski.AnimationSequencer
         public void Play(Action onCompleteCallback = null)
         {
             DOTween.Kill(this);
-            playingSequence?.Kill();
+            DOTween.Kill(playingSequence);
 
             if (onCompleteCallback != null) 
                 onFinishedEvent.AddListener(onCompleteCallback.Invoke);
@@ -169,7 +166,14 @@ namespace BrunoMikoski.AnimationSequencer
             sequence.SetUpdate(updateType, timeScaleIndependent);
             sequence.OnComplete(() =>
             {
-                onStartEvent.Invoke();
+                if (playType == PlayType.Forward)
+                {
+                    onStartEvent.Invoke();
+                }
+                else
+                {
+                    onFinishedEvent.Invoke();
+                }
             });
             sequence.OnUpdate(() =>
             {
@@ -177,11 +181,16 @@ namespace BrunoMikoski.AnimationSequencer
             });
             sequence.OnComplete(() =>
             {
-                onFinishedEvent.Invoke();
+                if (playType == PlayType.Forward)
+                {
+                    onFinishedEvent.Invoke();
+                }
+                else
+                {
+                    onStartEvent.Invoke();
+                }
             });
             
-            sequence.SetAutoKill(autoKill);
-
             int targetLoops = loops;
 
             if (!Application.isPlaying)
@@ -192,6 +201,20 @@ namespace BrunoMikoski.AnimationSequencer
 
             sequence.SetLoops(targetLoops, loopType);
             return sequence;
+        }
+
+        public void ResetToInitialState()
+        {
+            for (var i = 0; i < animationSteps.Length; i++)
+            {
+                animationSteps[i].ResetToInitialState();
+            }
+        }
+
+        public void ClearPlayingSequence()
+        {
+            DOTween.Kill(playingSequence);
+            playingSequence = null;
         }
     }
 }

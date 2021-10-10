@@ -37,5 +37,7 @@ namespace BrunoMikoski.AnimationSequencer
             tween.SetRelative(isRelative);
             return tween;
         }
+
+        public abstract void ResetToInitialState();
     }
 }

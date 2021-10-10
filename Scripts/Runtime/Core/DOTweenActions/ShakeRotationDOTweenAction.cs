@@ -20,12 +20,22 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private bool fadeout = true;
 
+        private Transform previousTarget;
+        private Quaternion previousRotation;
+
         protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
-            Tweener tween = target.transform.DOShakeRotation(duration, strength, vibrato, randomness, fadeout);
+            previousTarget = target.transform;
+            previousRotation = previousTarget.rotation;
+            
+            Tweener tween = previousTarget.DOShakeRotation(duration, strength, vibrato, randomness, fadeout);
 
             return tween;
         }
 
+        public override void ResetToInitialState()
+        {
+            previousTarget.rotation = previousRotation;
+        }
     }
 }

@@ -19,12 +19,21 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private bool snapping;
 
+        private Transform previousTarget;
+        private Vector3 previousPosition;
+
         protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
+            previousTarget = target.transform;
+            previousPosition = target.transform.position;
             Tweener tween = target.transform.DOPunchPosition(punch, duration, vibrato, elasticity, snapping);
 
             return tween;
         }
 
+        public override void ResetToInitialState()
+        {
+            previousTarget.position = previousPosition;
+        }
     }
 }
