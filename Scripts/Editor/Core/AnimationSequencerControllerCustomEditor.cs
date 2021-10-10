@@ -340,7 +340,12 @@ namespace BrunoMikoski.AnimationSequencer
                 if (sequencerController.PlayingSequence == null)
                     sequencerController.Play();
                 else
-                    sequencerController.TogglePause();
+                {
+                    if (sequencerController.PlayingSequence.IsActive())
+                        sequencerController.TogglePause();
+                    else
+                        sequencerController.Play();
+                }
             }
         }
 
