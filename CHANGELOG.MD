@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.6]
+### Changed
+ - Removed the `Play` from the playtype, now is only `Backward` and `Forward` and `Forward` is the default one
+ - Implement manual reset of editor changes to avoid issues while previewing animation and stop
+ - Refactored the preview controllers to allow all the controllers to be able to play the animation when needed
+ - Improved inspector performance 
+
+### Added
+ - Implemented a bunch of feedback from [nindim](https://github.com/nindim)
+
 ## [0.2.5]
 ### Changed
 - Replaced TypeUtility for [Unity TypeCache](https://docs.unity3d.com/2019.4/Documentation/ScriptReference/TypeCache.html)
@@ -95,6 +105,7 @@ Thanks for all the [suggestions](https://github.com/brunomikoski/Animation-Seque
 
 ### [Unreleased]
 
+[0.2.6]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.2.6
 [0.2.5]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.2.5
 [0.2.4]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.2.4
 [0.2.3]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.2.3

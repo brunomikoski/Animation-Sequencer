@@ -17,12 +17,22 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private float elasticity = 1f;
 
+        private Transform previousTarget;
+        private Vector3 previousScale;
+
         protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
+            previousTarget = target.transform;
+            previousScale = previousTarget.localScale;
+            
             Tweener tween = target.transform.DOPunchScale(punch, duration, vibrato, elasticity);
 
             return tween;
         }
 
+        public override void ResetToInitialState()
+        {
+            previousTarget.localScale = previousScale;
+        }
     }
 }

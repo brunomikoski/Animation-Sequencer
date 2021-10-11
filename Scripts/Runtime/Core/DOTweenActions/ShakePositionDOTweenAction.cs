@@ -21,12 +21,21 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private bool fadeout = true;
 
+        private Transform previousTarget;
+        private Vector3 previousPosition;
+
         protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
+            previousTarget = target.transform;
+            previousPosition = previousTarget.position;
             Tweener tween = target.transform.DOShakePosition(duration, strength, vibrato, randomness, snapping, fadeout);
 
             return tween;
         }
 
+        public override void ResetToInitialState()
+        {
+            previousTarget.position = previousPosition;
+        }
     }
 }

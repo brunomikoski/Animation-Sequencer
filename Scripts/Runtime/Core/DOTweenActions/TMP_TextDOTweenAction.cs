@@ -24,6 +24,9 @@ namespace BrunoMikoski.AnimationSequencer
         private ScrambleMode scrambleMode = ScrambleMode.None;
         
         private TMP_Text tmpTextComponent;
+        
+        private string previousText;
+        private TMP_Text previousTarget;
 
         protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
@@ -37,11 +40,19 @@ namespace BrunoMikoski.AnimationSequencer
                 }
             }
 
+            previousText = tmpTextComponent.text;
+            previousTarget = tmpTextComponent;
             TweenerCore<string, string, StringOptions> tween = tmpTextComponent.DOText(text, duration, richText, scrambleMode);
             return tween;
         }
 
+        public override void ResetToInitialState()
+        {
+            if (string.IsNullOrEmpty(previousText))
+                return;
 
+            previousTarget.text = previousText;
+        }
     }
 }
 #endif

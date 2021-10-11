@@ -130,6 +130,36 @@ namespace BrunoMikoski.AnimationSequencer
             }
         }
         
+        private static GUIContent cachedStepBackGUIContent;
+        internal static GUIContent StepBackGUIContent
+        {
+            get
+            {
+                if (cachedStepBackGUIContent == null)
+                {
+                    cachedStepBackGUIContent = EditorGUIUtility.IconContent("Animation.PrevKey");
+                    cachedStepBackGUIContent.tooltip = "Step Back";
+                }
+
+                return cachedStepBackGUIContent;
+            }
+        }
+        
+        private static GUIContent cachedStepNextGUIContent;
+        internal static GUIContent StepNextGUIContent
+        {
+            get
+            {
+                if (cachedStepNextGUIContent == null)
+                {
+                    cachedStepNextGUIContent = EditorGUIUtility.IconContent("Animation.NextKey");
+                    cachedStepNextGUIContent.tooltip = "Step Next";
+                }
+
+                return cachedStepNextGUIContent;
+            }
+        }
+        
         private static GUIContent cachedStopButtonGUIContent;
         internal static GUIContent StopButtonGUIContent
         {

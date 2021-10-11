@@ -16,6 +16,7 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private float alpha;
         private CanvasGroup canvasGroup;
+        private float previousFade;
 
         protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
@@ -30,8 +31,17 @@ namespace BrunoMikoski.AnimationSequencer
                 }
             }
 
+            previousFade = canvasGroup.alpha;
             TweenerCore<float, float, FloatOptions> canvasTween = canvasGroup.DOFade(alpha, duration);
             return canvasTween;
+        }
+
+        public override void ResetToInitialState()
+        {
+            if (canvasGroup == null)
+                return;
+
+            canvasGroup.alpha = previousFade;
         }
     }
 }

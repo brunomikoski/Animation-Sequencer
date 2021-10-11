@@ -31,6 +31,10 @@ namespace BrunoMikoski.AnimationSequencer
             animationSequence.AppendCallback(FinishParticles);
         }
 
+        public override void ResetToInitialState()
+        {
+        }
+
         private void FinishParticles()
         {
             if (stopEmittingWhenOver)

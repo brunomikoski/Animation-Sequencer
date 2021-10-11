@@ -35,6 +35,14 @@ namespace BrunoMikoski.AnimationSequencer
 
         }
 
+        public override void ResetToInitialState()
+        {
+            for (int i = actions.Length - 1; i >= 0; i--)
+            {
+                actions[i].ResetToInitialState();
+            }
+        }
+
         public override string GetDisplayNameForEditor(int index)
         {
             string targetName = "NULL";
