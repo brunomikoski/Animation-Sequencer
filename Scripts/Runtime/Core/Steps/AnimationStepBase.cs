@@ -9,16 +9,13 @@ namespace BrunoMikoski.AnimationSequencer
     {
         [SerializeField]
         private float delay;
+        public float Delay => delay;
+
         [SerializeField]
         private FlowType flowType;
-
-        public float Delay => delay;
         public FlowType FlowType => flowType;
 
         public abstract string DisplayName { get; }
-        
-        //TODO find a way to discover if one step is playing or not.
-        public bool IsPlaying => false;
         
         public abstract void AddTweenToSequence(Sequence animationSequence);
 

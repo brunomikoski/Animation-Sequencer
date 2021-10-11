@@ -30,11 +30,12 @@ namespace BrunoMikoski.AnimationSequencer
         private bool showSettings = false;
         private bool showCallbacks = false;
         private bool showSequenceSettings = false;
+        private bool showSteps = true;
 
         private void OnEnable()
         {
             sequencerController = target as AnimationSequencerController;
-            reorderableList = new ReorderableList(serializedObject, serializedObject.FindProperty("animationSteps"), true, true, true, true);
+            reorderableList = new ReorderableList(serializedObject, serializedObject.FindProperty("animationSteps"), true, false, true, true);
             reorderableList.drawElementCallback += OnDrawAnimationStep;
             reorderableList.elementHeightCallback += GetAnimationStepHeight;
             reorderableList.onAddDropdownCallback += OnClickToAddNew;
@@ -44,7 +45,6 @@ namespace BrunoMikoski.AnimationSequencer
             EditorApplication.playModeStateChanged += OnEditorPlayModeChanged;
             Repaint();
         }
-
 
         public override bool RequiresConstantRepaint()
         {
@@ -135,14 +135,18 @@ namespace BrunoMikoski.AnimationSequencer
             DrawFoldoutArea("Callback", ref showCallbacks, DrawCallbacks);
             DrawFoldoutArea("Preview", ref showPreview, DrawPreviewControls);
             DrawFoldoutArea("Sequence Settings", ref showSequenceSettings, DrawSequenceSettings);
+            DrawFoldoutArea("Steps", ref showSteps, DrawAnimationSteps);
+        }
+
+        private void DrawAnimationSteps()
+        {
             bool wasGUIEnabled = GUI.enabled;
             if (DOTweenEditorPreview.isPreviewing)
                 GUI.enabled = false;
 
             reorderableList.DoLayoutList();
-
+                        
             GUI.enabled = wasGUIEnabled;
-            Repaint();
         }
 
         private void DrawCallbacks()
@@ -329,10 +333,17 @@ namespace BrunoMikoski.AnimationSequencer
                 }
                 else
                 {
-                    if (sequencerController.PlayingSequence.IsComplete())
-                        sequencerController.Rewind();
-                    
-                    sequencerController.TogglePause();
+                    if (sequencerController.PlayingSequence == null)
+                    {
+                        sequencerController.Play();
+                    }
+                    else
+                    {
+                        if (sequencerController.PlayingSequence.IsComplete())
+                            sequencerController.Rewind();
+
+                        sequencerController.TogglePause();
+                    }
                 }
             }
             else
@@ -424,13 +435,8 @@ namespace BrunoMikoski.AnimationSequencer
             SerializedProperty element = reorderableList.serializedProperty.GetArrayElementAtIndex(index);
             SerializedProperty flowTypeSerializedProperty = element.FindPropertyRelative("flowType");
 
-            if (element.TryGetTargetObjectOfProperty(out AnimationStepBase animationStepBase))
-            {
-                if (animationStepBase.IsPlaying)
-                {
-                    reorderableList.index = index;
-                }
-            }
+            if (!element.TryGetTargetObjectOfProperty(out AnimationStepBase animationStepBase))
+                return;
 
             FlowType flowType = (FlowType)flowTypeSerializedProperty.enumValueIndex;
 

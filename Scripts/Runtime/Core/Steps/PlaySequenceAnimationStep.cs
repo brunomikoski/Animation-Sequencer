@@ -15,7 +15,7 @@ namespace BrunoMikoski.AnimationSequencer
         public override void AddTweenToSequence(Sequence animationSequence)
         {
             Sequence sequence = sequencer.GenerateSequence();
-            sequence.AppendInterval(Delay);
+            sequence.SetDelay(Delay);
             if (FlowType == FlowType.Join)
                 animationSequence.Join(sequence);
             else
