@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  - Removed the `Play` from the playtype, now is only `Backward` and `Forward` and `Forward` is the default one
  - Implement manual reset of editor changes to avoid issues while previewing animation and stop
  - Refactored the preview controllers to allow all the controllers to be able to play the animation when needed
- - 
+ - Improved inspector performance 
 
 ### Added
  - Implemented a bunch of feedback from [nindim](https://github.com/nindim)
