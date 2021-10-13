@@ -14,7 +14,7 @@ namespace BrunoMikoski.AnimationSequencer
             Forward,
             Backward
         }
-        
+
         [SerializeReference]
         private AnimationStepBase[] animationSteps = new AnimationStepBase[0];
         [SerializeField]
@@ -68,11 +68,11 @@ namespace BrunoMikoski.AnimationSequencer
             DOTween.Kill(this);
             DOTween.Kill(playingSequence);
 
-            if (onCompleteCallback != null) 
+            if (onCompleteCallback != null)
                 onFinishedEvent.AddListener(onCompleteCallback.Invoke);
 
             playingSequence = GenerateSequence();
-            
+
             switch (playType)
             {
                 case PlayType.Backward:
@@ -88,12 +88,12 @@ namespace BrunoMikoski.AnimationSequencer
                     break;
             }
         }
-        
+
         public void TogglePause()
         {
             if (playingSequence == null)
                 return;
-            
+
             playingSequence.TogglePause();
         }
 
@@ -104,7 +104,7 @@ namespace BrunoMikoski.AnimationSequencer
 
             playingSequence.Pause();
         }
-        
+
         public void Resume()
         {
             if (playingSequence == null)
@@ -113,7 +113,7 @@ namespace BrunoMikoski.AnimationSequencer
             playingSequence.Play();
         }
 
-        
+
         public void Complete(bool withCallbacks = true)
         {
             if (playingSequence == null)
@@ -126,10 +126,10 @@ namespace BrunoMikoski.AnimationSequencer
         {
             if (playingSequence == null)
                 return;
-            
+
             playingSequence.Rewind(includeDelay);
         }
-        
+
         public void Kill(bool complete = false)
         {
             if (!IsPlaying)
@@ -147,7 +147,7 @@ namespace BrunoMikoski.AnimationSequencer
         public Sequence GenerateSequence()
         {
             Sequence sequence = DOTween.Sequence();
-            
+
             for (int i = 0; i < animationSteps.Length; i++)
             {
                 animationSteps[i].AddTweenToSequence(sequence);
@@ -155,7 +155,7 @@ namespace BrunoMikoski.AnimationSequencer
 
             sequence.SetTarget(this);
             sequence.SetUpdate(updateType, timeScaleIndependent);
-            sequence.OnComplete(() =>
+            sequence.OnStart(() =>
             {
                 if (playType == PlayType.Forward)
                 {
@@ -181,7 +181,7 @@ namespace BrunoMikoski.AnimationSequencer
                     onStartEvent.Invoke();
                 }
             });
-            
+
             int targetLoops = loops;
 
             if (!Application.isPlaying)
