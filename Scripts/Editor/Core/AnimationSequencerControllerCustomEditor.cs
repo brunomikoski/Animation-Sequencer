@@ -26,11 +26,11 @@ namespace BrunoMikoski.AnimationSequencer
             }
         }
 
-        private bool showPreview = true;
-        private bool showSettings = false;
-        private bool showCallbacks = false;
-        private bool showSequenceSettings = false;
-        private bool showSteps = true;
+        private bool showPreviewPanel = true;
+        private bool showSettingsPanel;
+        private bool showCallbacksPanel;
+        private bool showSequenceSettingsPanel;
+        private bool showStepsPanel = true;
 
         private void OnEnable()
         {
@@ -131,11 +131,11 @@ namespace BrunoMikoski.AnimationSequencer
 
         public override void OnInspectorGUI()
         {
-            DrawFoldoutArea("Animation Sequence Settings", ref showSettings, DrawSettings);
-            DrawFoldoutArea("Callback", ref showCallbacks, DrawCallbacks);
-            DrawFoldoutArea("Preview", ref showPreview, DrawPreviewControls);
-            DrawFoldoutArea("Sequence Settings", ref showSequenceSettings, DrawSequenceSettings);
-            DrawFoldoutArea("Steps", ref showSteps, DrawAnimationSteps);
+            DrawFoldoutArea("Animation Sequence Settings", ref showSettingsPanel, DrawSettings);
+            DrawFoldoutArea("Callback", ref showCallbacksPanel, DrawCallbacks);
+            DrawFoldoutArea("Preview", ref showPreviewPanel, DrawPreviewControls);
+            DrawFoldoutArea("Sequence Settings", ref showSequenceSettingsPanel, DrawSequenceSettings);
+            DrawFoldoutArea("Steps", ref showStepsPanel, DrawAnimationSteps);
         }
 
         private void DrawAnimationSteps()
@@ -358,6 +358,7 @@ namespace BrunoMikoski.AnimationSequencer
                         sequencerController.Play();
                 }
             }
+            showStepsPanel = false;
         }
 
         private void DrawProgressSlider()

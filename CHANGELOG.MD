@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+## [0.2.7]
+### Changed
+- [Fixed issue](https://github.com/brunomikoski/Animation-Sequencer/pull/29) when `OnStart` event was been triggered inside the `OnComplete` event. [JohnDesley](https://github.com/JohnDesley)
+- Automatically hide the Steps Panel when previewing to increase performance.
+
 ## [0.2.6]
 ### Changed
  - Removed the `Play` from the playtype, now is only `Backward` and `Forward` and `Forward` is the default one
@@ -103,8 +110,7 @@ Thanks for all the [suggestions](https://github.com/brunomikoski/Animation-Seque
 ### Added 
 - First initial working version
 
-### [Unreleased]
-
+[0.2.7]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.2.7
 [0.2.6]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.2.6
 [0.2.5]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.2.5
 [0.2.4]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.2.4
