@@ -89,6 +89,26 @@ namespace BrunoMikoski.AnimationSequencer
             }
         }
 
+        public void SetTime(float seconds, bool andPlay = true)
+        {
+            if (playingSequence == null)
+                Play();
+
+            float duration = playingSequence.Duration();
+            float progress = Mathf.Clamp01(seconds / duration);
+            SetProgress(progress, andPlay);
+        }
+        
+        public void SetProgress(float progress, bool andPlay = true)
+        {
+            progress = Mathf.Clamp01(progress);
+            
+            if (playingSequence == null)
+                Play();
+
+            playingSequence.Goto(progress, andPlay);
+        }
+
         public void TogglePause()
         {
             if (playingSequence == null)
