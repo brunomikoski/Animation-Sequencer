@@ -9,7 +9,7 @@ namespace BrunoMikoski.AnimationSequencer
     [DisallowMultipleComponent]
     public class AnimationSequencerController : MonoBehaviour
     {
-        private enum PlayType
+        public enum PlayType
         {
             Forward,
             Backward
@@ -31,6 +31,7 @@ namespace BrunoMikoski.AnimationSequencer
         private int loops = 0;
         [SerializeField]
         private LoopType loopType = LoopType.Restart;
+        
         [SerializeField]
         private UnityEvent onStartEvent = new UnityEvent();
         public UnityEvent OnStartEvent => onStartEvent;
@@ -63,7 +64,7 @@ namespace BrunoMikoski.AnimationSequencer
             playingSequence?.Kill();
         }
 
-        public void Play(Action onCompleteCallback = null)
+        public virtual void Play(PlayType direction = PlayType.Forward, Action onCompleteCallback = null)
         {
             DOTween.Kill(this);
             DOTween.Kill(playingSequence);

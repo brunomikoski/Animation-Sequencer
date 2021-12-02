@@ -391,10 +391,6 @@ namespace BrunoMikoski.AnimationSequencer
         private void DrawTimeScaleSlider()
         {
             GUILayout.FlexibleSpace();
-            bool guiEnabled = GUI.enabled;
-
-            GUI.enabled = sequencerController.PlayingSequence != null && DOTweenEditorPreview.isPreviewing;
-
             EditorGUI.BeginChangeCheck();
             float tweenTimescale = 1;
 
@@ -410,7 +406,6 @@ namespace BrunoMikoski.AnimationSequencer
                     sequencerController.PlayingSequence.timeScale = tweenTimescale;
             }
 
-            GUI.enabled = guiEnabled;
             GUILayout.FlexibleSpace();
         }
 
