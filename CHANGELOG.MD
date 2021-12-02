@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ## [0.2.8]
-### Chanced
+### Changed
 - Added the SetProgress to be able to set the position of the sequencer by code.
 - Set the `Play` method to virtual so can be overwritten 
 - Added [DOTWeen from the UPM](https://openupm.com/packages/com.demigiant.dotween/) package dependency 
