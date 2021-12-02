@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.2.8]
+### Changed
+- Added the SetProgress to be able to set the position of the sequencer by code.
+- Set the `Play` method to virtual so can be overwritten 
+- Added [DOTWeen from the UPM](https://openupm.com/packages/com.demigiant.dotween/) package dependency 
+- Fixed Timescale slider greyed out before editor was playing
+- Added direction as a parameter of the `Play` method, so you can trigger to play backwards and forward by code.
+
 ## [0.2.7]
 ### Changed
 - [Fixed issue](https://github.com/brunomikoski/Animation-Sequencer/pull/29) when `OnStart` event was been triggered inside the `OnComplete` event. [JohnDesley](https://github.com/JohnDesley)
