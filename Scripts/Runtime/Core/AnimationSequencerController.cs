@@ -31,7 +31,9 @@ namespace BrunoMikoski.AnimationSequencer
         private int loops = 0;
         [SerializeField]
         private LoopType loopType = LoopType.Restart;
-        
+        [SerializeField]
+        private bool autoKill = true;
+
         [SerializeField]
         private UnityEvent onStartEvent = new UnityEvent();
         public UnityEvent OnStartEvent => onStartEvent;
@@ -48,7 +50,7 @@ namespace BrunoMikoski.AnimationSequencer
         public bool IsPlaying => playingSequence != null && playingSequence.IsActive() && playingSequence.IsPlaying();
         public bool IsPaused => playingSequence != null && playingSequence.IsActive() && !playingSequence.IsPlaying();
 
-        private void Awake()
+        public virtual void Awake()
         {
             if (playOnAwake)
             {
@@ -60,15 +62,13 @@ namespace BrunoMikoski.AnimationSequencer
 
         private void OnDestroy()
         {
-            DOTween.Kill(this);
-            playingSequence?.Kill();
+            ClearPlayingSequence();
         }
 
-        public virtual void Play(PlayType direction = PlayType.Forward, Action onCompleteCallback = null)
+        public virtual void Play(Action onCompleteCallback = null)
         {
-            DOTween.Kill(this);
-            DOTween.Kill(playingSequence);
-
+            ClearPlayingSequence();
+            
             if (onCompleteCallback != null)
                 onFinishedEvent.AddListener(onCompleteCallback.Invoke);
 
@@ -90,7 +90,35 @@ namespace BrunoMikoski.AnimationSequencer
             }
         }
 
-        public void SetTime(float seconds, bool andPlay = true)
+        public virtual void PlayForward(bool restFirst = true, Action onCompleteCallback = null)
+        {
+            if (playingSequence == null)
+                Play();
+
+            if (onCompleteCallback != null)
+                onFinishedEvent.AddListener(onCompleteCallback.Invoke);
+            
+            if (restFirst)
+                SetProgress(0);
+            
+            playingSequence.PlayForward();
+        }
+
+        public virtual void PlayBackwards(bool completeFirst = true, Action onCompleteCallback = null)
+        {
+            if (playingSequence == null)
+                Play();
+
+            if (onCompleteCallback != null)
+                onFinishedEvent.AddListener(onCompleteCallback.Invoke);
+            
+            if (completeFirst)
+                SetProgress(1);
+            
+            playingSequence.PlayBackwards();
+        }
+
+        public virtual void SetTime(float seconds, bool andPlay = true)
         {
             if (playingSequence == null)
                 Play();
@@ -100,7 +128,7 @@ namespace BrunoMikoski.AnimationSequencer
             SetProgress(progress, andPlay);
         }
         
-        public void SetProgress(float progress, bool andPlay = true)
+        public virtual void SetProgress(float progress, bool andPlay = true)
         {
             progress = Mathf.Clamp01(progress);
             
@@ -110,7 +138,7 @@ namespace BrunoMikoski.AnimationSequencer
             playingSequence.Goto(progress, andPlay);
         }
 
-        public void TogglePause()
+        public virtual void TogglePause()
         {
             if (playingSequence == null)
                 return;
@@ -118,7 +146,7 @@ namespace BrunoMikoski.AnimationSequencer
             playingSequence.TogglePause();
         }
 
-        public void Pause()
+        public virtual void Pause()
         {
             if (!IsPlaying)
                 return;
@@ -126,7 +154,7 @@ namespace BrunoMikoski.AnimationSequencer
             playingSequence.Pause();
         }
 
-        public void Resume()
+        public virtual void Resume()
         {
             if (playingSequence == null)
                 return;
@@ -135,7 +163,7 @@ namespace BrunoMikoski.AnimationSequencer
         }
 
 
-        public void Complete(bool withCallbacks = true)
+        public virtual void Complete(bool withCallbacks = true)
         {
             if (playingSequence == null)
                 return;
@@ -143,7 +171,7 @@ namespace BrunoMikoski.AnimationSequencer
             playingSequence.Complete(withCallbacks);
         }
 
-        public void Rewind(bool includeDelay = true)
+        public virtual void Rewind(bool includeDelay = true)
         {
             if (playingSequence == null)
                 return;
@@ -151,7 +179,7 @@ namespace BrunoMikoski.AnimationSequencer
             playingSequence.Rewind(includeDelay);
         }
 
-        public void Kill(bool complete = false)
+        public virtual void Kill(bool complete = false)
         {
             if (!IsPlaying)
                 return;
@@ -159,13 +187,13 @@ namespace BrunoMikoski.AnimationSequencer
             playingSequence.Kill(complete);
         }
 
-        public IEnumerator PlayEnumerator()
+        public virtual IEnumerator PlayEnumerator()
         {
             Play();
             yield return playingSequence.WaitForCompletion();
         }
 
-        public Sequence GenerateSequence()
+        public virtual Sequence GenerateSequence()
         {
             Sequence sequence = DOTween.Sequence();
 
@@ -175,6 +203,7 @@ namespace BrunoMikoski.AnimationSequencer
             }
 
             sequence.SetTarget(this);
+            sequence.SetAutoKill(autoKill);
             sequence.SetUpdate(updateType, timeScaleIndependent);
             sequence.OnStart(() =>
             {
@@ -215,7 +244,7 @@ namespace BrunoMikoski.AnimationSequencer
             return sequence;
         }
 
-        public void ResetToInitialState()
+        public virtual void ResetToInitialState()
         {
             for (int i = animationSteps.Length - 1; i >= 0; i--)
             {
@@ -225,6 +254,7 @@ namespace BrunoMikoski.AnimationSequencer
 
         public void ClearPlayingSequence()
         {
+            DOTween.Kill(this);
             DOTween.Kill(playingSequence);
             playingSequence = null;
         }

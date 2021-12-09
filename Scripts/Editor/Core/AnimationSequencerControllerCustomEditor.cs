@@ -8,8 +8,8 @@ using UnityEngine;
 
 namespace BrunoMikoski.AnimationSequencer
 {
-    [CustomEditor(typeof(AnimationSequencerController))]
-    public sealed class AnimationSequencerControllerCustomEditor : Editor
+    [CustomEditor(typeof(AnimationSequencerController), true)]
+    public class AnimationSequencerControllerCustomEditor : Editor
     {
         private ReorderableList reorderableList;
         
@@ -199,12 +199,14 @@ namespace BrunoMikoski.AnimationSequencer
             SerializedProperty sequenceDirectionSerializedProperty = serializedObject.FindProperty("playType");
             SerializedProperty loopsSerializedProperty = serializedObject.FindProperty("loops");
             SerializedProperty loopTypeSerializedProperty = serializedObject.FindProperty("loopType");
+            SerializedProperty autoKillSerializedProperty = serializedObject.FindProperty("autoKill");
 
             using (EditorGUI.ChangeCheckScope changedCheck = new EditorGUI.ChangeCheckScope())
             {
                 EditorGUILayout.PropertyField(timeScaleIndependentSerializedProperty);
                 EditorGUILayout.PropertyField(sequenceDirectionSerializedProperty);
                 EditorGUILayout.PropertyField(updateTypeSerializedProperty);
+                EditorGUILayout.PropertyField(autoKillSerializedProperty);
 
                 EditorGUILayout.PropertyField(loopsSerializedProperty);
 

@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.3.0]
+### Changed
+- Exposed `AnimationSequencerController` methods to be virtual, so they can be extended.
+- Removed the `sealed` from `AnimationSequencerControllerCustomEditor` so allow custom editors as well.
+- Refactor the Play / Forward / Backward setup, to be easier to understand and use
+- Added `autoKill` setting on the sequence settings, to allow back and forward play easily;
+
 ## [0.2.8]
 ### Changed
 - Added the SetProgress to be able to set the position of the sequencer by code.
@@ -118,6 +125,8 @@ Thanks for all the [suggestions](https://github.com/brunomikoski/Animation-Seque
 ### Added 
 - First initial working version
 
+[0.3.0]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.0
+[0.2.8]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.2.8
 [0.2.7]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.2.7
 [0.2.6]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.2.6
 [0.2.5]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.2.5
