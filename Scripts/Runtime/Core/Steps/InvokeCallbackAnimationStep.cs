@@ -16,7 +16,9 @@ namespace BrunoMikoski.AnimationSequencer
 
         public override void AddTweenToSequence(Sequence animationSequence)
         {
-            animationSequence.SetDelay(Delay);
+            // animationSequence.SetDelay(Delay) does not work as expected here, so AppendInterval(Delay) is used instead.
+            // https://stackoverflow.com/a/51600007
+            animationSequence.AppendInterval(Delay);
             animationSequence.AppendCallback(() => callback.Invoke());
         }
 

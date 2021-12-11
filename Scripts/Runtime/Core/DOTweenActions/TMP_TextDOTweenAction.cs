@@ -48,6 +48,9 @@ namespace BrunoMikoski.AnimationSequencer
 
         public override void ResetToInitialState()
         {
+            if (previousTarget == null)
+                return;
+            
             if (string.IsNullOrEmpty(previousText))
                 return;
 

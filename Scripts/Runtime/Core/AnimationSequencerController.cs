@@ -14,6 +14,12 @@ namespace BrunoMikoski.AnimationSequencer
             Forward,
             Backward
         }
+        
+        public enum AutoplayMode
+        {
+            Awake,
+            OnEnable
+        }
 
         [SerializeReference]
         private AnimationStepBase[] animationSteps = new AnimationStepBase[0];
@@ -22,11 +28,16 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private bool timeScaleIndependent = false;
         [SerializeField]
-        private bool playOnAwake;
+        private AutoplayMode autoplayMode = AutoplayMode.Awake;
+        public AutoplayMode AutoPlayMode { get { return autoplayMode;} set { autoplayMode = value; } }
         [SerializeField]
-        private bool pauseOnAwake;
+        protected bool playOnAwake;
+        public bool PlayOnAwake { get { return playOnAwake;} }
         [SerializeField]
-        private PlayType playType = PlayType.Forward;
+        protected bool pauseOnAwake;
+		public bool PauseOnAwake { get { return pauseOnAwake;} }
+        [SerializeField]
+        protected PlayType playType = PlayType.Forward;
         [SerializeField]
         private int loops = 0;
         [SerializeField]
@@ -36,21 +47,38 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private UnityEvent onStartEvent = new UnityEvent();
-        public UnityEvent OnStartEvent => onStartEvent;
+        public UnityEvent OnStartEvent { get { return onStartEvent;} protected set {onStartEvent = value;}}
         [SerializeField]
         private UnityEvent onFinishedEvent = new UnityEvent();
-        public UnityEvent OnFinishedEvent => onFinishedEvent;
+        public UnityEvent OnFinishedEvent { get { return onFinishedEvent;} protected set {onFinishedEvent = value;}}
         [SerializeField]
         private UnityEvent onProgressEvent = new UnityEvent();
         public UnityEvent OnProgressEvent => onProgressEvent;
 
         private Sequence playingSequence;
         public Sequence PlayingSequence => playingSequence;
+        private PlayType playTypeInternal = PlayType.Forward;
 
         public bool IsPlaying => playingSequence != null && playingSequence.IsActive() && playingSequence.IsPlaying();
         public bool IsPaused => playingSequence != null && playingSequence.IsActive() && !playingSequence.IsPlaying();
 
-        public virtual void Awake()
+        protected virtual void Awake()
+        {
+            if (autoplayMode != AutoplayMode.Awake)
+                return;
+
+            Autoplay();
+        }
+        
+        protected virtual void OnEnable()
+        {
+            if (autoplayMode != AutoplayMode.OnEnable)
+                return;
+
+            Autoplay();
+        }
+
+        private void Autoplay()
         {
             if (playOnAwake)
             {
@@ -59,14 +87,30 @@ namespace BrunoMikoski.AnimationSequencer
                     playingSequence.Pause();
             }
         }
+        
+        protected virtual void OnDisable()
+        {
+            if (autoplayMode != AutoplayMode.OnEnable)
+                return;
+            
+            if (playingSequence == null)
+                return;
 
-        private void OnDestroy()
+            ClearPlayingSequence();
+            // Reset the object to its initial state so that if it is re-enabled the start values are correct for
+            // regenerating the Sequence.
+            ResetToInitialState();
+        }
+
+        protected virtual void OnDestroy()
         {
             ClearPlayingSequence();
         }
 
         public virtual void Play(Action onCompleteCallback = null)
         {
+            playTypeInternal = playType;
+            
             ClearPlayingSequence();
             
             if (onCompleteCallback != null)
@@ -74,7 +118,7 @@ namespace BrunoMikoski.AnimationSequencer
 
             playingSequence = GenerateSequence();
 
-            switch (playType)
+            switch (playTypeInternal)
             {
                 case PlayType.Backward:
                     playingSequence.PlayBackwards();
@@ -94,6 +138,8 @@ namespace BrunoMikoski.AnimationSequencer
         {
             if (playingSequence == null)
                 Play();
+            
+            playTypeInternal = PlayType.Forward;
 
             if (onCompleteCallback != null)
                 onFinishedEvent.AddListener(onCompleteCallback.Invoke);
@@ -108,6 +154,8 @@ namespace BrunoMikoski.AnimationSequencer
         {
             if (playingSequence == null)
                 Play();
+            
+            playTypeInternal = PlayType.Backward;
 
             if (onCompleteCallback != null)
                 onFinishedEvent.AddListener(onCompleteCallback.Invoke);
@@ -196,6 +244,22 @@ namespace BrunoMikoski.AnimationSequencer
         public virtual Sequence GenerateSequence()
         {
             Sequence sequence = DOTween.Sequence();
+            
+            // Various edge cases exists with OnStart() and OnComplete(), some of which can be solved with OnRewind(),
+            // but it still leaves callbacks unfired when reversing direction after natural completion of the animation.
+            // Rather than using the in-built callbacks, we simply bookend the Sequence with AppendCallback to ensure
+            // a Start and Finish callback is always fired.
+            sequence.AppendCallback(() =>
+            {
+                if (playTypeInternal == PlayType.Forward)
+                {
+                    onStartEvent.Invoke();
+                }
+                else
+                {
+                    onFinishedEvent.Invoke();
+                }
+            });
 
             for (int i = 0; i < animationSteps.Length; i++)
             {
@@ -205,24 +269,14 @@ namespace BrunoMikoski.AnimationSequencer
             sequence.SetTarget(this);
             sequence.SetAutoKill(autoKill);
             sequence.SetUpdate(updateType, timeScaleIndependent);
-            sequence.OnStart(() =>
-            {
-                if (playType == PlayType.Forward)
-                {
-                    onStartEvent.Invoke();
-                }
-                else
-                {
-                    onFinishedEvent.Invoke();
-                }
-            });
             sequence.OnUpdate(() =>
             {
                 onProgressEvent.Invoke();
             });
-            sequence.OnComplete(() =>
+            // See comment above regarding bookending via AppendCallback.
+            sequence.AppendCallback(() =>
             {
-                if (playType == PlayType.Forward)
+                if (playTypeInternal == PlayType.Forward)
                 {
                     onFinishedEvent.Invoke();
                 }

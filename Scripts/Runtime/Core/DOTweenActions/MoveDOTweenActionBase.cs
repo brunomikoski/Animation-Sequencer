@@ -45,6 +45,9 @@ namespace BrunoMikoski.AnimationSequencer
 
         public override void ResetToInitialState()
         {
+            if (previousTarget == null)
+                return;
+            
             if (localMove)
                 previousTarget.transform.localPosition = previousPosition;
             else
