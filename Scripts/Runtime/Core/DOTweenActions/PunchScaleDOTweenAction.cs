@@ -32,6 +32,9 @@ namespace BrunoMikoski.AnimationSequencer
 
         public override void ResetToInitialState()
         {
+            if (previousTarget == null)
+                return;
+            
             previousTarget.localScale = previousScale;
         }
     }

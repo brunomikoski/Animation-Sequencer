@@ -31,6 +31,7 @@ namespace BrunoMikoski.AnimationSequencer
         private bool showCallbacksPanel;
         private bool showSequenceSettingsPanel;
         private bool showStepsPanel = true;
+        private float tweenTimeScale = 1f;
 
         private void OnEnable()
         {
@@ -69,6 +70,8 @@ namespace BrunoMikoski.AnimationSequencer
                     DOTweenEditorPreview.Stop();            
                 }
             }
+            
+            tweenTimeScale = 1f;
         }
 
         private void OnEditorPlayModeChanged(PlayModeStateChange playModeState)
@@ -149,7 +152,7 @@ namespace BrunoMikoski.AnimationSequencer
             GUI.enabled = wasGUIEnabled;
         }
 
-        private void DrawCallbacks()
+        protected virtual void DrawCallbacks()
         {
             bool wasGUIEnabled = GUI.enabled;
             if (DOTweenEditorPreview.isPreviewing)
@@ -174,14 +177,37 @@ namespace BrunoMikoski.AnimationSequencer
 
         private void DrawSettings()
         {
+            SerializedProperty autoPlayModeSerializedProperty = serializedObject.FindProperty("autoplayMode");
             SerializedProperty playOnAwakeSerializedProperty = serializedObject.FindProperty("playOnAwake");
             SerializedProperty pauseOnAwakeSerializedProperty = serializedObject.FindProperty("pauseOnAwake");
 
             using (EditorGUI.ChangeCheckScope changedCheck = new EditorGUI.ChangeCheckScope())
             {
-                EditorGUILayout.PropertyField(playOnAwakeSerializedProperty);
+                var autoplayMode = (AnimationSequencerController.AutoplayType)autoPlayModeSerializedProperty.enumValueIndex;
+                EditorGUILayout.PropertyField(autoPlayModeSerializedProperty);
+
+                string playOnAwakeLabel = null;
+                string pauseOnAwakeLabel = null;
+                switch(autoplayMode)
+                {
+                    case AnimationSequencerController.AutoplayType.Awake:
+                        playOnAwakeLabel = "Play On Awake";
+                        pauseOnAwakeLabel = "Pause On Awake";
+                        break;
+
+                    case AnimationSequencerController.AutoplayType.OnEnable:
+                        playOnAwakeLabel = "Play On Enable";
+                        pauseOnAwakeLabel = "Pause On Enable";
+                        break;
+
+                    default:
+                        Debug.LogError($"Unhandled AutoplayType {autoplayMode}");
+                        break;
+                }
+                
+                EditorGUILayout.PropertyField(playOnAwakeSerializedProperty, new GUIContent(playOnAwakeLabel));
                 if (playOnAwakeSerializedProperty.boolValue)
-                    EditorGUILayout.PropertyField(pauseOnAwakeSerializedProperty);
+                    EditorGUILayout.PropertyField(pauseOnAwakeSerializedProperty, new GUIContent(pauseOnAwakeLabel));
                 
                 if (changedCheck.changed)
                     serializedObject.ApplyModifiedProperties();
@@ -341,8 +367,16 @@ namespace BrunoMikoski.AnimationSequencer
                     }
                     else
                     {
-                        if (sequencerController.PlayingSequence.IsComplete())
+                        if (!sequencerController.PlayingSequence.IsBackwards() &&
+                            sequencerController.PlayingSequence.fullPosition >= sequencerController.PlayingSequence.Duration())
+                        {
                             sequencerController.Rewind();
+                        }
+                        else if (sequencerController.PlayingSequence.IsBackwards() &&
+                                 sequencerController.PlayingSequence.fullPosition <= 0f)
+                        {
+                            sequencerController.Complete();
+                        }
 
                         sequencerController.TogglePause();
                     }
@@ -394,19 +428,12 @@ namespace BrunoMikoski.AnimationSequencer
         {
             GUILayout.FlexibleSpace();
             EditorGUI.BeginChangeCheck();
-            float tweenTimescale = 1;
-
-            if (sequencerController.PlayingSequence != null)
-                tweenTimescale = sequencerController.PlayingSequence.timeScale;
-
+            
             EditorGUILayout.LabelField("TimeScale");
-            tweenTimescale = EditorGUILayout.Slider(tweenTimescale, 0, 2);
-
-            if (EditorGUI.EndChangeCheck())
-            {
-                if (sequencerController.PlayingSequence != null)
-                    sequencerController.PlayingSequence.timeScale = tweenTimescale;
-            }
+            tweenTimeScale = EditorGUILayout.Slider(tweenTimeScale, 0, 2);
+            
+            if (sequencerController.PlayingSequence != null)
+                sequencerController.PlayingSequence.timeScale = tweenTimeScale;
 
             GUILayout.FlexibleSpace();
         }

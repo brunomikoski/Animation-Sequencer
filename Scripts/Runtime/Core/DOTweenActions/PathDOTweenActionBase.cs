@@ -49,6 +49,9 @@ namespace BrunoMikoski.AnimationSequencer
         protected abstract Vector3[] GetPathPositions();
         public override void ResetToInitialState()
         {
+            if (previousTarget == null)
+                return;
+            
             if (isLocal)
             {
                 previousTarget.transform.localPosition = previousPosition;
