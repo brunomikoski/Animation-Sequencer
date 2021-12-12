@@ -183,10 +183,31 @@ namespace BrunoMikoski.AnimationSequencer
 
             using (EditorGUI.ChangeCheckScope changedCheck = new EditorGUI.ChangeCheckScope())
             {
+                var autoplayMode = (AnimationSequencerController.AutoplayType)autoPlayModeSerializedProperty.enumValueIndex;
                 EditorGUILayout.PropertyField(autoPlayModeSerializedProperty);
-                EditorGUILayout.PropertyField(playOnAwakeSerializedProperty);
+
+                string playOnAwakeLabel = null;
+                string pauseOnAwakeLabel = null;
+                switch(autoplayMode)
+                {
+                    case AnimationSequencerController.AutoplayType.Awake:
+                        playOnAwakeLabel = "Play On Awake";
+                        pauseOnAwakeLabel = "Pause On Awake";
+                        break;
+
+                    case AnimationSequencerController.AutoplayType.OnEnable:
+                        playOnAwakeLabel = "Play On Enable";
+                        pauseOnAwakeLabel = "Pause On Enable";
+                        break;
+
+                    default:
+                        Debug.LogError($"Unhandled AutoplayType {autoplayMode}");
+                        break;
+                }
+                
+                EditorGUILayout.PropertyField(playOnAwakeSerializedProperty, new GUIContent(playOnAwakeLabel));
                 if (playOnAwakeSerializedProperty.boolValue)
-                    EditorGUILayout.PropertyField(pauseOnAwakeSerializedProperty);
+                    EditorGUILayout.PropertyField(pauseOnAwakeSerializedProperty, new GUIContent(pauseOnAwakeLabel));
                 
                 if (changedCheck.changed)
                     serializedObject.ApplyModifiedProperties();

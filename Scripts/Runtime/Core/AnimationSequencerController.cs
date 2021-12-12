@@ -15,7 +15,7 @@ namespace BrunoMikoski.AnimationSequencer
             Backward
         }
         
-        public enum AutoplayMode
+        public enum AutoplayType
         {
             Awake,
             OnEnable
@@ -28,8 +28,7 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private bool timeScaleIndependent = false;
         [SerializeField]
-        private AutoplayMode autoplayMode = AutoplayMode.Awake;
-        public AutoplayMode AutoPlayMode { get { return autoplayMode;} set { autoplayMode = value; } }
+        private AutoplayType autoplayMode = AutoplayType.Awake;
         [SerializeField]
         protected bool playOnAwake;
         public bool PlayOnAwake { get { return playOnAwake;} }
@@ -64,7 +63,7 @@ namespace BrunoMikoski.AnimationSequencer
 
         protected virtual void Awake()
         {
-            if (autoplayMode != AutoplayMode.Awake)
+            if (autoplayMode != AutoplayType.Awake)
                 return;
 
             Autoplay();
@@ -72,7 +71,7 @@ namespace BrunoMikoski.AnimationSequencer
         
         protected virtual void OnEnable()
         {
-            if (autoplayMode != AutoplayMode.OnEnable)
+            if (autoplayMode != AutoplayType.OnEnable)
                 return;
 
             Autoplay();
@@ -90,7 +89,7 @@ namespace BrunoMikoski.AnimationSequencer
         
         protected virtual void OnDisable()
         {
-            if (autoplayMode != AutoplayMode.OnEnable)
+            if (autoplayMode != AutoplayType.OnEnable)
                 return;
             
             if (playingSequence == null)
@@ -113,6 +112,8 @@ namespace BrunoMikoski.AnimationSequencer
             
             ClearPlayingSequence();
             
+            onFinishedEvent.RemoveAllListeners();
+            
             if (onCompleteCallback != null)
                 onFinishedEvent.AddListener(onCompleteCallback.Invoke);
 
@@ -134,17 +135,18 @@ namespace BrunoMikoski.AnimationSequencer
             }
         }
 
-        public virtual void PlayForward(bool restFirst = true, Action onCompleteCallback = null)
+        public virtual void PlayForward(bool resetFirst = true, Action onCompleteCallback = null)
         {
             if (playingSequence == null)
                 Play();
             
             playTypeInternal = PlayType.Forward;
+            onFinishedEvent.RemoveAllListeners();
 
             if (onCompleteCallback != null)
                 onFinishedEvent.AddListener(onCompleteCallback.Invoke);
             
-            if (restFirst)
+            if (resetFirst)
                 SetProgress(0);
             
             playingSequence.PlayForward();
@@ -156,6 +158,7 @@ namespace BrunoMikoski.AnimationSequencer
                 Play();
             
             playTypeInternal = PlayType.Backward;
+            onFinishedEvent.RemoveAllListeners();
 
             if (onCompleteCallback != null)
                 onFinishedEvent.AddListener(onCompleteCallback.Invoke);
