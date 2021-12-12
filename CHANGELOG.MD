@@ -6,6 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.3.1]
+### Changed
+- Added `AutoplayType`, this allows animations to trigger in either `Awake` or `OnEnable` (defaults to Awake to retain backwards compatibility)
+- Fixed issues with backward playback in Editor Preview Tool and at runtime.
+- Fixed callbacks not firing correctly when playing backward.
+- If `AutoplayType` is OnEnable, then `OnDisable` will kill the tweens and reset the animated objects to their initial states, this ensures that they are in the right state for the Tweens to be regenerated the next time the animation is enabled.
+- TimeScale slider in Preview Tool can now be used before playback commences.
+- Exposed getters for `PlayOnAwake` and `PauseOnAwake`, these can be used for asserts to catch incorrect setup of `AniamtionSequenceControllers` from the code's perspective.
+- Fixed an issue with "Move To Anchored Position" when using the IsRelative flag. It must be set when calling tween.From(isRelative) for it to work.
+- Fixed delays not working for Callback steps.
+- Fixed potential null refs in various DOTweenActions.
+- Allowed various parts of AnimationSequenceController and AnimationSequenceControllerCustomEditor to be overridden.
+- Play On Awake and Pause On Awake now alter their inspector label dependent on the selected AutoplayType.
+- Fixed a bug with the completion callbacks passed to Play, PlayForward and PlayBackwards, old callbacks were executing for subsequent plays. All listeners are now removed each time any playback function is executed.
+- Fixed typo in PlayForward bool.
+
+Thanks for @nindim for all the improvements and bug fixes
+
 ## [0.3.0]
 ### Changed
 - Exposed `AnimationSequencerController` methods to be virtual, so they can be extended.
@@ -125,6 +143,8 @@ Thanks for all the [suggestions](https://github.com/brunomikoski/Animation-Seque
 ### Added 
 - First initial working version
 
+
+[0.3.1]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.1
 [0.3.0]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.0
 [0.2.8]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.2.8
 [0.2.7]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.2.7
