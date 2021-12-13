@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.3.2]
+### Changed
+- Fixed bug with delay and multiple sequences
+- Expand the steps panel if started playing with the panel open.~~~~
+
 ## [0.3.1]
 ### Changed
 - Added `AutoplayType`, this allows animations to trigger in either `Awake` or `OnEnable` (defaults to Awake to retain backwards compatibility)
@@ -144,6 +149,7 @@ Thanks for all the [suggestions](https://github.com/brunomikoski/Animation-Seque
 - First initial working version
 
 
+[0.3.2]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.2
 [0.3.1]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.1
 [0.3.0]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.0
 [0.2.8]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.2.8

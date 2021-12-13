@@ -32,6 +32,7 @@ namespace BrunoMikoski.AnimationSequencer
         private bool showSequenceSettingsPanel;
         private bool showStepsPanel = true;
         private float tweenTimeScale = 1f;
+        private bool wasShowingStepsPanel;
 
         private void OnEnable()
         {
@@ -319,6 +320,7 @@ namespace BrunoMikoski.AnimationSequencer
                     DOTweenEditorPreview.Stop();
                     sequencerController.ResetToInitialState();
                     sequencerController.ClearPlayingSequence();
+                    showStepsPanel = wasShowingStepsPanel;
                 }
             }
 
@@ -394,6 +396,8 @@ namespace BrunoMikoski.AnimationSequencer
                         sequencerController.Play();
                 }
             }
+
+            wasShowingStepsPanel = showStepsPanel;
             showStepsPanel = false;
         }
 
