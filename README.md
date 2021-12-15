@@ -175,7 +175,6 @@ Unity 2018.4.0 or later versions
 
 ## How to install
 
-Please be aware that you need to have DOTween installed on your project, with the Asmdef files created, you cannot use the OpenUPM version of DOTween is not offial and doesn't work properly, so download the latest one from DOTween website: http://dotween.demigiant.com/download.php
 	
 	
 <details>
@@ -191,6 +190,7 @@ To add it the package to your project:
   Name: OpenUPM
   URL:  https://package.openupm.com/
   Scope(s): com.brunomikoski
+	    com.demigiant
   ```
 - click <kbd>Save</kbd>
 - open Package Manager
