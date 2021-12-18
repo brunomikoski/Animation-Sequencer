@@ -18,7 +18,7 @@ namespace BrunoMikoski.AnimationSequencer
         {
             Sequence sequence = DOTween.Sequence();
             sequence.SetDelay(Delay);
-            animationSequence.AppendCallback(() => callback.Invoke());
+            sequence.AppendCallback(() => callback.Invoke());
 
             if (FlowType == FlowType.Append)
                 animationSequence.Append(sequence);
