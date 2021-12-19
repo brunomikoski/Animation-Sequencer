@@ -36,6 +36,7 @@ namespace BrunoMikoski.AnimationSequencer
 
 #if UNITY_EDITOR
             // Work around a Unity bug where updating the colour does not cause any visual change outside of PlayMode.
+            // https://forum.unity.com/threads/editor-scripting-force-color-update.798663/
             graphicTween.OnUpdate(() =>
             {
                 if (Application.isPlaying)
