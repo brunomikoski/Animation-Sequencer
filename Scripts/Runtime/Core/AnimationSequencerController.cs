@@ -39,7 +39,7 @@ namespace BrunoMikoski.AnimationSequencer
         protected bool pauseOnAwake;
 		public bool PauseOnAwake { get { return pauseOnAwake;} }
         [SerializeField]
-		private float playbackSpeed = 1f;
+        private float playbackSpeed = 1f;
         public float PlaybackSpeed => playbackSpeed;
         [SerializeField]
         protected PlayType playType = PlayType.Forward;

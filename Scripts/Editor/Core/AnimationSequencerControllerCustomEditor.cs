@@ -480,7 +480,7 @@ namespace BrunoMikoski.AnimationSequencer
             EditorGUILayout.LabelField("TimeScale");
             tweenTimeScale = EditorGUILayout.Slider(tweenTimeScale, 0, 2);
 			
-			UpdateSequenceTimeScale();
+            UpdateSequenceTimeScale();
 
             GUILayout.FlexibleSpace();
         }
