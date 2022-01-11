@@ -3,6 +3,9 @@ using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace BrunoMikoski.AnimationSequencer
 {
@@ -36,6 +39,9 @@ namespace BrunoMikoski.AnimationSequencer
         protected bool pauseOnAwake;
 		public bool PauseOnAwake { get { return pauseOnAwake;} }
         [SerializeField]
+        private float playbackSpeed = 1f;
+        public float PlaybackSpeed => playbackSpeed;
+        [SerializeField]
         protected PlayType playType = PlayType.Forward;
         [SerializeField]
         private int loops = 0;
@@ -57,6 +63,9 @@ namespace BrunoMikoski.AnimationSequencer
         private Sequence playingSequence;
         public Sequence PlayingSequence => playingSequence;
         private PlayType playTypeInternal = PlayType.Forward;
+#if UNITY_EDITOR
+        private bool requiresReset = false;
+#endif
 
         public bool IsPlaying => playingSequence != null && playingSequence.IsActive() && playingSequence.IsPlaying();
         public bool IsPaused => playingSequence != null && playingSequence.IsActive() && !playingSequence.IsPlaying();
@@ -298,6 +307,7 @@ namespace BrunoMikoski.AnimationSequencer
             }
 
             sequence.SetLoops(targetLoops, loopType);
+            sequence.timeScale = playbackSpeed;
             return sequence;
         }
 
@@ -315,5 +325,65 @@ namespace BrunoMikoski.AnimationSequencer
             DOTween.Kill(playingSequence);
             playingSequence = null;
         }
+  
+        public void SetAutoplayMode(AutoplayType autoplayType)
+        {
+            autoplayMode = autoplayType;
+        }
+        
+        public void SetPlayOnAwake(bool _playOnAwake)
+        {
+            playOnAwake = _playOnAwake;
+        }
+        
+        public void SetPauseOnAwake(bool _pauseOnAwake)
+        {
+            pauseOnAwake = _pauseOnAwake;
+        }
+        
+        public void SetTimeScaleIndependent(bool _timeScaleIndependent)
+        {
+            timeScaleIndependent = _timeScaleIndependent;
+        }
+        
+        public void SetPlayType(PlayType _playType)
+        {
+            playType = _playType;
+        }
+        
+        public void SetUpdateType(UpdateType _updateType)
+        {
+            updateType = _updateType;
+        }
+        
+        public void SetAutoKill(bool _autoKill)
+        {
+            autoKill = _autoKill;
+        }
+        
+        public void SetLoops(int _loops)
+        {
+            loops = _loops;
+        }
+        
+#if UNITY_EDITOR
+        // Unity Event Function called when component is added or reset.
+        private void Reset()
+        {
+            requiresReset = true;
+        }
+
+        // Used by the CustomEditor so it knows when to reset to the defaults.
+        public bool IsResetRequired()
+        {
+            return requiresReset;
+        }
+
+        // Called by the CustomEditor once the reset has been completed 
+        public void ResetComplete()
+        {
+            requiresReset = false;
+        }
+#endif
     }
 }
