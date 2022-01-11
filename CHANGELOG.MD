@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 - Fixed InvokeCallbackStep adding the callback to the parent sequence
 
+## [0.3.3]
+### Changed
+- Fixed issue in which the Animation Step's Delay was being applied to each Action individually, this was causing them to execute sequentially rather than simultaneously.
+- Fixed an issue in which joined Steps after an Invoke Callback Step with a delay were incorrectly delayed.
+- Added general defaults, previously defaults could only be set for Actions.
+- Worked around a Unity bug in which updating the colour of a Graphic does not cause any visual change outside of PlayMode (affects "Color Graphic" and "Fade Graphic" actions).
+- Improved Step naming for Invoke Callback to include the called function name and also support multiple callbacks.
+- Added RectTransformSizeDOTweenAction to tween the sizeDelta of a Graphic.
+- Fixed a bug in which exiting the prefab staging view with an active preview would cause a null ref and failure to reset the animation. This was due to the timing of EditorWIndow.OnDisable (it is is called after the prefab objects have already been destroyed) and has been fixed by hooking into PrefabStage.prefabSaving.
+- Added runtime playback speed.
+
+
 ## [0.3.2]
 ### Changed
 - Fixed bug with delay and multiple sequences
@@ -150,6 +162,7 @@ Thanks for all the [suggestions](https://github.com/brunomikoski/Animation-Seque
 - First initial working version
 
 
+[0.3.3]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.3
 [0.3.2]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.2
 [0.3.1]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.1
 [0.3.0]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.0
@@ -168,5 +181,3 @@ Thanks for all the [suggestions](https://github.com/brunomikoski/Animation-Seque
 [0.1.2]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.1.2
 [0.1.1]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.1.1
 [0.1.0]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.1.0
-
-
