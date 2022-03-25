@@ -25,6 +25,7 @@ namespace BrunoMikoski.AnimationSequencer
             EditorGUI.LabelField(position, displayName, EditorStyles.boldLabel);
 
             position.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+            EditorGUI.BeginChangeCheck();
 
             foreach (SerializedProperty serializedProperty in property.GetChildren())
             {
@@ -44,6 +45,9 @@ namespace BrunoMikoski.AnimationSequencer
             GUI.Box(boxPosition, GUIContent.none, EditorStyles.helpBox);
             
             EditorGUI.EndProperty();
+            if (EditorGUI.EndChangeCheck())
+                property.serializedObject.ApplyModifiedProperties();
+            
             property.SetPropertyDrawerHeight(position.y - originY);
         }
 
