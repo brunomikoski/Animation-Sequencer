@@ -452,10 +452,7 @@ namespace BrunoMikoski.AnimationSequencer
             EditorGUI.BeginChangeCheck();
             float tweenProgress = 0;
 
-            if (sequencerController.PlayingSequence != null && sequencerController.PlayingSequence.IsActive())
-                tweenProgress = sequencerController.PlayingSequence.ElapsedPercentage();
-            else
-                tweenProgress = 0;
+            tweenProgress = GetCurrentSequencerProgress();
 
             EditorGUILayout.LabelField("Progress");
             tweenProgress = EditorGUILayout.Slider(tweenProgress, 0, 1);
@@ -470,6 +467,22 @@ namespace BrunoMikoski.AnimationSequencer
             }
 
             GUILayout.FlexibleSpace();
+        }
+
+        private float GetCurrentSequencerProgress()
+        {
+            float tweenProgress;
+            if (sequencerController.PlayingSequence != null && sequencerController.PlayingSequence.IsActive())
+                tweenProgress = sequencerController.PlayingSequence.ElapsedPercentage();
+            else
+                tweenProgress = 0;
+            return tweenProgress;
+        }
+
+        private void SetCurrentSequenceProgress(float progress)
+        {
+            sequencerController.PlayingSequence.Goto(progress *
+                                                     sequencerController.PlayingSequence.Duration());
         }
 
         private void DrawTimeScaleSlider()

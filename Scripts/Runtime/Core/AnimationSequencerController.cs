@@ -34,10 +34,8 @@ namespace BrunoMikoski.AnimationSequencer
         private AutoplayType autoplayMode = AutoplayType.Awake;
         [SerializeField]
         protected bool playOnAwake;
-        public bool PlayOnAwake { get { return playOnAwake;} }
         [SerializeField]
         protected bool pauseOnAwake;
-		public bool PauseOnAwake { get { return pauseOnAwake;} }
         [SerializeField]
         private float playbackSpeed = 1f;
         public float PlaybackSpeed => playbackSpeed;
@@ -49,7 +47,7 @@ namespace BrunoMikoski.AnimationSequencer
         private LoopType loopType = LoopType.Restart;
         [SerializeField]
         private bool autoKill = true;
-
+        
         [SerializeField]
         private UnityEvent onStartEvent = new UnityEvent();
         public UnityEvent OnStartEvent { get { return onStartEvent;} protected set {onStartEvent = value;}}
@@ -331,41 +329,41 @@ namespace BrunoMikoski.AnimationSequencer
             autoplayMode = autoplayType;
         }
         
-        public void SetPlayOnAwake(bool _playOnAwake)
+        public void SetPlayOnAwake(bool targetPlayOnAwake)
         {
-            playOnAwake = _playOnAwake;
+            playOnAwake = targetPlayOnAwake;
         }
         
-        public void SetPauseOnAwake(bool _pauseOnAwake)
+        public void SetPauseOnAwake(bool targetPauseOnAwake)
         {
-            pauseOnAwake = _pauseOnAwake;
+            pauseOnAwake = targetPauseOnAwake;
         }
         
-        public void SetTimeScaleIndependent(bool _timeScaleIndependent)
+        public void SetTimeScaleIndependent(bool targetTimeScaleIndependent)
         {
-            timeScaleIndependent = _timeScaleIndependent;
+            timeScaleIndependent = targetTimeScaleIndependent;
         }
         
-        public void SetPlayType(PlayType _playType)
+        public void SetPlayType(PlayType targetPlayType)
         {
-            playType = _playType;
+            playType = targetPlayType;
         }
         
-        public void SetUpdateType(UpdateType _updateType)
+        public void SetUpdateType(UpdateType targetUpdateType)
         {
-            updateType = _updateType;
+            updateType = targetUpdateType;
         }
         
-        public void SetAutoKill(bool _autoKill)
+        public void SetAutoKill(bool targetAutoKill)
         {
-            autoKill = _autoKill;
+            autoKill = targetAutoKill;
         }
         
-        public void SetLoops(int _loops)
+        public void SetLoops(int targetLoops)
         {
-            loops = _loops;
+            loops = targetLoops;
         }
-        
+      
 #if UNITY_EDITOR
         // Unity Event Function called when component is added or reset.
         private void Reset()
