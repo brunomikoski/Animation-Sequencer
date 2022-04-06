@@ -383,5 +383,16 @@ namespace BrunoMikoski.AnimationSequencer
             requiresReset = false;
         }
 #endif
+        public bool TryGetStepAtIndex<T>(int index, out T result) where T : AnimationStepBase
+        {
+            if (index < 0 || index > animationSteps.Length - 2)
+            {
+                result = null;
+                return false;
+            }
+
+            result = animationSteps[index] as T;
+            return result != null;
+        }
     }
 }

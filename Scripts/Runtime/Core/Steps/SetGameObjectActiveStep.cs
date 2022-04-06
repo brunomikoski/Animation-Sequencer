@@ -11,9 +11,19 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private GameObject targetGameObject;
+        public GameObject TargetGameObject
+        {
+            get => targetGameObject;
+            set => targetGameObject = value;
+        }
 
         [SerializeField]
         private bool active;
+        public bool Active
+        {
+            get => active;
+            set => active = value;
+        }
 
         private bool wasActive;
 

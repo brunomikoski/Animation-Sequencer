@@ -14,14 +14,43 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         protected bool isLocal;
+        public bool IsLocal
+        {
+            get => isLocal;
+            set => isLocal = value;
+        }
+
         [SerializeField]
         private Color gizmoColor;
+        public Color GizmoColor
+        {
+            get => gizmoColor;
+            set => gizmoColor = value;
+        }
+
         [SerializeField]
         private int resolution = 10;
+        public int Resolution
+        {
+            get => resolution;
+            set => resolution = value;
+        }
+
         [SerializeField]
         private PathMode pathMode = PathMode.Full3D;
+        public PathMode PathMode
+        {
+            get => pathMode;
+            set => pathMode = value;
+        }
+
         [SerializeField]
         private PathType pathType = PathType.CatmullRom;
+        public PathType PathType
+        {
+            get => pathType;
+            set => pathType = value;
+        }
 
         private Transform previousTarget;
         private Vector3 previousPosition;
@@ -61,5 +90,6 @@ namespace BrunoMikoski.AnimationSequencer
                 previousTarget.transform.position = previousPosition;
             }
         }
+        
     }
 }

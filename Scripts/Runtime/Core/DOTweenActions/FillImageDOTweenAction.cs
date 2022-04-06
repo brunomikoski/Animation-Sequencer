@@ -15,6 +15,12 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField, Range(0, 1)]
         private float fillAmount;
+        public float FillAmount
+        {
+            get => fillAmount;
+            set => fillAmount = Mathf.Clamp01(value);
+        }
+
         private Image image;
         private float previousFillAmount;
 

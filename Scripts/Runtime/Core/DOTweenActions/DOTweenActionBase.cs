@@ -16,11 +16,27 @@ namespace BrunoMikoski.AnimationSequencer
         
         [SerializeField]
         protected AnimationDirection direction;
+        public AnimationDirection Direction
+        {
+            get => direction;
+            set => direction = value;
+        }
 
         [SerializeField]
         protected CustomEase ease = CustomEase.InOutCirc;
+        public CustomEase Ease
+        {
+            get => ease;
+            set => ease = value;
+        }
+
         [SerializeField]
         protected bool isRelative;
+        public bool IsRelative
+        {
+            get => isRelative;
+            set => isRelative = value;
+        }
 
         public virtual Type TargetComponentType { get; }
         public abstract string DisplayName { get; }

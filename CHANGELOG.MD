@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.3.5]
+### Changed
+- Fixed Infinite Loops not working with sequence, well its not fixed but I'm using the workaround described here: https://github.com/Demigiant/dotween/issues/92
+- Exposed all the Steps/Actions changeable values as properties so they can be changed by code.
+- Added new `TryGetStepAtIndex` and `TryGetActionAtIndex` to be able to get and manipulate values from code.
 
 ## [0.3.4]
 ### Changed
@@ -166,7 +171,7 @@ Thanks for all the [suggestions](https://github.com/brunomikoski/Animation-Seque
 ### Added 
 - First initial working version
 
-
+[0.3.5]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.5
 [0.3.4]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.4
 [0.3.3]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.3
 [0.3.2]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.2

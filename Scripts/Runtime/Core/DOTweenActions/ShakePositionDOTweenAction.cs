@@ -12,14 +12,43 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private Vector3 strength;
+        public Vector3 Strength
+        {
+            get => strength;
+            set => strength = value;
+        }
+
         [SerializeField]
         private int vibrato = 10;
+        public int Vibrato
+        {
+            get => vibrato;
+            set => vibrato = value;
+        }
+
         [SerializeField]
         private float randomness = 90;
+        public float Randomness
+        {
+            get => randomness;
+            set => randomness = value;
+        }
+
         [SerializeField]
         private bool snapping;
+        public bool Snapping
+        {
+            get => snapping;
+            set => snapping = value;
+        }
+
         [SerializeField]
         private bool fadeout = true;
+        public bool Fadeout
+        {
+            get => fadeout;
+            set => fadeout = value;
+        }
 
         private Transform previousTarget;
         private Vector3 previousPosition;
