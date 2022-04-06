@@ -10,6 +10,11 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private Vector3 position;
+        public Vector3 Position
+        {
+            get => position;
+            set => position = value;
+        }
 
         public override string DisplayName => "Move To Position";
 

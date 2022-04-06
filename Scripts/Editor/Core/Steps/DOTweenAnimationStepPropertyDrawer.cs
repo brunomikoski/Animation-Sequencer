@@ -118,6 +118,13 @@ namespace BrunoMikoski.AnimationSequencer
                 loopCountSerializedProperty.intValue = Mathf.Clamp(loopCountSerializedProperty.intValue, -1, int.MaxValue);
                 if (loopCountSerializedProperty.intValue != 0)
                 {
+                    if (loopCountSerializedProperty.intValue == -1)
+                    {
+                        Debug.LogWarning("Infinity Loops doesn't work well with sequence, the best way of doing " +
+                                         "that is setting to the int.MaxValue, will end eventually, but will take a really " +
+                                         "long time, more info here: https://github.com/Demigiant/dotween/issues/92");
+                        loopCountSerializedProperty.intValue = int.MaxValue;
+                    }
                     SerializedProperty loopTypeSerializedProperty = property.FindPropertyRelative("loopType");
                     EditorGUI.PropertyField(position, loopTypeSerializedProperty);
                     position.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;

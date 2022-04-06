@@ -11,11 +11,27 @@ namespace BrunoMikoski.AnimationSequencer
         public override string DisplayName => "Tween Target";
         [SerializeField]
         private int loopCount;
-        
+        public int LoopCount
+        {
+            get => loopCount;
+            set => loopCount = value;
+        }
+
         [SerializeField]
         private LoopType loopType;
+        public LoopType LoopType
+        {
+            get => loopType;
+            set => loopType = value;
+        }
+
         [SerializeReference]
         private DOTweenActionBase[] actions;
+        public DOTweenActionBase[] Actions
+        {
+            get => actions;
+            set => actions = value;
+        }
 
         public override void AddTweenToSequence(Sequence animationSequence)
         {
@@ -27,9 +43,10 @@ namespace BrunoMikoski.AnimationSequencer
                 {
                     tween.SetDelay(Delay);
                 }
-                tween.SetLoops(loopCount, loopType);
                 sequence.Join(tween);
             }
+
+            sequence.SetLoops(loopCount, loopType);
             
             if (FlowType == FlowType.Join)
                 animationSequence.Join(sequence);
@@ -53,6 +70,18 @@ namespace BrunoMikoski.AnimationSequencer
                 targetName = target.name;
             
             return $"{index}. {targetName}: {String.Join(", ", actions.Select(action => action.DisplayName)).Truncate(45)}";
+        }
+
+        public bool TryGetActionAtIndex<T>(int index, out T result) where T: DOTweenActionBase
+        {
+            if (index < 0 || index > actions.Length - 2)
+            {
+                result = null;
+                return false;
+            }
+
+            result = actions[index] as T;
+            return result != null;
         }
     }
 }

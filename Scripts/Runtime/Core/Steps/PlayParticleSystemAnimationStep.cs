@@ -9,13 +9,27 @@ namespace BrunoMikoski.AnimationSequencer
     {
         [SerializeField]
         private ParticleSystem particleSystem;
+        public ParticleSystem ParticleSystem
+        {
+            get => particleSystem;
+            set => particleSystem = value;
+        }
 
         [SerializeField]
         private float duration = 1;
-
+        public float Duration
+        {
+            get => duration;
+            set => duration = value;
+        }
 
         [SerializeField]
         private bool stopEmittingWhenOver;
+        public bool StopEmittingWhenOver
+        {
+            get => stopEmittingWhenOver;
+            set => stopEmittingWhenOver = value;
+        }
 
         public override string DisplayName => "Play Particle System";
 

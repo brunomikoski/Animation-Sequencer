@@ -288,7 +288,11 @@ namespace BrunoMikoski.AnimationSequencer
  
                 if (changedCheck.changed)
                 {
-                    loopsSerializedProperty.intValue = Mathf.Clamp(loopsSerializedProperty.intValue, -1, int.MaxValue);
+                    if (loopsSerializedProperty.intValue == -1)
+                    {
+                        Debug.LogWarning("Infinity Loops doesn't work well with sequence, the best way of doing that is setting to the int.MaxValue, will end eventually, but will take a really long time, more info here: https://github.com/Demigiant/dotween/issues/92");
+                        loopsSerializedProperty.intValue = int.MaxValue;
+                    }
                     serializedObject.ApplyModifiedProperties();
                 }
             }

@@ -8,7 +8,12 @@ namespace BrunoMikoski.AnimationSequencer
     {
         [SerializeField]
         private Transform[] pointPositions;
-        
+        public Transform[] PointPositions
+        {
+            get => pointPositions;
+            set => pointPositions = value;
+        }
+
         public override string DisplayName => "Move to Path Transform Positions";
         
         protected override Vector3[] GetPathPositions()

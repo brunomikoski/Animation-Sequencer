@@ -10,7 +10,12 @@ namespace BrunoMikoski.AnimationSequencer
     {
         [SerializeField]
         private UnityEvent callback = new UnityEvent();
-        
+        public UnityEvent Callback
+        {
+            get => callback;
+            set => callback = value;
+        }
+
         public override string DisplayName => "Invoke Callback";
         
 

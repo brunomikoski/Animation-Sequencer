@@ -15,7 +15,12 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private float alpha;
-        
+        public float Alpha
+        {
+            get => alpha;
+            set => alpha = value;
+        }
+
         private Graphic targetGraphic;
         private float previousAlpha;
 

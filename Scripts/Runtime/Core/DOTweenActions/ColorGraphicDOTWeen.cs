@@ -15,7 +15,12 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private Color color;
-        
+        public Color Color
+        {
+            get => color;
+            set => color = value;
+        }
+
         private Graphic targetGraphic;
         private Color previousColor;
 
@@ -49,7 +54,7 @@ namespace BrunoMikoski.AnimationSequencer
             
             return graphicTween;
         }
-
+        
         public override void ResetToInitialState()
         {
             if (targetGraphic == null)

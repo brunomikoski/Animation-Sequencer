@@ -15,6 +15,12 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private float alpha;
+        public float Alpha
+        {
+            get => alpha;
+            set => alpha = value;
+        }
+
         private CanvasGroup canvasGroup;
         private float previousFade;
 

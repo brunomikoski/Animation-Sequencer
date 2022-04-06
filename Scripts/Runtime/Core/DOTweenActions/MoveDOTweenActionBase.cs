@@ -13,8 +13,19 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private bool localMove;
+        public bool LocalMove
+        {
+            get => localMove;
+            set => localMove = value;
+        }
+
         [SerializeField]
         private AxisConstraint axisConstraint;
+        public AxisConstraint AxisConstraint
+        {
+            get => axisConstraint;
+            set => axisConstraint = value;
+        }
 
         private Vector3 previousPosition;
         private GameObject previousTarget;

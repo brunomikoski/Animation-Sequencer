@@ -10,9 +10,19 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private Transform target;
+        public Transform Target
+        {
+            get => target;
+            set => target = value;
+        }
+
         [SerializeField]
         private bool useLocalEulerAngles;
-        
+        public bool UseLocalEulerAngles
+        {
+            get => useLocalEulerAngles;
+            set => useLocalEulerAngles = value;
+        }
         
         protected override Vector3 GetRotation()
         {
