@@ -301,7 +301,10 @@ namespace BrunoMikoski.AnimationSequencer
             if (!Application.isPlaying)
             {
                 if (loops == -1)
+                {
                     targetLoops = 10;
+                    Debug.LogWarning("Infinity sequences on editor can cause issues, using 10 loops while on editor.");
+                }
             }
 
             sequence.SetLoops(targetLoops, loopType);
