@@ -112,8 +112,13 @@ namespace BrunoMikoski.AnimationSequencer
         {
             ClearPlayingSequence();
         }
+        
+        public virtual void Play()
+        {
+            Play(null);
+        }
 
-        public virtual void Play(Action onCompleteCallback = null)
+        public virtual void Play(Action onCompleteCallback)
         {
             playTypeInternal = playType;
             
