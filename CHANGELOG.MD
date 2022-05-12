@@ -5,10 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+## [0.3.6]
+- Fixed Unity 2021 support
 
 ## [0.3.5]
 ### Changed
-- Fixed Unity 2021 support
 - Fixed Infinite Loops not working with sequence, well its not fixed but I'm using the workaround described here: https://github.com/Demigiant/dotween/issues/92
 - Exposed all the Steps/Actions changeable values as properties so they can be changed by code.
 - Added new `TryGetStepAtIndex` and `TryGetActionAtIndex` to be able to get and manipulate values from code.
@@ -172,6 +173,7 @@ Thanks for all the [suggestions](https://github.com/brunomikoski/Animation-Seque
 ### Added 
 - First initial working version
 
+[0.3.6]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.6
 [0.3.5]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.5
 [0.3.4]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.4
 [0.3.3]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.3
