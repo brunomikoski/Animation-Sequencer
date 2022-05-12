@@ -12,10 +12,27 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private Vector3 punch;
+        public Vector3 Punch
+        {
+            get => punch;
+            set => punch = value;
+        }
+
         [SerializeField]
         private int vibrato = 10;
+        public int Vibrato
+        {
+            get => vibrato;
+            set => vibrato = value;
+        }
+
         [SerializeField]
         private float elasticity = 1f;
+        public float Elasticity
+        {
+            get => elasticity;
+            set => elasticity = value;
+        }
 
         private Transform previousTarget;
         private Vector3 previousScale;

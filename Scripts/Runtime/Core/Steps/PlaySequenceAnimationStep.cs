@@ -11,6 +11,11 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private AnimationSequencerController sequencer;
+        public AnimationSequencerController Sequencer
+        {
+            get => sequencer;
+            set => sequencer = value;
+        }
 
         public override void AddTweenToSequence(Sequence animationSequence)
         {

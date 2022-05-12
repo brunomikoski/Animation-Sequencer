@@ -18,10 +18,27 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private string text;
+        public string Text
+        {
+            get => text;
+            set => text = value;
+        }
+
         [SerializeField]
         private bool richText;
+        public bool RichText
+        {
+            get => richText;
+            set => richText = value;
+        }
+
         [SerializeField]
         private ScrambleMode scrambleMode = ScrambleMode.None;
+        public ScrambleMode ScrambleMode
+        {
+            get => scrambleMode;
+            set => scrambleMode = value;
+        }
         
         private TMP_Text tmpTextComponent;
         

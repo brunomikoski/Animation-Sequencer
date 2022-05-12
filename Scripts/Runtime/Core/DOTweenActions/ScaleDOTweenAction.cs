@@ -14,8 +14,19 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private Vector3 scale;
+        public Vector3 Scale
+        {
+            get => scale;
+            set => scale = value;
+        }
+
         [SerializeField]
         private AxisConstraint axisConstraint;
+        public AxisConstraint AxisConstraint
+        {
+            get => axisConstraint;
+            set => axisConstraint = value;
+        }
 
         private Vector3? previousState;
         private GameObject previousTarget;

@@ -13,7 +13,12 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private AxisConstraint axisConstraint;
-        
+        public AxisConstraint AxisConstraint
+        {
+            get => axisConstraint;
+            set => axisConstraint = value;
+        }
+
         private RectTransform rectTransform;
         private Vector2 previousAnchorPosition;
 

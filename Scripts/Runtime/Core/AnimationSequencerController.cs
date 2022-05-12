@@ -112,8 +112,13 @@ namespace BrunoMikoski.AnimationSequencer
         {
             ClearPlayingSequence();
         }
+        
+        public virtual void Play()
+        {
+            Play(null);
+        }
 
-        public virtual void Play(Action onCompleteCallback = null)
+        public virtual void Play(Action onCompleteCallback)
         {
             playTypeInternal = playType;
             
@@ -301,7 +306,10 @@ namespace BrunoMikoski.AnimationSequencer
             if (!Application.isPlaying)
             {
                 if (loops == -1)
+                {
                     targetLoops = 10;
+                    Debug.LogWarning("Infinity sequences on editor can cause issues, using 10 loops while on editor.");
+                }
             }
 
             sequence.SetLoops(targetLoops, loopType);
@@ -383,5 +391,16 @@ namespace BrunoMikoski.AnimationSequencer
             requiresReset = false;
         }
 #endif
+        public bool TryGetStepAtIndex<T>(int index, out T result) where T : AnimationStepBase
+        {
+            if (index < 0 || index > animationSteps.Length - 2)
+            {
+                result = null;
+                return false;
+            }
+
+            result = animationSteps[index] as T;
+            return result != null;
+        }
     }
 }

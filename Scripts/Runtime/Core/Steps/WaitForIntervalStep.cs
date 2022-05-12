@@ -11,7 +11,12 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private float interval;
-        
+        public float Interval
+        {
+            get => interval;
+            set => interval = value;
+        }
+
         public override void AddTweenToSequence(Sequence animationSequence)
         {
             Sequence sequence = DOTween.Sequence();

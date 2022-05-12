@@ -15,8 +15,20 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private bool local;
+        public bool Local
+        {
+            get => local;
+            set => local = value;
+        }
+
         [SerializeField]
         private RotateMode rotationMode = RotateMode.Fast;
+        public RotateMode RotationMode
+        {
+            get => rotationMode;
+            set => rotationMode = value;
+        }
+
 
         private Transform previousTarget;
         private Quaternion previousRotation;

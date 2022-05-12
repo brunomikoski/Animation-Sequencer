@@ -10,9 +10,19 @@ namespace BrunoMikoski.AnimationSequencer
 
         [SerializeField]
         private Transform target;
+        public Transform Target
+        {
+            get => target;
+            set => target = value;
+        }
 
         [SerializeField]
         private bool useLocalPosition;
+        public bool UseLocalPosition
+        {
+            get => useLocalPosition;
+            set => useLocalPosition = value;
+        }
 
         public override string DisplayName => "Move To Transform Position";
 
