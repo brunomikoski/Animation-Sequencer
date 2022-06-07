@@ -20,8 +20,5 @@
     "name": "Bruno Mikoski",
     "url": "https://www.brunomikoski.com"
   },
-  "type": "library",
-  "dependencies": {
-    "com.demigiant.dotween": "1.2.632"
-  }
+  "type": "library"
 }
