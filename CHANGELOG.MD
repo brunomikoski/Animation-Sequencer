@@ -5,13 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
-## [0.3.6]
 - Fixed Unity 2021 support
 
 ## [0.3.8]
 ### Changed
 - Fixed Unity 2020 foldout issues
-- Added other small null checks~~~~
+- Added other small null checks
 
 ## [0.3.5]
 ### Changed
@@ -178,6 +177,7 @@ Thanks for all the [suggestions](https://github.com/brunomikoski/Animation-Seque
 ### Added 
 - First initial working version
 
+[0.3.8]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.8
 [0.3.6]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.6
 [0.3.5]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.5
 [0.3.4]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.4
