@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.3.6]
 - Fixed Unity 2021 support
 
+## [0.3.8]
+### Changed
+- Fixed Unity 2020 foldout issues
+- Added other small null checks~~~~
+
 ## [0.3.5]
 ### Changed
 - Fixed Infinite Loops not working with sequence, well its not fixed but I'm using the workaround described here: https://github.com/Demigiant/dotween/issues/92

@@ -507,11 +507,10 @@ namespace BrunoMikoski.AnimationSequencer
                 rect.width -= 10;
                 rect.y -= 4;
                 
-                foldout = EditorGUI.BeginFoldoutHeaderGroup(rect, foldout, title);
+                foldout = EditorGUI.Foldout(rect, foldout, title);
                 
                 if (foldout)
                     additionalInspectorGUI.Invoke();
-                EditorGUI.EndFoldoutHeaderGroup();
             }
         }
         
@@ -559,9 +558,9 @@ namespace BrunoMikoski.AnimationSequencer
         {
             SerializedProperty sourceSerializedProperty = reorderableList.serializedProperty.GetArrayElementAtIndex(index);
             reorderableList.serializedProperty.InsertArrayElementAtIndex(index + 1);
-            SerializedProperty target = reorderableList.serializedProperty.GetArrayElementAtIndex(index + 1);
-            ContextClickUtils.CopyPropertyValue(sourceSerializedProperty, target);
-            target.serializedObject.ApplyModifiedProperties();
+            SerializedProperty source = reorderableList.serializedProperty.GetArrayElementAtIndex(index + 1);
+            ContextClickUtils.CopyPropertyValue(sourceSerializedProperty, source);
+            source.serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawContextInputOnItem(SerializedProperty element, int index, Rect rect1)
@@ -635,15 +634,18 @@ namespace BrunoMikoski.AnimationSequencer
         private void SetDefaults()
         {
             sequencerController = target as AnimationSequencerController;
-            sequencerController.SetAutoplayMode(AnimationControllerDefaults.Instance.AutoplayMode);
-            sequencerController.SetPlayOnAwake(AnimationControllerDefaults.Instance.PlayOnAwake);
-            sequencerController.SetPauseOnAwake(AnimationControllerDefaults.Instance.PauseOnAwake);
-            sequencerController.SetTimeScaleIndependent(AnimationControllerDefaults.Instance.TimeScaleIndependent);
-            sequencerController.SetPlayType(AnimationControllerDefaults.Instance.PlayType);
-            sequencerController.SetUpdateType(AnimationControllerDefaults.Instance.UpdateType);
-            sequencerController.SetAutoKill(AnimationControllerDefaults.Instance.AutoKill);
-            sequencerController.SetLoops(AnimationControllerDefaults.Instance.Loops);
-            sequencerController.ResetComplete();
+            if (sequencerController != null)
+            {
+                sequencerController.SetAutoplayMode(AnimationControllerDefaults.Instance.AutoplayMode);
+                sequencerController.SetPlayOnAwake(AnimationControllerDefaults.Instance.PlayOnAwake);
+                sequencerController.SetPauseOnAwake(AnimationControllerDefaults.Instance.PauseOnAwake);
+                sequencerController.SetTimeScaleIndependent(AnimationControllerDefaults.Instance.TimeScaleIndependent);
+                sequencerController.SetPlayType(AnimationControllerDefaults.Instance.PlayType);
+                sequencerController.SetUpdateType(AnimationControllerDefaults.Instance.UpdateType);
+                sequencerController.SetAutoKill(AnimationControllerDefaults.Instance.AutoKill);
+                sequencerController.SetLoops(AnimationControllerDefaults.Instance.Loops);
+                sequencerController.ResetComplete();
+            }
         }
     }
 }
