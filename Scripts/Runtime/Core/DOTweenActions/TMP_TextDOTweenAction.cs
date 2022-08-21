@@ -1,3 +1,4 @@
+#if DOTWEEN_ENABLED
 #if TMP_ENABLED
 
 using System;
@@ -75,4 +76,5 @@ namespace BrunoMikoski.AnimationSequencer
         }
     }
 }
+#endif
 #endif

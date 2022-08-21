@@ -1,8 +1,9 @@
-﻿using System;
+﻿#if DOTWEEN_ENABLED
+using System;
 using DG.DOTweenEditor;
 using DG.Tweening;
 using UnityEditor;
-using UnityEditor.Experimental.SceneManagement;
+
 using UnityEditor.IMGUI.Controls;
 using UnityEditorInternal;
 using UnityEngine;
@@ -46,7 +47,7 @@ namespace BrunoMikoski.AnimationSequencer
             reorderableList.onReorderCallback += OnListOrderChanged;
             reorderableList.drawHeaderCallback += OnDrawerHeader;
             EditorApplication.playModeStateChanged += OnEditorPlayModeChanged;
-            PrefabStage.prefabSaving += PrefabSaving;
+            UnityEditor.SceneManagement.PrefabStage.prefabSaving += PrefabSaving;
             Repaint();
         }
 
@@ -64,7 +65,7 @@ namespace BrunoMikoski.AnimationSequencer
             reorderableList.onReorderCallback -= OnListOrderChanged;
             reorderableList.drawHeaderCallback -= OnDrawerHeader;
             EditorApplication.playModeStateChanged -= OnEditorPlayModeChanged;
-            PrefabStage.prefabSaving -= PrefabSaving;
+            UnityEditor.SceneManagement.PrefabStage.prefabSaving -= PrefabSaving;
 
             if (!Application.isPlaying)
             {
@@ -649,3 +650,4 @@ namespace BrunoMikoski.AnimationSequencer
         }
     }
 }
+#endif
