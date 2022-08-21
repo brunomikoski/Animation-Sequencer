@@ -5,7 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+
+## [0.3.9]
+### Changed
 - Fixed Unity 2021 support
+- Added a new setup to help dealing with projects when DOTween is not available. The AnimationSequencer will try to find the DOTween asmdef and add a scripting defining symbol `DOTWEEN_ENABLED`. Keep in mind that if you remove DOTWEEN you will have to remove the asmdef by hand. 
 
 ## [0.3.8]
 ### Changed
