@@ -3,7 +3,6 @@ using System;
 using DG.DOTweenEditor;
 using DG.Tweening;
 using UnityEditor;
-
 using UnityEditor.IMGUI.Controls;
 using UnityEditorInternal;
 using UnityEngine;
@@ -47,7 +46,13 @@ namespace BrunoMikoski.AnimationSequencer
             reorderableList.onReorderCallback += OnListOrderChanged;
             reorderableList.drawHeaderCallback += OnDrawerHeader;
             EditorApplication.playModeStateChanged += OnEditorPlayModeChanged;
+            
+#if UNITY_2021_1_OR_NEWER
             UnityEditor.SceneManagement.PrefabStage.prefabSaving += PrefabSaving;
+#else
+            UnityEditor.Experimental.SceneManagement.PrefabStage.prefabSaving += PrefabSaving;
+#endif
+            
             Repaint();
         }
 
@@ -65,7 +70,11 @@ namespace BrunoMikoski.AnimationSequencer
             reorderableList.onReorderCallback -= OnListOrderChanged;
             reorderableList.drawHeaderCallback -= OnDrawerHeader;
             EditorApplication.playModeStateChanged -= OnEditorPlayModeChanged;
+#if UNITY_2021_1_OR_NEWER
             UnityEditor.SceneManagement.PrefabStage.prefabSaving -= PrefabSaving;
+#else
+            UnityEditor.Experimental.SceneManagement.PrefabStage.prefabSaving -= PrefabSaving;
+#endif
 
             if (!Application.isPlaying)
             {
