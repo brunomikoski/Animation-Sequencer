@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.9]
 ### Changed
-- Added new `DOTWEEN_ENABLED` defining symbol for when DOTween setup is correct, and prevent errors
+- Fixed Unity 2021 support
+- Added a new setup to help dealing with projects when DOTween is not available. The AnimationSequencer will try to find the DOTween asmdef and add a scripting defining symbol `DOTWEEN_ENABLED`. Keep in mind that if you remove DOTWEEN you will have to remove the asmdef by hand. 
 
 ## [0.3.8]
 ### Changed
