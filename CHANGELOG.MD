@@ -5,7 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
-- Fixed Unity 2021 support
+
+## [0.4.0]
+### Changed
+- Fixed Unity 2020 compability
+
+## [0.3.9]
+### Changed
+- Added new `DOTWEEN_ENABLED` defining symbol for when DOTween setup is correct, and prevent errors
 
 ## [0.3.8]
 ### Changed
@@ -177,6 +184,8 @@ Thanks for all the [suggestions](https://github.com/brunomikoski/Animation-Seque
 ### Added 
 - First initial working version
 
+[0.4.0]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.4.0
+[0.3.9]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.9
 [0.3.8]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.8
 [0.3.6]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.6
 [0.3.5]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.5
