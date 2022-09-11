@@ -45,6 +45,7 @@ namespace BrunoMikoski.AnimationSequencer
             reorderableList.onRemoveCallback += OnClickToRemove;
             reorderableList.onReorderCallback += OnListOrderChanged;
             reorderableList.drawHeaderCallback += OnDrawerHeader;
+            EditorApplication.update += EditorUpdate;
             EditorApplication.playModeStateChanged += OnEditorPlayModeChanged;
             
 #if UNITY_2021_1_OR_NEWER
@@ -55,6 +56,8 @@ namespace BrunoMikoski.AnimationSequencer
             
             Repaint();
         }
+
+       
 
         public override bool RequiresConstantRepaint()
         {
@@ -70,6 +73,8 @@ namespace BrunoMikoski.AnimationSequencer
             reorderableList.onReorderCallback -= OnListOrderChanged;
             reorderableList.drawHeaderCallback -= OnDrawerHeader;
             EditorApplication.playModeStateChanged -= OnEditorPlayModeChanged;
+            EditorApplication.update -= EditorUpdate;
+
 #if UNITY_2021_1_OR_NEWER
             UnityEditor.SceneManagement.PrefabStage.prefabSaving -= PrefabSaving;
 #else
@@ -88,6 +93,18 @@ namespace BrunoMikoski.AnimationSequencer
             tweenTimeScale = 1f;
         }
 
+        private void EditorUpdate()
+        {
+            if (Application.isPlaying)
+                return;
+            
+            SerializedProperty progressSP = serializedObject.FindProperty("progress");
+            if (Mathf.Approximately(progressSP.floatValue, -1))
+                return;
+            
+            SetProgress(progressSP.floatValue);
+        }
+        
         private void OnEditorPlayModeChanged(PlayModeStateChange playModeState)
         {
             if (playModeState == PlayModeStateChange.ExitingEditMode)
@@ -206,36 +223,15 @@ namespace BrunoMikoski.AnimationSequencer
         private void DrawSettings()
         {
             SerializedProperty autoPlayModeSerializedProperty = serializedObject.FindProperty("autoplayMode");
-            SerializedProperty playOnAwakeSerializedProperty = serializedObject.FindProperty("playOnAwake");
-            SerializedProperty pauseOnAwakeSerializedProperty = serializedObject.FindProperty("pauseOnAwake");
+            SerializedProperty pauseOnAwakeSerializedProperty = serializedObject.FindProperty("startPaused");
 
             using (EditorGUI.ChangeCheckScope changedCheck = new EditorGUI.ChangeCheckScope())
             {
-                var autoplayMode = (AnimationSequencerController.AutoplayType)autoPlayModeSerializedProperty.enumValueIndex;
+                AnimationSequencerController.AutoplayType autoplayMode = (AnimationSequencerController.AutoplayType)autoPlayModeSerializedProperty.enumValueIndex;
                 EditorGUILayout.PropertyField(autoPlayModeSerializedProperty);
 
-                string playOnAwakeLabel = null;
-                string pauseOnAwakeLabel = null;
-                switch(autoplayMode)
-                {
-                    case AnimationSequencerController.AutoplayType.Awake:
-                        playOnAwakeLabel = "Play On Awake";
-                        pauseOnAwakeLabel = "Pause On Awake";
-                        break;
-
-                    case AnimationSequencerController.AutoplayType.OnEnable:
-                        playOnAwakeLabel = "Play On Enable";
-                        pauseOnAwakeLabel = "Pause On Enable";
-                        break;
-
-                    default:
-                        Debug.LogError($"Unhandled AutoplayType {autoplayMode}");
-                        break;
-                }
-                
-                EditorGUILayout.PropertyField(playOnAwakeSerializedProperty, new GUIContent(playOnAwakeLabel));
-                if (playOnAwakeSerializedProperty.boolValue)
-                    EditorGUILayout.PropertyField(pauseOnAwakeSerializedProperty, new GUIContent(pauseOnAwakeLabel));
+                if (autoplayMode != AnimationSequencerController.AutoplayType.Nothing)
+                    EditorGUILayout.PropertyField(pauseOnAwakeSerializedProperty);
 				
                 DrawPlaybackSpeedSlider();
                 
@@ -469,14 +465,19 @@ namespace BrunoMikoski.AnimationSequencer
 
             if (EditorGUI.EndChangeCheck())
             {
-                if(!sequencerController.IsPlaying)
-                    PlaySequence();
-
-                sequencerController.PlayingSequence.Goto(tweenProgress *
-                                                         sequencerController.PlayingSequence.Duration());
+                SetProgress(tweenProgress);
             }
 
             GUILayout.FlexibleSpace();
+        }
+
+        private void SetProgress(float tweenProgress)
+        {
+            if (!sequencerController.IsPlaying)
+                PlaySequence();
+
+            sequencerController.PlayingSequence.Goto(tweenProgress *
+                                                     sequencerController.PlayingSequence.Duration());
         }
 
         private float GetCurrentSequencerProgress()
@@ -572,7 +573,7 @@ namespace BrunoMikoski.AnimationSequencer
             ContextClickUtils.CopyPropertyValue(sourceSerializedProperty, source);
             source.serializedObject.ApplyModifiedProperties();
         }
-
+        
         private void DrawContextInputOnItem(SerializedProperty element, int index, Rect rect1)
         {
             rect1.x -= 24;
