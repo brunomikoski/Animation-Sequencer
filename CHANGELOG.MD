@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.5.0]
+### Changed
+- Added support to control AnimationSequencer though regular unity animations, in both runtime / playtime
+- Fixed issue with color tweens no working on the editor > 2021
+- Added a settings menu on `Edit/Preferences/AnimationSequencer`
+- You can now disable the auto foldout of the steps while previewing on the Settings
+
 ## [0.4.0]
 ### Changed
 - Fixed Unity 2020 compability
@@ -185,6 +192,7 @@ Thanks for all the [suggestions](https://github.com/brunomikoski/Animation-Seque
 ### Added 
 - First initial working version
 
+[0.5.0]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.5.0
 [0.4.0]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.4.0
 [0.3.9]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.9
 [0.3.8]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.8

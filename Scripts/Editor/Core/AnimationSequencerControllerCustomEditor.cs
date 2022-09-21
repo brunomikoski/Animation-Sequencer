@@ -97,14 +97,14 @@ namespace BrunoMikoski.AnimationSequencer
         {
             if (Application.isPlaying)
                 return;
-            
+
             SerializedProperty progressSP = serializedObject.FindProperty("progress");
             if (Mathf.Approximately(progressSP.floatValue, -1))
                 return;
             
             SetProgress(progressSP.floatValue);
         }
-        
+
         private void OnEditorPlayModeChanged(PlayModeStateChange playModeState)
         {
             if (playModeState == PlayModeStateChange.ExitingEditMode)
@@ -448,7 +448,7 @@ namespace BrunoMikoski.AnimationSequencer
             }
 
             wasShowingStepsPanel = showStepsPanel;
-            showStepsPanel = false;
+            showStepsPanel = !AnimationSequencerSettings.GetInstance().AutoHideStepsWhenPreviewing;
         }
 
         private void DrawProgressSlider()
