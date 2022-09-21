@@ -22,7 +22,8 @@ namespace BrunoMikoski.AnimationSequencer
         public enum AutoplayType
         {
             Awake,
-            OnEnable
+            OnEnable,
+            Nothing
         }
 
         [SerializeReference]
@@ -34,9 +35,7 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField]
         private AutoplayType autoplayMode = AutoplayType.Awake;
         [SerializeField]
-        protected bool playOnAwake;
-        [SerializeField]
-        protected bool pauseOnAwake;
+        protected bool startPaused;
         [SerializeField]
         private float playbackSpeed = 1f;
         public float PlaybackSpeed => playbackSpeed;
@@ -69,6 +68,10 @@ namespace BrunoMikoski.AnimationSequencer
         public bool IsPlaying => playingSequence != null && playingSequence.IsActive() && playingSequence.IsPlaying();
         public bool IsPaused => playingSequence != null && playingSequence.IsActive() && !playingSequence.IsPlaying();
 
+        [SerializeField, Range(0, 1)] 
+        private float progress = -1;
+        
+
         protected virtual void Awake()
         {
             if (autoplayMode != AutoplayType.Awake)
@@ -87,12 +90,9 @@ namespace BrunoMikoski.AnimationSequencer
 
         private void Autoplay()
         {
-            if (playOnAwake)
-            {
-                Play();
-                if (pauseOnAwake)
-                    playingSequence.Pause();
-            }
+            Play();
+            if (startPaused)
+                playingSequence.Pause();
         }
         
         protected virtual void OnDisable()
@@ -276,7 +276,7 @@ namespace BrunoMikoski.AnimationSequencer
                     onFinishedEvent.Invoke();
                 }
             });
-
+            
             for (int i = 0; i < animationSteps.Length; i++)
             {
                 animationSteps[i].AddTweenToSequence(sequence);
@@ -340,12 +340,11 @@ namespace BrunoMikoski.AnimationSequencer
         
         public void SetPlayOnAwake(bool targetPlayOnAwake)
         {
-            playOnAwake = targetPlayOnAwake;
         }
         
         public void SetPauseOnAwake(bool targetPauseOnAwake)
         {
-            pauseOnAwake = targetPauseOnAwake;
+            startPaused = targetPauseOnAwake;
         }
         
         public void SetTimeScaleIndependent(bool targetTimeScaleIndependent)
@@ -372,7 +371,15 @@ namespace BrunoMikoski.AnimationSequencer
         {
             loops = targetLoops;
         }
-      
+
+        private void Update()
+        {
+            if (progress == -1.0f)
+                return;
+            
+            SetProgress(progress);
+        }
+
 #if UNITY_EDITOR
         // Unity Event Function called when component is added or reset.
         private void Reset()
