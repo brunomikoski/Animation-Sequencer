@@ -34,6 +34,7 @@ namespace BrunoMikoski.AnimationSequencer
         private bool showStepsPanel = true;
         private float tweenTimeScale = 1f;
         private bool wasShowingStepsPanel;
+        private bool justStartPreviewing;
 
         private void OnEnable()
         {
@@ -370,7 +371,8 @@ namespace BrunoMikoski.AnimationSequencer
                     DOTweenEditorPreview.Stop();
                     sequencerController.ResetToInitialState();
                     sequencerController.ClearPlayingSequence();
-                    showStepsPanel = wasShowingStepsPanel;
+                    if (AnimationSequencerSettings.GetInstance().AutoHideStepsWhenPreviewing)
+                        showStepsPanel = wasShowingStepsPanel;
                 }
             }
 
@@ -401,10 +403,12 @@ namespace BrunoMikoski.AnimationSequencer
 
         private void PlaySequence()
         {
+            justStartPreviewing = false;
             if (!Application.isPlaying)
             {
                 if (!DOTweenEditorPreview.isPreviewing)
                 {
+                    justStartPreviewing = true;
                     DOTweenEditorPreview.Start();
 
                     sequencerController.Play();
@@ -447,7 +451,9 @@ namespace BrunoMikoski.AnimationSequencer
                 }
             }
 
-            wasShowingStepsPanel = showStepsPanel;
+            if (justStartPreviewing)
+                wasShowingStepsPanel = showStepsPanel;
+            
             showStepsPanel = !AnimationSequencerSettings.GetInstance().AutoHideStepsWhenPreviewing;
         }
 
