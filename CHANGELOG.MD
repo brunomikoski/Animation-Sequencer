@@ -5,7 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+
+## [0.5.1]
+### Changed
 - Fixed issue when previewing animation and having the `AutoHideWhenPreviewing` enabled would cause the Steps not expand on the second play
+- Fixed issue where FadeCanvas didn't work while previewing on Editor on Unity 2021
 
 ## [0.5.0]
 ### Changed
@@ -193,6 +197,7 @@ Thanks for all the [suggestions](https://github.com/brunomikoski/Animation-Seque
 ### Added 
 - First initial working version
 
+[0.5.1]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.5.1
 [0.5.0]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.5.0
 [0.4.0]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.4.0
 [0.3.9]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.3.9
