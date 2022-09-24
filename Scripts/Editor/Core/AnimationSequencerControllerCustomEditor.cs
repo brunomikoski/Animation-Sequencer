@@ -472,6 +472,12 @@ namespace BrunoMikoski.AnimationSequencer
             if (EditorGUI.EndChangeCheck())
             {
                 SetProgress(tweenProgress);
+
+                if (!Application.isPlaying)
+                {
+                    serializedObject.FindProperty("progress").floatValue = tweenProgress;
+                    serializedObject.ApplyModifiedProperties();
+                }
             }
 
             GUILayout.FlexibleSpace();
@@ -565,80 +571,6 @@ namespace BrunoMikoski.AnimationSequencer
             // DrawContextInputOnItem(element, index, rect);
         }
 
-        private void RemoveItemAtIndex(int index)
-        {
-            reorderableList.serializedProperty.DeleteArrayElementAtIndex(index);
-            reorderableList.serializedProperty.serializedObject.ApplyModifiedProperties();
-        }
-
-        private void DuplicateItem(int index)
-        {
-            SerializedProperty sourceSerializedProperty = reorderableList.serializedProperty.GetArrayElementAtIndex(index);
-            reorderableList.serializedProperty.InsertArrayElementAtIndex(index + 1);
-            SerializedProperty source = reorderableList.serializedProperty.GetArrayElementAtIndex(index + 1);
-            ContextClickUtils.CopyPropertyValue(sourceSerializedProperty, source);
-            source.serializedObject.ApplyModifiedProperties();
-        }
-        
-        private void DrawContextInputOnItem(SerializedProperty element, int index, Rect rect1)
-        {
-            rect1.x -= 24;
-            rect1.width += 24;
-            Event current = Event.current;
-            if (rect1.Contains(current.mousePosition) && current.type == EventType.ContextClick)
-            {
-                GenericMenu menu = new GenericMenu();
-
-                menu.AddItem(
-                    new GUIContent("Copy Values"),
-                    false,
-                    () =>
-                    {
-                        ContextClickUtils.SetSource(element);
-                    }
-                );
-                if (ContextClickUtils.CanPasteToTarget(element))
-                {
-                    menu.AddItem(
-                        new GUIContent("Paste Values"),
-                        false,
-                        () =>
-                        {
-                            ContextClickUtils.ApplySourceToTarget(element);
-                        }
-                    );
-                    
-                }
-                else
-                {
-                    menu.AddDisabledItem(new GUIContent("Paste Values"));
-                }
-                menu.AddSeparator("");
-
-                menu.AddItem(
-                    new GUIContent("Duplicate Item"),
-                    false,
-                    () =>
-                    {
-                        DuplicateItem(index);
-                    }
-                );
-                
-                menu.AddItem(
-                    new GUIContent("Delete Item"),
-                    false,
-                    () =>
-                    {
-                        RemoveItemAtIndex(index);
-                    }
-                );
-                
-                menu.ShowAsContext();
-                current.Use();
-            }
-        }
-
-       
         private float GetAnimationStepHeight(int index)
         {
             if (index > reorderableList.serializedProperty.arraySize - 1)

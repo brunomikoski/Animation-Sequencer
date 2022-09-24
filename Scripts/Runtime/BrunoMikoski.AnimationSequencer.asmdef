@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "DOTween.Modules",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "Unity.Timeline"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -17,6 +18,11 @@
             "name": "com.unity.textmeshpro",
             "expression": "",
             "define": "TMP_ENABLED"
+        },
+        {
+            "name": "com.unity.modules.director",
+            "expression": "",
+            "define": "DIRECTOR_ENABLED"
         }
     ],
     "noEngineReferences": false
