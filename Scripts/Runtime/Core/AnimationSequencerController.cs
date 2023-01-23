@@ -403,7 +403,7 @@ namespace BrunoMikoski.AnimationSequencer
 #endif
         public bool TryGetStepAtIndex<T>(int index, out T result) where T : AnimationStepBase
         {
-            if (index < 0 || index > animationSteps.Length - 2)
+            if (index < 0 || index > animationSteps.Length - 1)
             {
                 result = null;
                 return false;
