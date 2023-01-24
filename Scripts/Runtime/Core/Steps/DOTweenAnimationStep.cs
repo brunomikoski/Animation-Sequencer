@@ -75,7 +75,7 @@ namespace BrunoMikoski.AnimationSequencer
 
         public bool TryGetActionAtIndex<T>(int index, out T result) where T: DOTweenActionBase
         {
-            if (index < 0 || index > actions.Length - 2)
+            if (index < 0 || index > actions.Length - 1)
             {
                 result = null;
                 return false;
