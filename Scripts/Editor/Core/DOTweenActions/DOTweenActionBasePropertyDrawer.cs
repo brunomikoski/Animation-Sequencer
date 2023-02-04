@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BrunoMikoski.AnimationSequencer
 {
-    [CustomPropertyDrawer(typeof(DOTweenActionBase), true)]
+    [CustomPropertyDrawer(typeof(SequencerAnimationBase), true)]
     public sealed class DOTweenActionBasePropertyDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

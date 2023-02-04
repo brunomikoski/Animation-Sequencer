@@ -9,9 +9,9 @@ namespace BrunoMikoski.AnimationSequencer
         private readonly Type animationStepType;
         public Type AnimationStepType => animationStepType;
 
-        public AnimationStepAdvancedDropdownItem(AnimationStepBase animationStepBase, string displayName) : base(displayName)
+        public AnimationStepAdvancedDropdownItem(AnimationStep animationStep, string displayName) : base(displayName)
         {
-            animationStepType = animationStepBase.GetType();
+            animationStepType = animationStep.GetType();
         }
     }
 }

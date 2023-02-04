@@ -12,7 +12,7 @@ namespace BrunoMikoski.AnimationSequencer
         [SettingsProvider]
         private static SettingsProvider SettingsProvider()
         {
-            return CreateSettingsProvider("Animation Sequencer", null);
+            return CreateSettingsProvider("Preferences/Animation Sequencer", null);
         }
     }
 }

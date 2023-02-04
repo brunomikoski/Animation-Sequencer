@@ -20,19 +20,19 @@ namespace BrunoMikoski.AnimationSequencer
         {
             AdvancedDropdownItem root = new AdvancedDropdownItem("Animation Step");
 
-            TypeCache.TypeCollection availableTypesOfAnimationStep = TypeCache.GetTypesDerivedFrom(typeof(AnimationStepBase));
+            TypeCache.TypeCollection availableTypesOfAnimationStep = TypeCache.GetTypesDerivedFrom(typeof(AnimationStep));
             foreach (Type animatedItemType in availableTypesOfAnimationStep)
             {
                 if (animatedItemType.IsAbstract)
                     continue;
                 
-                AnimationStepBase animationStepBase = Activator.CreateInstance(animatedItemType) as AnimationStepBase;
+                AnimationStep animationStep = Activator.CreateInstance(animatedItemType) as AnimationStep;
 
-                string displayName = animationStepBase.GetType().Name;
-                if (!string.IsNullOrEmpty(animationStepBase.DisplayName))
-                    displayName = animationStepBase.DisplayName;
+                string displayName = animationStep.GetType().Name;
+                if (!string.IsNullOrEmpty(animationStep.DisplayName))
+                    displayName = animationStep.DisplayName;
                 
-                root.AddChild(new AnimationStepAdvancedDropdownItem(animationStepBase, displayName));
+                root.AddChild(new AnimationStepAdvancedDropdownItem(animationStep, displayName));
             }
 
             return root;

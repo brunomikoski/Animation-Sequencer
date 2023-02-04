@@ -30,8 +30,8 @@ namespace BrunoMikoski.AnimationSequencer
         }
 
         
-        private static Dictionary<Type, DOTweenActionBase> typeToInstanceCache;
-        public static Dictionary<Type, DOTweenActionBase> TypeToInstanceCache
+        private static Dictionary<Type, SequencerAnimationBase> typeToInstanceCache;
+        public static Dictionary<Type, SequencerAnimationBase> TypeToInstanceCache
         {
             get
             {
@@ -67,24 +67,24 @@ namespace BrunoMikoski.AnimationSequencer
 
             cachedTypeToDisplayName = new Dictionary<Type, GUIContent>();
             cachedTypeToInstance = new Dictionary<Type, GUIContent>();
-            typeToInstanceCache = new Dictionary<Type, DOTweenActionBase>();
+            typeToInstanceCache = new Dictionary<Type, SequencerAnimationBase>();
             
-            TypeCache.TypeCollection types = TypeCache.GetTypesDerivedFrom(typeof(DOTweenActionBase));
+            TypeCache.TypeCollection types = TypeCache.GetTypesDerivedFrom(typeof(SequencerAnimationBase));
             for (int i = 0; i < types.Count; i++)
             {
                 Type type = types[i];
                 if (type.IsAbstract)
                     continue;
                 
-                DOTweenActionBase doTweenActionBaseInstance = Activator.CreateInstance(type) as DOTweenActionBase;
-                if (doTweenActionBaseInstance == null)
+                SequencerAnimationBase sequencerAnimationBaseInstance = Activator.CreateInstance(type) as SequencerAnimationBase;
+                if (sequencerAnimationBaseInstance == null)
                     continue;
-                GUIContent guiContent = new GUIContent(doTweenActionBaseInstance.DisplayName);
-                if (doTweenActionBaseInstance.TargetComponentType != null)
+                GUIContent guiContent = new GUIContent(sequencerAnimationBaseInstance.DisplayName);
+                if (sequencerAnimationBaseInstance.TargetComponentType != null)
                 {
-                    GUIContent targetComponentGUIContent = EditorGUIUtility.ObjectContent(null, doTweenActionBaseInstance.TargetComponentType);
+                    GUIContent targetComponentGUIContent = EditorGUIUtility.ObjectContent(null, sequencerAnimationBaseInstance.TargetComponentType);
                     guiContent.image = targetComponentGUIContent.image;
-                    GUIContent parentGUIContent = new GUIContent(doTweenActionBaseInstance.TargetComponentType.Name)
+                    GUIContent parentGUIContent = new GUIContent(sequencerAnimationBaseInstance.TargetComponentType.Name)
                     {
                         image = targetComponentGUIContent.image
                     };
@@ -92,7 +92,7 @@ namespace BrunoMikoski.AnimationSequencer
                 }
                 
                 cachedTypeToDisplayName.Add(type, guiContent);
-                typeToInstanceCache.Add(type, doTweenActionBaseInstance);
+                typeToInstanceCache.Add(type, sequencerAnimationBaseInstance);
             }
         }
         
@@ -101,7 +101,7 @@ namespace BrunoMikoski.AnimationSequencer
             if (targetGameObject == null)
                 return false;
 
-            if (TypeToInstanceCache.TryGetValue(targetActionType, out DOTweenActionBase actionBaseInstance))
+            if (TypeToInstanceCache.TryGetValue(targetActionType, out SequencerAnimationBase actionBaseInstance))
             {
                 Type requiredComponent = actionBaseInstance.TargetComponentType;
                 

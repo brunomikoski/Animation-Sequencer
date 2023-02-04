@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BrunoMikoski.AnimationSequencer
 {
-    [CustomPropertyDrawer(typeof(AnimationStepBase), true)]
+    [CustomPropertyDrawer(typeof(AnimationStep), true)]
     public class AnimationStepBasePropertyDrawer : PropertyDrawer
     {
         protected void DrawBaseGUI(Rect position, SerializedProperty property, GUIContent label, params string[] excludedPropertiesNames)
