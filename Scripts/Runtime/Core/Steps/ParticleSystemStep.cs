@@ -9,23 +9,25 @@ namespace BrunoMikoski.AnimationSequencer
     public sealed class ParticleSystemStep : AnimationStep
     {
         public override string DisplayName => DisplayNames.ParticleSystemStep;
-        
-        [SerializeField] private ParticleSystem particleSystem;
-        [SerializeField] private float duration = 1;
-        [SerializeField] private bool stopEmittingWhenOver;
-        
+
+        [SerializeField]
+        private ParticleSystem particleSystem;
         public ParticleSystem ParticleSystem
         {
             get => particleSystem;
             set => particleSystem = value;
         }
-        
+
+        [SerializeField]
+        private float duration = 1;
         public float Duration
         {
             get => duration;
             set => duration = value;
         }
-        
+
+        [SerializeField]
+        private bool stopEmittingWhenOver;
         public bool StopEmittingWhenOver
         {
             get => stopEmittingWhenOver;
@@ -46,7 +48,8 @@ namespace BrunoMikoski.AnimationSequencer
 
         private void FinishParticles()
         {
-            if (stopEmittingWhenOver) particleSystem.Stop();
+            if (stopEmittingWhenOver) 
+                particleSystem.Stop();
         }
 
         public void SetTarget(ParticleSystem newTarget)
@@ -57,10 +60,11 @@ namespace BrunoMikoski.AnimationSequencer
         public override string GetDisplayNameForEditor(int index)
         {
             string display = "NULL";
-            if (particleSystem != null) display = particleSystem.name;
+            if (particleSystem != null) 
+                display = particleSystem.name;
+            
             return $"{index}. Play {display} particle system";
         }
-
     }
 }
 #endif

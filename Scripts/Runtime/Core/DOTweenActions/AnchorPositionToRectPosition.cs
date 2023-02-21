@@ -8,8 +8,9 @@ namespace BrunoMikoski.AnimationSequencer
     public sealed class AnchorPositionToRectPosition : AnimateAnchorPosition
     {
         public override string DisplayName => DisplayNames.AnchorPositionToRectPosition;
-        
-        [SerializeField] private RectTransform target;
+
+        [SerializeField]
+        private RectTransform target;
 
         protected override Vector2 GetPosition()
         {

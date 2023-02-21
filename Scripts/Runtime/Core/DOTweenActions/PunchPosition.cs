@@ -10,15 +10,16 @@ namespace BrunoMikoski.AnimationSequencer
     {
         public override string DisplayName => DisplayNames.PunchPosition;
 
-        [SerializeField] private bool snapping;
-        
-        private Vector3 previousPosition;
-        
+        [SerializeField]
+        private bool snapping;
         public bool Snapping
         {
             get => snapping;
             set => snapping = value;
         }
+
+        private Vector3 previousPosition;
+
 
         protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
@@ -31,7 +32,9 @@ namespace BrunoMikoski.AnimationSequencer
 
         public override void Reset()
         {
-            if (PreviousTarget == null) return;
+            if (PreviousTarget == null) 
+                return;
+            
             PreviousTarget.position = previousPosition;
         }
     }

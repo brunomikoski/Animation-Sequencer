@@ -10,8 +10,8 @@ namespace BrunoMikoski.AnimationSequencer
     {
         public override string DisplayName => DisplayNames.IntervalStep;
 
-        [SerializeField] private float interval;
-        
+        [SerializeField]
+        private float interval;
         public float Interval
         {
             get => interval;
@@ -24,9 +24,12 @@ namespace BrunoMikoski.AnimationSequencer
             sequence.SetDelay(Delay);
 
             sequence.AppendInterval(interval);
-            
-            if (FlowType == FlowType.Join) animationSequence.Join(sequence);
-            else animationSequence.Append(sequence);        }
+
+            if (FlowType == FlowType.Join) 
+                animationSequence.Join(sequence);
+            else 
+                animationSequence.Append(sequence);
+        }
 
         public override void Reset()
         {

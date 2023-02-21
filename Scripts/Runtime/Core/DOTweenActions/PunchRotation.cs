@@ -23,7 +23,9 @@ namespace BrunoMikoski.AnimationSequencer
 
         public override void Reset()
         {
-            if (PreviousTarget == null) return;
+            if (PreviousTarget == null) 
+                return;
+            
             PreviousTarget.rotation = previousRotation;
         }
     }

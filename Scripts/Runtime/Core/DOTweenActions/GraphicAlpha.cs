@@ -1,6 +1,8 @@
 ﻿#if DOTWEEN_ENABLED
 using System;
 using DG.Tweening;
+using DG.Tweening.Core;
+using DG.Tweening.Plugins.Options;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,25 +14,26 @@ namespace BrunoMikoski.AnimationSequencer
         public override Type TargetComponentType => typeof(Graphic);
         public override string DisplayName => DisplayNames.GraphicAlpha;
 
-        [SerializeField] private float alpha;
-
-        private Graphic targetGraphic;
-        private float previousAlpha;
-        
+        [SerializeField]
+        private float alpha;
         public float Alpha
         {
             get => alpha;
             set => alpha = value;
         }
 
+        private Graphic targetGraphic;
+        private float previousAlpha;
+
         protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
-            if (TryToGetComponent(ref targetGraphic, target)) return null;
+            if (!TryToGetComponent(target, out targetGraphic))
+                return null;
 
             previousAlpha = targetGraphic.color.a;
-            var graphicTween = targetGraphic.DOFade(alpha, duration);
-            
-#if UNITY_EDITOR 
+            Tweener graphicTween = targetGraphic.DOFade(alpha, duration);
+
+#if UNITY_EDITOR
             if (!Application.isPlaying)
             {
                 // Work around a Unity bug where updating the colour does not cause any visual change outside of PlayMode.
@@ -42,13 +45,14 @@ namespace BrunoMikoski.AnimationSequencer
                 });
             }
 #endif
-                
+
             return graphicTween;
         }
 
         public override void Reset()
         {
-            if (targetGraphic == null) return;
+            if (targetGraphic == null) 
+                return;
 
             Color color = targetGraphic.color;
             color.a = previousAlpha;

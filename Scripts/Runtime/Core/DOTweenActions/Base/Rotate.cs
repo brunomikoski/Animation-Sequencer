@@ -12,15 +12,16 @@ namespace BrunoMikoski.AnimationSequencer
     {
         public override Type TargetComponentType => typeof(Transform);
 
-        [SerializeField] private bool local;
-        [SerializeField] private RotateMode rotationMode = RotateMode.Fast;
-        
+        [SerializeField]
+        private bool local;
         public bool Local
         {
             get => local;
             set => local = value;
         }
-        
+
+        [SerializeField]
+        private RotateMode rotationMode = RotateMode.Fast;
         public RotateMode RotationMode
         {
             get => rotationMode;
@@ -49,15 +50,18 @@ namespace BrunoMikoski.AnimationSequencer
             return localTween;
         }
 
-        
+
         protected abstract Vector3 GetRotation();
 
         public override void Reset()
         {
-            if (previousTarget == null) return;
-            
-            if (!local) previousTarget.rotation = previousRotation;
-            else previousTarget.localRotation = previousRotation;
+            if (previousTarget == null) 
+                return;
+
+            if (!local) 
+                previousTarget.rotation = previousRotation;
+            else 
+                previousTarget.localRotation = previousRotation;
         }
     }
 }

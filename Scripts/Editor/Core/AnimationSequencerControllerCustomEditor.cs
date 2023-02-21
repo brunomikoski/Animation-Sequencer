@@ -87,11 +87,13 @@ namespace BrunoMikoski.AnimationSequencer
 
         private void EditorUpdate()
         {
-            if (Application.isPlaying) return;
+            if (Application.isPlaying) 
+                return;
 
             SerializedProperty progressSP = serializedObject.FindProperty(Sequencer.NameOfProgress);
             
-            if (Mathf.Approximately(progressSP.floatValue, -1)) return;
+            if (Mathf.Approximately(progressSP.floatValue, -1)) 
+                return;
             
             SetProgress(progressSP.floatValue);
         }
@@ -191,7 +193,9 @@ namespace BrunoMikoski.AnimationSequencer
         protected virtual void DrawCallbacks()
         {
             bool wasGUIEnabled = GUI.enabled;
-            if (DOTweenEditorPreview.isPreviewing) GUI.enabled = false;
+            if (DOTweenEditorPreview.isPreviewing) 
+                GUI.enabled = false;
+            
             SerializedProperty onStartEventSerializedProperty = serializedObject.FindProperty(Sequencer.NameOfOnStartEvent);
             SerializedProperty onFinishedEventSerializedProperty = serializedObject.FindProperty(Sequencer.NameOfOnFinishedEvent);
             SerializedProperty onProgressEventSerializedProperty = serializedObject.FindProperty(Sequencer.NameOfOnProgressEvent);
@@ -224,7 +228,8 @@ namespace BrunoMikoski.AnimationSequencer
 				
                 DrawPlaybackSpeedSlider();
                 
-                if (changedCheck.changed) serializedObject.ApplyModifiedProperties();
+                if (changedCheck.changed) 
+                    serializedObject.ApplyModifiedProperties();
             }
         }
 		

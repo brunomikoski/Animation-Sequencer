@@ -21,7 +21,8 @@ namespace BrunoMikoski.AnimationSequencer
 
         protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
-            if (TryToGetComponent(ref textComponent, target)) return null;
+            if (!TryToGetComponent(target, out textComponent))
+                return null;
 
             PreviousText = textComponent.text;
             previousTarget = textComponent;
@@ -31,8 +32,12 @@ namespace BrunoMikoski.AnimationSequencer
 
         public override void Reset()
         {
-            if (previousTarget == null) return;
-            if (string.IsNullOrEmpty(PreviousText)) return;
+            if (previousTarget == null) 
+                return;
+            
+            if (string.IsNullOrEmpty(PreviousText))
+                return;
+            
             previousTarget.text = PreviousText;
         }
     }

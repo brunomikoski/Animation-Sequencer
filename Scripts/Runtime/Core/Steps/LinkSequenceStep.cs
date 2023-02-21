@@ -10,8 +10,9 @@ namespace BrunoMikoski.AnimationSequencer
     {
         public override string DisplayName => DisplayNames.LinkSequenceStep;
 
-        [SerializeField] private Sequencer sequencer;
-        
+        [SerializeField]
+        private Sequencer sequencer;
+
         public Sequencer Sequencer
         {
             get => sequencer;
@@ -22,9 +23,11 @@ namespace BrunoMikoski.AnimationSequencer
         {
             Sequence sequence = sequencer.GenerateSequence();
             sequence.SetDelay(Delay);
-            
-            if (FlowType == FlowType.Join) animationSequence.Join(sequence);
-            else animationSequence.Append(sequence);
+
+            if (FlowType == FlowType.Join) 
+                animationSequence.Join(sequence);
+            else 
+                animationSequence.Append(sequence);
         }
 
         public override void Reset()
@@ -35,7 +38,9 @@ namespace BrunoMikoski.AnimationSequencer
         public override string GetDisplayNameForEditor(int index)
         {
             string display = "NULL";
-            if (sequencer != null) display = sequencer.name;
+            if (sequencer != null) 
+                display = sequencer.name;
+            
             return $"{index}. Play {display} Sequence";
         }
 

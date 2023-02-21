@@ -10,32 +10,34 @@ namespace BrunoMikoski.AnimationSequencer
     public sealed class TweenStep : GameObjectRelatedStep
     {
         public override string DisplayName => DisplayNames.TweenStep;
-        
-        [SerializeReference] private SequencerAnimationBase[] actions;
-        [SerializeField] private int loopCount;
-        [SerializeField] private LoopType loopType;
 
-        public static string NameOfActions => nameof(actions);
-        public static string NameOfLoopCount => nameof(loopCount);
-        public static string NameOfLoopType => nameof(loopType);
-
-        public int LoopCount
-        {
-            get => loopCount;
-            set => loopCount = value;
-        }
-        
-        public LoopType LoopType
-        {
-            get => loopType;
-            set => loopType = value;
-        }
-        
+        [SerializeReference]
+        private SequencerAnimationBase[] actions;
         public SequencerAnimationBase[] Actions
         {
             get => actions;
             set => actions = value;
         }
+        
+        [SerializeField]
+        private int loopCount;
+        public int LoopCount
+        {
+            get => loopCount;
+            set => loopCount = value;
+        }
+
+        [SerializeField]
+        private LoopType loopType;
+        public LoopType LoopType
+        {
+            get => loopType;
+            set => loopType = value;
+        }
+
+        public static string NameOfActions => nameof(actions);
+        public static string NameOfLoopCount => nameof(loopCount);
+        public static string NameOfLoopType => nameof(loopType);
 
         public override void AddTween(Sequence animationSequence)
         {
@@ -43,15 +45,18 @@ namespace BrunoMikoski.AnimationSequencer
             for (int i = 0; i < actions.Length; i++)
             {
                 Tween tween = actions[i].GenerateTween(target, duration);
-                if (i == 0) tween.SetDelay(Delay);
+                if (i == 0) 
+                    tween.SetDelay(Delay);
+                
                 sequence.Join(tween);
             }
 
             sequence.SetLoops(loopCount, loopType);
-            
-            if (FlowType == FlowType.Join) animationSequence.Join(sequence);
-            else animationSequence.Append(sequence);
 
+            if (FlowType == FlowType.Join) 
+                animationSequence.Join(sequence);
+            else 
+                animationSequence.Append(sequence);
         }
 
         public override void Reset()
@@ -63,11 +68,13 @@ namespace BrunoMikoski.AnimationSequencer
         public override string GetDisplayNameForEditor(int index)
         {
             string targetName = "NULL";
-            if (target != null) targetName = target.name;
-            return $"{index}. {targetName}: {String.Join(", ", actions.Select(action => action.DisplayName)).Truncate(45)}";
+            if (target != null) 
+                targetName = target.name;
+            return $"{index}. {targetName}: " +
+                   $"{string.Join(", ", actions.Select(action => action.DisplayName)).Truncate(45)}";
         }
 
-        public bool TryGetActionAtIndex<T>(int index, out T result) where T: SequencerAnimationBase
+        public bool TryGetActionAtIndex<T>(int index, out T result) where T : SequencerAnimationBase
         {
             if (index < 0 || index > actions.Length - 1)
             {

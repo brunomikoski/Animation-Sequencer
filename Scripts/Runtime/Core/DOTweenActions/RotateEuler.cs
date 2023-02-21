@@ -9,8 +9,8 @@ namespace BrunoMikoski.AnimationSequencer
     {
         public override string DisplayName => DisplayNames.RotateEuler;
 
-        [SerializeField] private Vector3 eulerAngles;
-        
+        [SerializeField] 
+        private Vector3 eulerAngles;
         public Vector3 EulerAngles
         {
             get => eulerAngles;

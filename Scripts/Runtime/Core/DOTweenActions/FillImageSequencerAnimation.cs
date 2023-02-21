@@ -27,15 +27,8 @@ namespace BrunoMikoski.AnimationSequencer
 
         protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
-            if (image == null)
-            {
-                image = target.GetComponent<Image>();
-                if (image == null)
-                {
-                    Debug.LogError($"{target} does not have {TargetComponentType} component");
-                    return null;
-                }
-            }
+            if (!TryToGetComponent(target, out image))
+                return null;
 
             previousFillAmount = image.fillAmount;
             TweenerCore<float, float, FloatOptions> tween = image.DOFillAmount(fillAmount, duration);

@@ -12,14 +12,16 @@ namespace BrunoMikoski.AnimationSequencer
     [MovedFrom(autoUpdateAPI: true, sourceClassName: "DOTweenAnimationStep")]
     public abstract class AnimationStep
     {
-        [SerializeField] private float delay;
-        [SerializeField] private FlowType flowType;
-        
+        [SerializeField]
+        private float delay;
         public float Delay => delay;
+
+        [SerializeField]
+        private FlowType flowType;
         public FlowType FlowType => flowType;
 
-        public static string NameOfFlowType => nameof(flowType);
 
+        public static string NameOfFlowType => nameof(flowType);
         public abstract string DisplayName { get; }
         public abstract void AddTween(Sequence animationSequence);
         public abstract void Reset();

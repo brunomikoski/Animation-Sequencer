@@ -9,15 +9,16 @@ namespace BrunoMikoski.AnimationSequencer
     {
         public override string DisplayName => DisplayNames.RotateTransformEuler;
 
-        [SerializeField] private Transform target;
-        [SerializeField] private bool useLocalEulerAngles;
-        
+        [SerializeField]
+        private Transform target;
         public Transform Target
         {
             get => target;
             set => target = value;
         }
-        
+
+        [SerializeField]
+        private bool useLocalEulerAngles;
         public bool UseLocalEulerAngles
         {
             get => useLocalEulerAngles;

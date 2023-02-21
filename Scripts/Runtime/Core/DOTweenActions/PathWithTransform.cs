@@ -8,9 +8,9 @@ namespace BrunoMikoski.AnimationSequencer
     public sealed class PathWithTransform : Path
     {
         public override string DisplayName => DisplayNames.PathWithTransforms;
-        
-        [SerializeField] private Transform[] pointPositions;
-        
+
+        [SerializeField]
+        private Transform[] pointPositions;
         public Transform[] PointPositions
         {
             get => pointPositions;

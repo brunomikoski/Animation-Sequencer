@@ -8,9 +8,9 @@ namespace BrunoMikoski.AnimationSequencer
     public sealed class AnchorPositionToPosition : AnimateAnchorPosition
     {
         public override string DisplayName => DisplayNames.AnchorPositionToPosition;
-        
-        [SerializeField] private Vector2 position;
 
+        [SerializeField]
+        private Vector2 position;
         public Vector2 Position
         {
             get => position;

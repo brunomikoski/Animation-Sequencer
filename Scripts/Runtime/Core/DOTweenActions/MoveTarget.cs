@@ -10,9 +10,9 @@ namespace BrunoMikoski.AnimationSequencer
         public override Type TargetComponentType => typeof(Transform);
         public override string DisplayName => DisplayNames.MoveTarget;
 
-        [SerializeField] private Transform target;
-        
-        public Transform Target
+        [SerializeField]
+        private Transform target;
+       public Transform Target
         {
             get => target;
             set => target = value;

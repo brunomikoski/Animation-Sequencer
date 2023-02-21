@@ -10,8 +10,8 @@ namespace BrunoMikoski.AnimationSequencer
         public override Type TargetComponentType => typeof(Transform);
         public override string DisplayName => DisplayNames.MovePosition;
 
-        [SerializeField] private Vector3 position;
-        
+        [SerializeField]
+        private Vector3 position;
         public Vector3 Position
         {
             get => position;

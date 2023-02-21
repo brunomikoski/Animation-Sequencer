@@ -13,34 +13,35 @@ namespace BrunoMikoski.AnimationSequencer
     {
         public override Type TargetComponentType => typeof(Transform);
 
-        [SerializeField] private bool isLocal;
-        [SerializeField] private AxisConstraint axisConstraint;
-        
-        private Vector3 previousPosition;
-        private GameObject previousTarget;
-        
+        [SerializeField]
+        private bool isLocal;
         public bool IsLocal
         {
             get => isLocal;
             set => isLocal = value;
         }
+
         
+        [SerializeField]
+        private AxisConstraint axisConstraint;
         public AxisConstraint AxisConstraint
         {
             get => axisConstraint;
             set => axisConstraint = value;
         }
+        
+        private Vector3 previousPosition;
+        private GameObject previousTarget;
 
         protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
             TweenerCore<Vector3, Vector3, VectorOptions> tween;
             previousTarget = target;
-            
+
             if (isLocal)
             {
                 previousPosition = target.transform.localPosition;
                 tween = target.transform.DOLocalMove(GetPosition(), duration);
-                
             }
             else
             {
@@ -56,10 +57,13 @@ namespace BrunoMikoski.AnimationSequencer
 
         public override void Reset()
         {
-            if (previousTarget == null) return;
-            
-            if (isLocal) previousTarget.transform.localPosition = previousPosition;
-            else previousTarget.transform.position = previousPosition;
+            if (previousTarget == null) 
+                return;
+
+            if (isLocal) 
+                previousTarget.transform.localPosition = previousPosition;
+            else 
+                previousTarget.transform.position = previousPosition;
         }
     }
 }

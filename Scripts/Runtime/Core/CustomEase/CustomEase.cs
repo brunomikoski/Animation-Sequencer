@@ -63,11 +63,9 @@ namespace BrunoMikoski.AnimationSequencer
                 return EaseManager.Evaluate(Ease.INTERNAL_Custom, easeFunction, time, duration,
                     overshootOrAmplitude, DOTween.defaultEasePeriod);
             }
-            else
-            {
-                return EaseManager.Evaluate(ease, null, time, duration,
-                    overshootOrAmplitude, DOTween.defaultEasePeriod);
-            }
+
+            return EaseManager.Evaluate(ease, null, time, duration,
+                overshootOrAmplitude, DOTween.defaultEasePeriod);
         }
 
         public void ApplyTo(TweenParams tweenParams)

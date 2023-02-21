@@ -8,10 +8,10 @@ namespace BrunoMikoski.AnimationSequencer
     public sealed class PathPosition : Path
     {
         public override string DisplayName => DisplayNames.PathPosition;
-        
-        [SerializeField] private Vector3[] positions;
 
-        public Vector3[] Positions
+        [SerializeField]
+        private Vector3[] positions;
+  public Vector3[] Positions
         {
             get => positions;
             set => positions = value;

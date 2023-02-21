@@ -12,8 +12,8 @@ namespace BrunoMikoski.AnimationSequencer
     {
         public override Type TargetComponentType => typeof(RectTransform);
 
-        [SerializeField] private AxisConstraint axisConstraint;
-        
+        [SerializeField]
+        private AxisConstraint axisConstraint;
         public AxisConstraint AxisConstraint
         {
             get => axisConstraint;
@@ -25,7 +25,8 @@ namespace BrunoMikoski.AnimationSequencer
 
         protected override Tweener GenerateTween_Internal(GameObject target, float duration)
         {
-            if (TryToGetComponent(ref rectTransform, target, typeof(RectTransform))) return null;
+            if (!TryToGetComponent(target, out rectTransform))
+                return null;
 
             previousAnchorPosition = rectTransform.anchoredPosition;
             var anchorPosTween = rectTransform.DOAnchorPos(GetPosition(), duration);

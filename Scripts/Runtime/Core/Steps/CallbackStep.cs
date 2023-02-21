@@ -11,8 +11,8 @@ namespace BrunoMikoski.AnimationSequencer
     {
         public override string DisplayName => DisplayNames.CallbackStep;
         
-        [SerializeField] private UnityEvent callback = new UnityEvent();
-
+        [SerializeField] 
+        private UnityEvent callback = new UnityEvent();
         public UnityEvent Callback
         {
             get => callback;
@@ -25,8 +25,10 @@ namespace BrunoMikoski.AnimationSequencer
             sequence.SetDelay(Delay);
             sequence.AppendCallback(() => callback.Invoke());
             
-            if (FlowType == FlowType.Append) animationSequence.Append(sequence);
-            else animationSequence.Join(sequence);
+            if (FlowType == FlowType.Append) 
+                animationSequence.Append(sequence);
+            else 
+                animationSequence.Join(sequence);
         }
 
         public override void Reset() { }
@@ -34,15 +36,19 @@ namespace BrunoMikoski.AnimationSequencer
         public override string GetDisplayNameForEditor(int index)
         {
             string[] persistentTargetNamesArray = new string[callback.GetPersistentEventCount()];
-            for (int i = 0; i < callback.GetPersistentEventCount(); i++)
+            int persistentEventCount = callback.GetPersistentEventCount();
+            for (int i = 0; i < persistentEventCount; i++)
             {
-                if (callback.GetPersistentTarget(i) == null) continue;
-                if (string.IsNullOrWhiteSpace(callback.GetPersistentMethodName(i))) continue;
+                if (callback.GetPersistentTarget(i) == null) 
+                    continue;
+                
+                if (string.IsNullOrWhiteSpace(callback.GetPersistentMethodName(i))) 
+                    continue;
                 
                 persistentTargetNamesArray[i] = $"{callback.GetPersistentTarget(i).name}.{callback.GetPersistentMethodName(i)}()";
             }
             
-            var persistentTargetNames = $"{string.Join(", ", persistentTargetNamesArray).Truncate(45)}";
+            string persistentTargetNames = $"{string.Join(", ", persistentTargetNamesArray).Truncate(45)}";
             return $"{index}. {DisplayName}: {persistentTargetNames}";
         }
     }
