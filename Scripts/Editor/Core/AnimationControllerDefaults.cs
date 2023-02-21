@@ -16,8 +16,8 @@ namespace BrunoMikoski.AnimationSequencer
         public bool PreferUsingPreviousActionEasing => preferUsingPreviousActionEasing;
 
         [SerializeField]
-        private DOTweenActionBase.AnimationDirection defaultDirection = DOTweenActionBase.AnimationDirection.To;
-        public DOTweenActionBase.AnimationDirection DefaultDirection => defaultDirection;
+        private SequencerAnimationBase.AnimationDirection defaultDirection = SequencerAnimationBase.AnimationDirection.To;
+        public SequencerAnimationBase.AnimationDirection DefaultDirection => defaultDirection;
         
         [SerializeField]
         private bool preferUsingPreviousDirection = true;
@@ -32,8 +32,8 @@ namespace BrunoMikoski.AnimationSequencer
         public bool PreferUsingPreviousRelativeValue => preferUsingPreviousRelativeValue;
         
         [SerializeField]
-        private AnimationSequencerController.AutoplayType autoplayMode = AnimationSequencerController.AutoplayType.Awake;
-        public AnimationSequencerController.AutoplayType AutoplayMode => autoplayMode;
+        private Sequencer.AutoplayType autoplayMode = Sequencer.AutoplayType.Awake;
+        public Sequencer.AutoplayType AutoplayMode => autoplayMode;
         
         [SerializeField]
         private bool playOnAwake = false;
@@ -48,8 +48,8 @@ namespace BrunoMikoski.AnimationSequencer
         public bool TimeScaleIndependent => timeScaleIndependent;
         
         [SerializeField]
-        private AnimationSequencerController.PlayType playType = AnimationSequencerController.PlayType.Forward;
-        public AnimationSequencerController.PlayType PlayType => playType;
+        private Sequencer.PlayType playType = Sequencer.PlayType.Forward;
+        public Sequencer.PlayType PlayType => playType;
         
         [SerializeField]
         private UpdateType updateType = UpdateType.Normal;

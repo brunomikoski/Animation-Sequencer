@@ -25,7 +25,7 @@ namespace BrunoMikoski.AnimationSequencer
             {
                 resultInstance = CreateInstance<T>();
                 
-                string absolutePath = Path.GetFullPath("Assets/Editor Default Resources");
+                string absolutePath = System.IO.Path.GetFullPath("Assets/Editor Default Resources");
 
                 if (!Directory.Exists(absolutePath))
                     Directory.CreateDirectory(absolutePath);
