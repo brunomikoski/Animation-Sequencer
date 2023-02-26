@@ -8,24 +8,24 @@ using Object = UnityEngine.Object;
 
 namespace BrunoMikoski.AnimationSequencer
 {
-    public sealed class DOTweenActionAdvancedDropdownItem : AdvancedDropdownItem
+    public sealed class TweenActionAdvancedDropdownItem : AdvancedDropdownItem
     {
         private Type baseDOTweenActionType;
         public Type BaseDOTweenActionType => baseDOTweenActionType;
 
-        public DOTweenActionAdvancedDropdownItem(Type baseDOTweenActionType, string displayName) : base(displayName)
+        public TweenActionAdvancedDropdownItem(Type baseDOTweenActionType, string displayName) : base(displayName)
         {
             this.baseDOTweenActionType = baseDOTweenActionType;
         }
     }
     
-    public sealed class DOTweenActionsAdvancedDropdown : AdvancedDropdown
+    public sealed class TweenActionsAdvancedDropdown : AdvancedDropdown
     {
-        private Action<DOTweenActionAdvancedDropdownItem> callback;
+        private Action<TweenActionAdvancedDropdownItem> callback;
         private SerializedProperty actionsList;
         private GameObject targetGameObject;
 
-        public DOTweenActionsAdvancedDropdown(AdvancedDropdownState state) : base(state)
+        public TweenActionsAdvancedDropdown(AdvancedDropdownState state) : base(state)
         {
             this.minimumSize = new Vector2(200, 300);
         }
@@ -57,18 +57,18 @@ namespace BrunoMikoski.AnimationSequencer
                     targetFolder = item;
                 }
 
-                DOTweenActionAdvancedDropdownItem doTweenActionAdvancedDropdownItem = 
-                    new DOTweenActionAdvancedDropdownItem(baseDOTweenActionType, typeToDisplayGUI.Value.text)
+                TweenActionAdvancedDropdownItem tweenActionAdvancedDropdownItem = 
+                    new TweenActionAdvancedDropdownItem(baseDOTweenActionType, typeToDisplayGUI.Value.text)
                 {
                     enabled = !IsTypeAlreadyInUse(actionsList, baseDOTweenActionType) && AnimationSequenceEditorGUIUtility.CanActionBeAppliedToTarget(baseDOTweenActionType, targetGameObject)
                 };
                 
                 if (typeToDisplayGUI.Value.image != null)
                 {
-                    doTweenActionAdvancedDropdownItem.icon = (Texture2D) typeToDisplayGUI.Value.image;
+                    tweenActionAdvancedDropdownItem.icon = (Texture2D) typeToDisplayGUI.Value.image;
                 }
                 
-                targetFolder.AddChild(doTweenActionAdvancedDropdownItem);
+                targetFolder.AddChild(tweenActionAdvancedDropdownItem);
             }
             
             return root;
@@ -77,10 +77,10 @@ namespace BrunoMikoski.AnimationSequencer
         protected override void ItemSelected(AdvancedDropdownItem item)
         {
             base.ItemSelected(item);
-            callback?.Invoke(item as DOTweenActionAdvancedDropdownItem);
+            callback?.Invoke(item as TweenActionAdvancedDropdownItem);
         }
 
-        public void Show(Rect rect, SerializedProperty actionsListSerializedProperty, Object targetGameObject, Action<DOTweenActionAdvancedDropdownItem> 
+        public void Show(Rect rect, SerializedProperty actionsListSerializedProperty, Object targetGameObject, Action<TweenActionAdvancedDropdownItem> 
         onActionSelectedCallback)
         {
             callback = onActionSelectedCallback;

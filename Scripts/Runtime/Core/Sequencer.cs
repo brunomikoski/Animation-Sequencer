@@ -13,8 +13,6 @@ namespace BrunoMikoski.AnimationSequencer
     [DisallowMultipleComponent]
     public class Sequencer : MonoBehaviour
     {
-        #region Local Enums
-
         public enum PlayType
         {
             Forward,
@@ -28,62 +26,54 @@ namespace BrunoMikoski.AnimationSequencer
             Nothing
         }
 
-        #endregion
-
-        #region Serialized Fields
-
         [SerializeReference]
-        private AnimationStep[] animationSteps = Array.Empty<AnimationStep>();
+        internal AnimationStep[] animationSteps = Array.Empty<AnimationStep>();
 
         [SerializeField]
-        private UpdateType updateType = UpdateType.Normal;
+        internal UpdateType updateType = UpdateType.Normal;
 
         [SerializeField]
-        private AutoplayType autoplayMode = AutoplayType.Awake;
+        internal AutoplayType autoplayMode = AutoplayType.Awake;
 
         [SerializeField]
-        protected PlayType playType = PlayType.Forward;
+        protected internal PlayType playType = PlayType.Forward;
 
         [SerializeField]
-        private LoopType loopType = LoopType.Restart;
+        internal LoopType loopType = LoopType.Restart;
 
         [SerializeField]
-        private bool timeScaleIndependent;
+        internal bool timeScaleIndependent;
 
         [SerializeField]
-        protected bool startPaused;
+        protected internal bool startPaused;
 
         [SerializeField]
-        private bool autoKill = true;
+        internal bool autoKill = true;
 
         [SerializeField]
-        private float playbackSpeed = 1f;
+        internal float playbackSpeed = 1f;
 
         [SerializeField]
-        private int loops;
+        internal int loops;
 
         [SerializeField]
-        private UnityEvent onStartEvent = new UnityEvent();
+        internal UnityEvent onStartEvent = new UnityEvent();
 
         [SerializeField]
-        private UnityEvent onFinishedEvent = new UnityEvent();
+        internal UnityEvent onFinishedEvent = new UnityEvent();
 
         [SerializeField]
-        private UnityEvent onProgressEvent = new UnityEvent();
+        internal UnityEvent onProgressEvent = new UnityEvent();
         
-        [SerializeField, Range(0, 1)] private float progress = -1;
+        [SerializeField, Range(0, 1)]
+        internal float progress = -1;
         
-        #endregion
-
-        #region Privates
 
         private Sequence playingSequence;
         private PlayType playTypeInternal = PlayType.Forward;
 #if UNITY_EDITOR
         private bool requiresReset = false;
 #endif
-
-        #endregion
 
 
         public Sequence PlayingSequence => playingSequence;
@@ -132,8 +122,6 @@ namespace BrunoMikoski.AnimationSequencer
             set => loops = value;
         }
 
-        #region Events
-
         public UnityEvent OnProgressEvent => onProgressEvent;
         public UnityEvent OnStartEvent
         {
@@ -145,25 +133,7 @@ namespace BrunoMikoski.AnimationSequencer
             get => onFinishedEvent;
             protected set => onFinishedEvent = value;
         }
-
-        #endregion
-
-
-
-        public static string NameOfAnimationSteps => nameof(animationSteps);
-        public static string NameOfUpdateType => nameof(updateType);
-        public static string NameOfAutoPlayMode => nameof(autoplayMode);
-        public static string NameOfPlayType => nameof(playType);
-        public static string NameOfLoopType => nameof(loopType);
-        public static string NameOfTimeScaleIndependent => nameof(timeScaleIndependent);
-        public static string NameOfStartPaused => nameof(startPaused);
-        public static string NameOfAutoKill => nameof(autoKill);
-        public static string NameOfPlaybackSpeed => nameof(playbackSpeed);
-        public static string NameOfLoops => nameof(loops);
-        public static string NameOfProgress => nameof(progress);
-        public static string NameOfOnStartEvent => nameof(onStartEvent);
-        public static string NameOfOnFinishedEvent => nameof(onFinishedEvent);
-        public static string NameOfOnProgressEvent => nameof(onProgressEvent);
+        
 
         protected virtual void Awake()
         {

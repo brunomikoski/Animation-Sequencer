@@ -6,7 +6,7 @@ using UnityEngine;
 namespace BrunoMikoski.AnimationSequencer
 {
     [CustomPropertyDrawer(typeof(TweenStep))]
-    public class DOTweenAnimationStepPropertyDrawer : AnimationStepBasePropertyDrawer
+    public class TweenStepPropertyDrawer : AnimationStepPropertyDrawer
     {
         public override bool CanCacheInspectorGUI(SerializedProperty property)
         {
@@ -147,7 +147,7 @@ namespace BrunoMikoski.AnimationSequencer
                 position.height = EditorGUIUtility.singleLineHeight;
                 if (GUI.Button(position, "Add Actions"))
                 {
-                    AnimationSequenceEditorGUIUtility.DOTweenActionsDropdown.Show(position, actionsSerializedProperty,
+                    AnimationSequenceEditorGUIUtility.TweenActionsDropdown.Show(position, actionsSerializedProperty,
                         targetSerializedProperty.objectReferenceValue,
                         item => { AddNewActionOfType(actionsSerializedProperty, item.BaseDOTweenActionType); });
                 }

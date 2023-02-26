@@ -1,0 +1,85 @@
+﻿.sequencer
+{
+}
+
+.box
+{
+    margin-top: 10px;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: rgba(28, 28, 28, 0.89);
+}
+
+.foldout
+{
+    flex-grow: 0;
+    /*padding-left: 18px;*/
+    /*padding-right: 4px;*/
+}
+
+
+.controlBox
+{
+    background-color: rgba(1,1,1,0);
+    /*align-items: center;*/
+    flex-direction: row;
+    justify-content: center;
+}
+
+.controlButton
+{
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+}
+
+.controlButton-icon
+{
+    width: 20px;
+    height: 20px;
+    background-color: rgba(1,1,1,0);
+}
+.backIcon
+{
+    background-image: resource("d_beginButton");
+}
+
+.stepBackIcon
+{
+    background-image: resource("Animation.PrevKey");
+}
+
+.playIcon
+{
+    background-image: resource("PlayButton On");
+}
+
+.stepForward
+{
+    background-image: resource("Animation.NextKey");
+}
+
+.forward
+{
+    background-image: resource("d_endButton");
+}
+
+.stop
+{
+    background-image: resource("animationdopesheetkeyframe");
+}
+
+
+.unity-foldout__input{
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.unity-foldout__text{
+    -unity-font-style: bold;
+    margin: 2px;
+}
+
+.unity-foldout{
+    margin: 2px;
+}

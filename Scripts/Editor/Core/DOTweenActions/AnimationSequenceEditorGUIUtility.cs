@@ -40,14 +40,14 @@ namespace BrunoMikoski.AnimationSequencer
             }
         }
         
-        private static DOTweenActionsAdvancedDropdown cachedDOTweenActionsDropdown;
-        public static DOTweenActionsAdvancedDropdown DOTweenActionsDropdown
+        private static TweenActionsAdvancedDropdown _CACHED_TWEEN_ACTIONS_DROPDOWN;
+        public static TweenActionsAdvancedDropdown TweenActionsDropdown
         {
             get
             {
-                if (cachedDOTweenActionsDropdown == null)
-                    cachedDOTweenActionsDropdown = new DOTweenActionsAdvancedDropdown(new AdvancedDropdownState());
-                return cachedDOTweenActionsDropdown;
+                if (_CACHED_TWEEN_ACTIONS_DROPDOWN == null)
+                    _CACHED_TWEEN_ACTIONS_DROPDOWN = new TweenActionsAdvancedDropdown(new AdvancedDropdownState());
+                return _CACHED_TWEEN_ACTIONS_DROPDOWN;
             }
         }
         
