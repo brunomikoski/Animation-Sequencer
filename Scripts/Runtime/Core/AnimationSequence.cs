@@ -11,7 +11,7 @@ using UnityEditor;
 namespace BrunoMikoski.AnimationSequencer
 {
     [DisallowMultipleComponent]
-    public class Sequencer : MonoBehaviour
+    public class AnimationSequence : MonoBehaviour
     {
         public enum PlayType
         {

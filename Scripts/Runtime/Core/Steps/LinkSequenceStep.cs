@@ -2,6 +2,7 @@
 using System;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace BrunoMikoski.AnimationSequencer
 {
@@ -10,18 +11,19 @@ namespace BrunoMikoski.AnimationSequencer
     {
         public override string DisplayName => DisplayNames.LinkSequenceStep;
 
+        [FormerlySerializedAs("sequencer")]
         [SerializeField]
-        private Sequencer sequencer;
+        private AnimationSequence animationSequence;
 
-        public Sequencer Sequencer
+        public AnimationSequence AnimationSequence
         {
-            get => sequencer;
-            set => sequencer = value;
+            get => animationSequence;
+            set => animationSequence = value;
         }
 
         public override void AddTween(Sequence animationSequence)
         {
-            Sequence sequence = sequencer.GenerateSequence();
+            Sequence sequence = this.animationSequence.GenerateSequence();
             sequence.SetDelay(Delay);
 
             if (FlowType == FlowType.Join) 
@@ -32,19 +34,19 @@ namespace BrunoMikoski.AnimationSequencer
 
         public override void Reset()
         {
-            sequencer.ResetToInitialState();
+            animationSequence.ResetToInitialState();
         }
 
         public override string GetDisplayNameForEditor(int index)
         {
             string display = "NULL";
-            if (sequencer != null) 
-                display = sequencer.name;
+            if (animationSequence != null) 
+                display = animationSequence.name;
             
             return $"{index}. Play {display} Sequence";
         }
 
-        public void SetTarget(Sequencer target) => sequencer = target;
+        public void SetTarget(AnimationSequence target) => animationSequence = target;
     }
 }
 #endif

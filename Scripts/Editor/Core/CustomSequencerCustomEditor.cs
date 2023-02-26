@@ -36,7 +36,7 @@ namespace BrunoMikoski.AnimationSequencer
         private float tweenTimeScale = 1f;
 
         private SerializedObject sequencerSerializedObject;
-        private Sequencer sequencer;
+        private AnimationSequence animationSequence;
 
 
         [MenuItem("Window/Animation Sequencer")]
@@ -70,21 +70,21 @@ namespace BrunoMikoski.AnimationSequencer
         {
             if (Selection.activeObject is GameObject gameObject)
             {
-                sequencer = gameObject.GetComponent<Sequencer>();
+                animationSequence = gameObject.GetComponent<AnimationSequence>();
             }
-            else if (Selection.activeObject is Sequencer customSequencerDrawer)
+            else if (Selection.activeObject is AnimationSequence customSequencerDrawer)
             {
-                sequencer = customSequencerDrawer;
+                animationSequence = customSequencerDrawer;
             }
             else
             {
-                sequencer = null;
+                animationSequence = null;
                 return;
             }
 
-            if (sequencer != null)
+            if (animationSequence != null)
             {
-                sequencerSerializedObject = new SerializedObject(sequencer);
+                sequencerSerializedObject = new SerializedObject(animationSequence);
                 CreateVisuals();
             }
         }
@@ -208,7 +208,7 @@ namespace BrunoMikoski.AnimationSequencer
             {
                 showInputField = true,
             };
-            SerializedProperty progressSerializedProperty = sequencerSerializedObject.FindProperty(SequencerEditorUtils.NameOfProgress);
+            SerializedProperty progressSerializedProperty = sequencerSerializedObject.FindProperty(AnimationSequenceEditorUtils.NameOfProgress);
             progressSlider.value = progressSerializedProperty.floatValue;
             // progressSlider.RegisterValueChangedCallback(v =>
             // {
@@ -243,9 +243,9 @@ namespace BrunoMikoski.AnimationSequencer
             foldout.AddToClassList(UssClassNames.Foldout);
             box.Add(foldout);
             
-            SerializedProperty onStartEventSerializedProperty = sequencerSerializedObject.FindProperty(SequencerEditorUtils.NameOfOnStartEvent);
-            SerializedProperty onFinishedEventSerializedProperty = sequencerSerializedObject.FindProperty(SequencerEditorUtils.NameOfOnFinishedEvent);
-            SerializedProperty onProgressEventSerializedProperty = sequencerSerializedObject.FindProperty(SequencerEditorUtils.NameOfOnProgressEvent);
+            SerializedProperty onStartEventSerializedProperty = sequencerSerializedObject.FindProperty(AnimationSequenceEditorUtils.NameOfOnStartEvent);
+            SerializedProperty onFinishedEventSerializedProperty = sequencerSerializedObject.FindProperty(AnimationSequenceEditorUtils.NameOfOnFinishedEvent);
+            SerializedProperty onProgressEventSerializedProperty = sequencerSerializedObject.FindProperty(AnimationSequenceEditorUtils.NameOfOnProgressEvent);
 
             
             foldout.Add(new PropertyField(onStartEventSerializedProperty));
@@ -268,20 +268,20 @@ namespace BrunoMikoski.AnimationSequencer
             foldout.AddToClassList(UssClassNames.Foldout);
 
 
-            SerializedProperty autoPlayModeSerializedProperty = sequencerSerializedObject.FindProperty(SequencerEditorUtils.NameOfAutoPlayMode);
+            SerializedProperty autoPlayModeSerializedProperty = sequencerSerializedObject.FindProperty(AnimationSequenceEditorUtils.NameOfAutoPlayMode);
 
-            EnumField autoPlayModeEnum = new EnumField("Auto Play", Sequencer.AutoplayType.Awake);
+            EnumField autoPlayModeEnum = new EnumField("Auto Play", AnimationSequence.AutoplayType.Awake);
             autoPlayModeEnum.BindProperty(autoPlayModeSerializedProperty);
             foldout.Add(autoPlayModeEnum);
             
 
-            SerializedProperty pauseOnAwakeSerializedProperty = sequencerSerializedObject.FindProperty(SequencerEditorUtils.NameOfStartPaused);
+            SerializedProperty pauseOnAwakeSerializedProperty = sequencerSerializedObject.FindProperty(AnimationSequenceEditorUtils.NameOfStartPaused);
             Toggle loopToggle = new Toggle("Start Paused");
             loopToggle.BindProperty(pauseOnAwakeSerializedProperty);
             foldout.Add(loopToggle);
 
             
-            SerializedProperty playbackSpeedSerializedProperty = sequencerSerializedObject.FindProperty(SequencerEditorUtils.NameOfPlaybackSpeed);
+            SerializedProperty playbackSpeedSerializedProperty = sequencerSerializedObject.FindProperty(AnimationSequenceEditorUtils.NameOfPlaybackSpeed);
             Slider playbackSpeedSlider = new Slider("Playback Speed", 0,2)
             {
                 showInputField = true,
@@ -291,30 +291,30 @@ namespace BrunoMikoski.AnimationSequencer
             foldout.Add(playbackSpeedSlider);
             
             
-            SerializedProperty timescaleIndependent = sequencerSerializedObject.FindProperty(SequencerEditorUtils.NameOfTimeScaleIndependent);
+            SerializedProperty timescaleIndependent = sequencerSerializedObject.FindProperty(AnimationSequenceEditorUtils.NameOfTimeScaleIndependent);
             Toggle timescaleIndependentToggle = new Toggle("Timescale Independent");
             timescaleIndependentToggle.BindProperty(timescaleIndependent);
             foldout.Add(timescaleIndependentToggle);
             
             
-            SerializedProperty playTypeSerializedProperty = sequencerSerializedObject.FindProperty(SequencerEditorUtils.NameOfPlayType);
-            EnumField playTypeEnumField = new EnumField("Play Type", (Sequencer.PlayType)playTypeSerializedProperty.enumValueIndex);
+            SerializedProperty playTypeSerializedProperty = sequencerSerializedObject.FindProperty(AnimationSequenceEditorUtils.NameOfPlayType);
+            EnumField playTypeEnumField = new EnumField("Play Type", (AnimationSequence.PlayType)playTypeSerializedProperty.enumValueIndex);
             playTypeEnumField.BindProperty(playTypeSerializedProperty);
             foldout.Add(playTypeEnumField);
             
 
-            SerializedProperty updateTypeSerializedProperty = sequencerSerializedObject.FindProperty(SequencerEditorUtils.NameOfUpdateType);
+            SerializedProperty updateTypeSerializedProperty = sequencerSerializedObject.FindProperty(AnimationSequenceEditorUtils.NameOfUpdateType);
             EnumField updateType = new EnumField("UpdateType Type",(UpdateType) updateTypeSerializedProperty.enumValueIndex);
             updateType.BindProperty(updateTypeSerializedProperty);
             foldout.Add(updateType);
 
             
-            SerializedProperty autoKillSerializedProperty = sequencerSerializedObject.FindProperty(SequencerEditorUtils.NameOfAutoKill);
+            SerializedProperty autoKillSerializedProperty = sequencerSerializedObject.FindProperty(AnimationSequenceEditorUtils.NameOfAutoKill);
             Toggle autoKillToggle = new Toggle("Auto Kill");
             autoKillToggle.BindProperty(autoKillSerializedProperty);
             foldout.Add(autoKillToggle);
             
-            SerializedProperty loopCountSerializedProperty = sequencerSerializedObject.FindProperty(SequencerEditorUtils.NameOfLoops);
+            SerializedProperty loopCountSerializedProperty = sequencerSerializedObject.FindProperty(AnimationSequenceEditorUtils.NameOfLoops);
             IntegerField loopCountField = new IntegerField("Loop Count");
             loopCountField.BindProperty(loopCountSerializedProperty);
             foldout.Add(loopCountField);

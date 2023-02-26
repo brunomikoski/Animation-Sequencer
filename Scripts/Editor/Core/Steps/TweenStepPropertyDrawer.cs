@@ -29,7 +29,7 @@ namespace BrunoMikoski.AnimationSequencer
                 SerializedProperty previousElement =
                     actionsSerializedProperty.GetArrayElementAtIndex(actionsSerializedProperty.arraySize - 2);
 
-                if (AnimationControllerDefaults.Instance.PreferUsingPreviousDirection)
+                if (AnimationSequenceDefaults.Instance.PreferUsingPreviousDirection)
                 {
                     SerializedProperty previousDirection = previousElement.FindPropertyRelative(NameOfDirection);
                     if (previousDirection != null)
@@ -40,7 +40,7 @@ namespace BrunoMikoski.AnimationSequencer
                     }
                 }
 
-                if (AnimationControllerDefaults.Instance.PreferUsingPreviousActionEasing)
+                if (AnimationSequenceDefaults.Instance.PreferUsingPreviousActionEasing)
                 {
                     SerializedProperty previousEase = previousElement.FindPropertyRelative(NameOfEase)
                         .FindPropertyRelative(NameOfEase);
@@ -57,11 +57,11 @@ namespace BrunoMikoski.AnimationSequencer
                     SerializedProperty currentEase =
                         arrayElement.FindPropertyRelative(NameOfEase).FindPropertyRelative(NameOfEase);
                     if (currentEase != null)
-                        currentEase.enumValueIndex = (int) AnimationControllerDefaults.Instance.DefaultEasing.Ease;
+                        currentEase.enumValueIndex = (int) AnimationSequenceDefaults.Instance.DefaultEasing.Ease;
                 }
 
 
-                if (AnimationControllerDefaults.Instance.PreferUsingPreviousRelativeValue)
+                if (AnimationSequenceDefaults.Instance.PreferUsingPreviousRelativeValue)
                 {
                     SerializedProperty previousEase = previousElement.FindPropertyRelative(NameOfIsRelative);
                     if (previousEase != null)
@@ -76,7 +76,7 @@ namespace BrunoMikoski.AnimationSequencer
                     SerializedProperty currentEase =
                         arrayElement.FindPropertyRelative(NameOfEase).FindPropertyRelative(NameOfEase);
                     if (currentEase != null)
-                        currentEase.enumValueIndex = (int) AnimationControllerDefaults.Instance.DefaultEasing.Ease;
+                        currentEase.enumValueIndex = (int) AnimationSequenceDefaults.Instance.DefaultEasing.Ease;
                 }
             }
             else
@@ -84,16 +84,16 @@ namespace BrunoMikoski.AnimationSequencer
                 SerializedProperty currentEase =
                     arrayElement.FindPropertyRelative(NameOfEase).FindPropertyRelative(NameOfEase);
                 if (currentEase != null)
-                    currentEase.enumValueIndex = (int) AnimationControllerDefaults.Instance.DefaultEasing.Ease;
+                    currentEase.enumValueIndex = (int) AnimationSequenceDefaults.Instance.DefaultEasing.Ease;
 
 
                 SerializedProperty currentDirection = arrayElement.FindPropertyRelative(NameOfDirection);
                 if (currentDirection != null)
-                    currentDirection.enumValueIndex = (int) AnimationControllerDefaults.Instance.DefaultDirection;
+                    currentDirection.enumValueIndex = (int) AnimationSequenceDefaults.Instance.DefaultDirection;
 
                 SerializedProperty isRelativeSerializedProperty = arrayElement.FindPropertyRelative(NameOfIsRelative);
                 if (isRelativeSerializedProperty != null)
-                    isRelativeSerializedProperty.boolValue = AnimationControllerDefaults.Instance.UseRelative;
+                    isRelativeSerializedProperty.boolValue = AnimationSequenceDefaults.Instance.UseRelative;
             }
 
 

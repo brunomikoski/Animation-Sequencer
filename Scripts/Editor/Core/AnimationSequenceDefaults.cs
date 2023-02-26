@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace BrunoMikoski.AnimationSequencer
 {
-    [CreateAssetMenu(menuName = "Animation Sequencer/Create Animation Sequencer Default", fileName = "AnimationControllerDefaults")]
-    public sealed class AnimationControllerDefaults : EditorDefaultResourceSingleton<AnimationControllerDefaults>
+    [CreateAssetMenu(menuName = "Animation Sequencer/Create Animation Sequence Default", fileName = "AnimationSequenceDefaults")]
+    public sealed class AnimationSequenceDefaults : EditorDefaultResourceSingleton<AnimationSequenceDefaults>
     {
         [SerializeField]
         private CustomEase defaultEasing = CustomEase.InOutQuad;
@@ -32,8 +32,8 @@ namespace BrunoMikoski.AnimationSequencer
         public bool PreferUsingPreviousRelativeValue => preferUsingPreviousRelativeValue;
         
         [SerializeField]
-        private Sequencer.AutoplayType autoplayMode = Sequencer.AutoplayType.Awake;
-        public Sequencer.AutoplayType AutoplayMode => autoplayMode;
+        private AnimationSequence.AutoplayType autoplayMode = AnimationSequence.AutoplayType.Awake;
+        public AnimationSequence.AutoplayType AutoplayMode => autoplayMode;
         
         [SerializeField]
         private bool playOnAwake = false;
@@ -48,8 +48,8 @@ namespace BrunoMikoski.AnimationSequencer
         public bool TimeScaleIndependent => timeScaleIndependent;
         
         [SerializeField]
-        private Sequencer.PlayType playType = Sequencer.PlayType.Forward;
-        public Sequencer.PlayType PlayType => playType;
+        private AnimationSequence.PlayType playType = AnimationSequence.PlayType.Forward;
+        public AnimationSequence.PlayType PlayType => playType;
         
         [SerializeField]
         private UpdateType updateType = UpdateType.Normal;

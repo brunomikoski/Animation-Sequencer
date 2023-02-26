@@ -1,2 +1,0 @@
-﻿#if DOTWEEN_ENABLED
-#endif
