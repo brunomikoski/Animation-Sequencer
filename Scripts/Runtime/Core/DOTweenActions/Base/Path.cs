@@ -6,7 +6,7 @@ using DG.Tweening.Plugins.Core.PathCore;
 using DG.Tweening.Plugins.Options;
 using UnityEngine;
 
-namespace BrunoMikoski.AnimationSequencer
+namespace BrunoMikoski.AnimationsSequencer
 {
     [Serializable]
     public abstract class Path : SequencerAnimationBase

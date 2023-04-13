@@ -4,7 +4,7 @@ using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 
-namespace BrunoMikoski.AnimationSequencer
+namespace BrunoMikoski.AnimationsSequencer
 {
     [Serializable]
     public sealed class TweenStep : GameObjectRelatedStep

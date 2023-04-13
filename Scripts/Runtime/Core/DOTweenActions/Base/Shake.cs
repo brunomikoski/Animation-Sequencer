@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace BrunoMikoski.AnimationSequencer
+namespace BrunoMikoski.AnimationsSequencer
 {
     [Serializable]
     public abstract class Shake : SequencerAnimationBase

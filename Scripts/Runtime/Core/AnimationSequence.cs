@@ -8,7 +8,7 @@ using UnityEngine.Events;
 using UnityEditor;
 #endif
 
-namespace BrunoMikoski.AnimationSequencer
+namespace BrunoMikoski.AnimationsSequencer
 {
     [DisallowMultipleComponent]
     public class AnimationSequence : MonoBehaviour

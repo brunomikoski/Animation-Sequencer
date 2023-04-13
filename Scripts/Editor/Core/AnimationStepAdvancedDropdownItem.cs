@@ -2,7 +2,7 @@
 using System;
 using UnityEditor.IMGUI.Controls;
 
-namespace BrunoMikoski.AnimationSequencer
+namespace BrunoMikoski.AnimationsSequencer
 {
     public sealed class AnimationStepAdvancedDropdownItem : AdvancedDropdownItem
     {

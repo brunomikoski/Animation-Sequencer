@@ -1,4 +1,4 @@
-﻿namespace BrunoMikoski.AnimationSequencer
+﻿namespace BrunoMikoski.AnimationsSequencer
 {
     public enum FlowType 
     { 

@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace BrunoMikoski.AnimationSequencer
+namespace BrunoMikoski.AnimationsSequencer
 {
     public sealed class AnimationSequencerSettings : ScriptableObjectForPreferences<AnimationSequencerSettings>
     {

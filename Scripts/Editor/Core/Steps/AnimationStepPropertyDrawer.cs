@@ -3,7 +3,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace BrunoMikoski.AnimationSequencer
+namespace BrunoMikoski.AnimationsSequencer
 {
     [CustomPropertyDrawer(typeof(AnimationStep), true)]
     public class AnimationStepPropertyDrawer : PropertyDrawer

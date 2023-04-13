@@ -1,12 +1,12 @@
 ﻿#if DOTWEEN_ENABLED
 using System;
-using BrunoMikoski.AnimationSequencer;
+using BrunoMikoski.AnimationsSequencer;
 using DG.Tweening;
 using DG.Tweening.Core.Easing;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace BrunoMikoski.AnimationSequencer
+namespace BrunoMikoski.AnimationsSequencer
 {
     [Serializable]
     public partial class CustomEase : IEquatable<CustomEase>

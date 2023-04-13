@@ -7,7 +7,7 @@ using UnityEditor.IMGUI.Controls;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace BrunoMikoski.AnimationSequencer
+namespace BrunoMikoski.AnimationsSequencer
 {
     [CustomEditor(typeof(AnimationSequence), true)]
     public sealed class AnimationSequenceCustomEditor : Editor

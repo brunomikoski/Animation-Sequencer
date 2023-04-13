@@ -7,7 +7,7 @@ using DG.Tweening.Plugins.Options;
 using TMPro;
 using UnityEngine;
 
-namespace BrunoMikoski.AnimationSequencer
+namespace BrunoMikoski.AnimationsSequencer
 {
     [Serializable]
     public sealed class TMPAnimation : AnimatedText

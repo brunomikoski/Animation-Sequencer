@@ -5,7 +5,7 @@ using DG.Tweening.Plugins.Options;
 using TMPro;
 using UnityEngine.UI;
 
-namespace BrunoMikoski.AnimationSequencer
+namespace BrunoMikoski.AnimationsSequencer
 {
     public static class DOTweenExtensions
     {

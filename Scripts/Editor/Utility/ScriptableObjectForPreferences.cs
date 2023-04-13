@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace BrunoMikoski.AnimationSequencer
+namespace BrunoMikoski.AnimationsSequencer
 {
     //From https://github.com/baba-s/UniScriptableObjectForPreferences/blob/master/Editor/ScriptableObjectForPreferences.cs
     public abstract class ScriptableObjectForPreferences<T> : ScriptableObject

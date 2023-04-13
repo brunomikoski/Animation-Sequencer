@@ -1,4 +1,4 @@
-namespace BrunoMikoski.AnimationSequencer
+namespace BrunoMikoski.AnimationsSequencer
 {
     public static class DisplayNames
     {

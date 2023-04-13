@@ -2,7 +2,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace BrunoMikoski.AnimationSequencer
+namespace BrunoMikoski.AnimationsSequencer
 {
     [CreateAssetMenu(menuName = "Animation Sequencer/Create Animation Sequence Default", fileName = "AnimationSequenceDefaults")]
     public sealed class AnimationSequenceDefaults : EditorDefaultResourceSingleton<AnimationSequenceDefaults>
