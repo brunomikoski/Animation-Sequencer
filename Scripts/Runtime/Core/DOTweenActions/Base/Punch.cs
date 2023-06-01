@@ -1,3 +1,4 @@
+#if DOTWEEN_ENABLED
 using System;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -36,3 +37,4 @@ namespace BrunoMikoski.AnimationsSequencer
         protected Transform PreviousTarget;
     }
 }
+#endif

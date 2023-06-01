@@ -91,6 +91,9 @@ namespace BrunoMikoski.AnimationsSequencer
                 return;
 
             SerializedProperty progressSP = serializedObject.FindProperty(AnimationSequenceEditorUtils.NameOfProgress);
+
+            if (progressSP == null)
+                return;
             
             if (Mathf.Approximately(progressSP.floatValue, -1)) 
                 return;
