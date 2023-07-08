@@ -1,6 +1,7 @@
 ﻿#if DOTWEEN_ENABLED
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace BrunoMikoski.AnimationSequencer
 {
@@ -8,18 +9,13 @@ namespace BrunoMikoski.AnimationSequencer
     public sealed class AnchoredPositionMoveToRectTransformPositionDOTweenActionBase : AnchoredPositionMoveDOTweenActionBase
     {
         [SerializeField]
-        private RectTransform rectTransform;
-        public RectTransform RectTransform
-        {
-            get => rectTransform;
-            set => rectTransform = value;
-        }
+        private RectTransform target;
 
         public override string DisplayName => "Move to RectTransform Anchored Position";
 
         protected override Vector2 GetPosition()
         {
-            return rectTransform.anchoredPosition;
+            return target.anchoredPosition;
         }
     }
 }

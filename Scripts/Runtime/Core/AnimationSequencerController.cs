@@ -74,6 +74,7 @@ namespace BrunoMikoski.AnimationSequencer
 
         protected virtual void Awake()
         {
+            progress = -1;
             if (autoplayMode != AutoplayType.Awake)
                 return;
 
@@ -188,18 +189,18 @@ namespace BrunoMikoski.AnimationSequencer
                 Play();
 
             float duration = playingSequence.Duration();
-            float progress = Mathf.Clamp01(seconds / duration);
-            SetProgress(progress, andPlay);
+            float finalProgress = Mathf.Clamp01(seconds / duration);
+            SetProgress(finalProgress, andPlay);
         }
         
-        public virtual void SetProgress(float progress, bool andPlay = true)
+        public virtual void SetProgress(float targetProgress, bool andPlay = true)
         {
-            progress = Mathf.Clamp01(progress);
+            targetProgress = Mathf.Clamp01(targetProgress);
             
             if (playingSequence == null)
                 Play();
 
-            playingSequence.Goto(progress, andPlay);
+            playingSequence.Goto(targetProgress, andPlay);
         }
 
         public virtual void TogglePause()
@@ -320,6 +321,7 @@ namespace BrunoMikoski.AnimationSequencer
 
         public virtual void ResetToInitialState()
         {
+            progress = -1.0f;
             for (int i = animationSteps.Length - 1; i >= 0; i--)
             {
                 animationSteps[i].ResetToInitialState();
@@ -401,7 +403,7 @@ namespace BrunoMikoski.AnimationSequencer
 #endif
         public bool TryGetStepAtIndex<T>(int index, out T result) where T : AnimationStepBase
         {
-            if (index < 0 || index > animationSteps.Length - 2)
+            if (index < 0 || index > animationSteps.Length - 1)
             {
                 result = null;
                 return false;
