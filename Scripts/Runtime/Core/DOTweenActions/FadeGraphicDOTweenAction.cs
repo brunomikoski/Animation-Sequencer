@@ -47,8 +47,8 @@ namespace BrunoMikoski.AnimationSequencer
                 // https://forum.unity.com/threads/editor-scripting-force-color-update.798663/
                 graphicTween.OnUpdate(() =>
                 {
-                    targetGraphic.transform.localScale = new Vector3(1.001f, 1.001f, 1.001f);
-                    targetGraphic.transform.localScale = new Vector3(1, 1, 1);
+                    targetGraphic.enabled = false;
+                    targetGraphic.enabled = true;
                 });
             }
 #endif
