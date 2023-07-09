@@ -1,11 +1,14 @@
 ﻿#if DOTWEEN_ENABLED
 using System;
 using System.Collections;
+#if UNITASK_ENABLED
+using System.Threading;
+using Cysharp.Threading.Tasks;
+#endif
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 #if UNITY_EDITOR
-using UnityEditor;
 #endif
 
 namespace BrunoMikoski.AnimationSequencer
@@ -412,6 +415,16 @@ namespace BrunoMikoski.AnimationSequencer
             result = animationSteps[index] as T;
             return result != null;
         }
+
+#if UNITASK_ENABLED
+        public async UniTask PlayAsync(CancellationToken cancellationTokenSource = default)
+        {
+            if (cancellationTokenSource == default)
+                cancellationTokenSource = this.GetCancellationTokenOnDestroy();
+            
+            await PlayEnumerator().ToUniTask(PlayerLoopTiming.Update, cancellationTokenSource);
+        }
+#endif
     }
 }
 #endif

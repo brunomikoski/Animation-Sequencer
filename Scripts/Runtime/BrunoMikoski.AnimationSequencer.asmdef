@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "DOTween.Modules",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -17,6 +18,11 @@
             "name": "com.unity.textmeshpro",
             "expression": "",
             "define": "TMP_ENABLED"
+        },
+        {
+            "name": "com.cysharp.unitask",
+            "expression": "",
+            "define": "UNITASK_ENABLED"
         }
     ],
     "noEngineReferences": false
