@@ -180,10 +180,9 @@ namespace BrunoMikoski.AnimationSequencer
                 SetDefaults();
             }
 
-            DrawFoldoutArea("Animation Sequence Settings", ref showSettingsPanel, DrawSettings);
+            DrawFoldoutArea("Settings", ref showSettingsPanel, DrawSettings);
             DrawFoldoutArea("Callback", ref showCallbacksPanel, DrawCallbacks);
             DrawFoldoutArea("Preview", ref showPreviewPanel, DrawPreviewControls);
-            DrawFoldoutArea("Sequence Settings", ref showSequenceSettingsPanel, DrawSequenceSettings);
             DrawFoldoutArea("Steps", ref showStepsPanel, DrawAnimationSteps);
         }
 
@@ -239,6 +238,48 @@ namespace BrunoMikoski.AnimationSequencer
                 if (changedCheck.changed)
                     serializedObject.ApplyModifiedProperties();
             }
+            
+            bool wasEnabled = GUI.enabled; 
+            if (DOTweenEditorPreview.isPreviewing)
+                GUI.enabled = false;
+            
+            SerializedProperty updateTypeSerializedProperty = serializedObject.FindProperty("updateType");
+            SerializedProperty timeScaleIndependentSerializedProperty = serializedObject.FindProperty("timeScaleIndependent");
+            SerializedProperty sequenceDirectionSerializedProperty = serializedObject.FindProperty("playType");
+            SerializedProperty loopsSerializedProperty = serializedObject.FindProperty("loops");
+            SerializedProperty loopTypeSerializedProperty = serializedObject.FindProperty("loopType");
+            SerializedProperty autoKillSerializedProperty = serializedObject.FindProperty("autoKill");
+            SerializedProperty rootSerializedProperty = serializedObject.FindProperty("rootGameObject");
+
+            using (EditorGUI.ChangeCheckScope changedCheck = new EditorGUI.ChangeCheckScope())
+            {
+                EditorGUILayout.PropertyField(timeScaleIndependentSerializedProperty);
+                EditorGUILayout.PropertyField(sequenceDirectionSerializedProperty);
+                EditorGUILayout.PropertyField(updateTypeSerializedProperty);
+                EditorGUILayout.PropertyField(autoKillSerializedProperty);
+
+                EditorGUILayout.PropertyField(loopsSerializedProperty);
+
+                if (loopsSerializedProperty.intValue != 0)
+                {
+                    EditorGUILayout.PropertyField(loopTypeSerializedProperty);
+                }
+ 
+                EditorGUILayout.PropertyField(rootSerializedProperty);
+                if (rootSerializedProperty.objectReferenceValue == null)
+                {
+                    rootSerializedProperty.objectReferenceValue = sequencerController.gameObject;
+                    serializedObject.ApplyModifiedProperties();
+                }
+                
+                if (changedCheck.changed)
+                {
+                    loopsSerializedProperty.intValue = Mathf.Clamp(loopsSerializedProperty.intValue, -1, int.MaxValue);
+                    serializedObject.ApplyModifiedProperties();
+                }
+                
+            }
+            GUI.enabled = wasEnabled;
         }
 		
         private void DrawPlaybackSpeedSlider()
@@ -266,42 +307,6 @@ namespace BrunoMikoski.AnimationSequencer
             sequencerController.PlayingSequence.timeScale = sequencerController.PlaybackSpeed * tweenTimeScale;
         }
         
-        private void DrawSequenceSettings()
-        {
-            bool wasEnabled = GUI.enabled; 
-            if (DOTweenEditorPreview.isPreviewing)
-                GUI.enabled = false;
-            
-            SerializedProperty updateTypeSerializedProperty = serializedObject.FindProperty("updateType");
-            SerializedProperty timeScaleIndependentSerializedProperty = serializedObject.FindProperty("timeScaleIndependent");
-            SerializedProperty sequenceDirectionSerializedProperty = serializedObject.FindProperty("playType");
-            SerializedProperty loopsSerializedProperty = serializedObject.FindProperty("loops");
-            SerializedProperty loopTypeSerializedProperty = serializedObject.FindProperty("loopType");
-            SerializedProperty autoKillSerializedProperty = serializedObject.FindProperty("autoKill");
-
-            using (EditorGUI.ChangeCheckScope changedCheck = new EditorGUI.ChangeCheckScope())
-            {
-                EditorGUILayout.PropertyField(timeScaleIndependentSerializedProperty);
-                EditorGUILayout.PropertyField(sequenceDirectionSerializedProperty);
-                EditorGUILayout.PropertyField(updateTypeSerializedProperty);
-                EditorGUILayout.PropertyField(autoKillSerializedProperty);
-
-                EditorGUILayout.PropertyField(loopsSerializedProperty);
-
-                if (loopsSerializedProperty.intValue != 0)
-                {
-                    EditorGUILayout.PropertyField(loopTypeSerializedProperty);
-                }
- 
-                if (changedCheck.changed)
-                {
-                    loopsSerializedProperty.intValue = Mathf.Clamp(loopsSerializedProperty.intValue, -1, int.MaxValue);
-                    serializedObject.ApplyModifiedProperties();
-                }
-            }
-
-            GUI.enabled = wasEnabled;
-        }
 
         private void DrawPreviewControls()
         {
