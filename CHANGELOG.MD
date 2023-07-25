@@ -6,7 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Changed
+
+## [0.5.2]
+### Changed
 - Fixed Animation not saving progress changes
+- The last renaming caused a lot of unwanted issues, I'm reverting this until I figure out exactly how to handle this
+
 
 ## [0.5.1]
 ### Changed
@@ -199,6 +204,7 @@ Thanks for all the [suggestions](https://github.com/brunomikoski/Animation-Seque
 ### Added 
 - First initial working version
 
+[0.5.2]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.5.2
 [0.5.1]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.5.1
 [0.5.0]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.5.0
 [0.4.0]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.4.0

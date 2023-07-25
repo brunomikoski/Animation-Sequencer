@@ -249,7 +249,6 @@ namespace BrunoMikoski.AnimationSequencer
             SerializedProperty loopsSerializedProperty = serializedObject.FindProperty("loops");
             SerializedProperty loopTypeSerializedProperty = serializedObject.FindProperty("loopType");
             SerializedProperty autoKillSerializedProperty = serializedObject.FindProperty("autoKill");
-            SerializedProperty rootSerializedProperty = serializedObject.FindProperty("rootGameObject");
 
             using (EditorGUI.ChangeCheckScope changedCheck = new EditorGUI.ChangeCheckScope())
             {
@@ -265,13 +264,6 @@ namespace BrunoMikoski.AnimationSequencer
                     EditorGUILayout.PropertyField(loopTypeSerializedProperty);
                 }
  
-                EditorGUILayout.PropertyField(rootSerializedProperty);
-                if (rootSerializedProperty.objectReferenceValue == null)
-                {
-                    rootSerializedProperty.objectReferenceValue = sequencerController.gameObject;
-                    serializedObject.ApplyModifiedProperties();
-                }
-                
                 if (changedCheck.changed)
                 {
                     loopsSerializedProperty.intValue = Mathf.Clamp(loopsSerializedProperty.intValue, -1, int.MaxValue);

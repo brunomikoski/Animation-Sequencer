@@ -77,9 +77,6 @@ namespace BrunoMikoski.AnimationSequencer
         [SerializeField, Range(0, 1)] 
         private float progress = -1;
 
-        [SerializeField]
-        private GameObject rootGameObject;
-
         protected virtual void Awake()
         {
             progress = -1;
