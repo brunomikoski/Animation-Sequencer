@@ -1,7 +1,6 @@
 ﻿#if DOTWEEN_ENABLED
 using System;
 using System.Collections;
-using System.Collections.Generic;
 #if UNITASK_ENABLED
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -9,10 +8,6 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
-using Object = UnityEngine.Object;
-#if UNITY_EDITOR
-#endif
 
 namespace BrunoMikoski.AnimationSequencer
 {
