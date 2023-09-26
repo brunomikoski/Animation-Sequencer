@@ -7,11 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Changed
 
+
+## [0.5.3]
+### Changed
+- Exposed the `AnimationSteps` from the `AnimationSequencerController`
+
+### Added
+- Add `ReplaceTarget<GameObjectAnimationStep>` that allows you to replace the target of a step by a new one, this is useful when you want to replace a step target by a prefab, or a new instance of the same object. This will replace the target of the step and all the actions that are using the same target of that specific type.
+- Add `ReplaceTargets(params (GameObject original, GameObject target)[] replacements)` that replaces all the original targets to the newTarget
+- Add `ReplaceTargets(GameObject originalTarget, GameObject newTarget)` to replace all the targets of the original target to the new target
+
+
 ## [0.5.2]
 ### Changed
 - Fixed Animation not saving progress changes
 - The last renaming caused a lot of unwanted issues, I'm reverting this until I figure out exactly how to handle this
-
 
 ## [0.5.1]
 ### Changed
@@ -204,6 +214,7 @@ Thanks for all the [suggestions](https://github.com/brunomikoski/Animation-Seque
 ### Added 
 - First initial working version
 
+[0.5.3]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.5.3
 [0.5.2]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.5.2
 [0.5.1]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.5.1
 [0.5.0]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.5.0

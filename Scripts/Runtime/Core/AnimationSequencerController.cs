@@ -1,6 +1,7 @@
 ﻿#if DOTWEEN_ENABLED
 using System;
 using System.Collections;
+using System.Collections.Generic;
 #if UNITASK_ENABLED
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace BrunoMikoski.AnimationSequencer
             Forward,
             Backward
         }
-        
+
         public enum AutoplayType
         {
             Awake,
@@ -27,35 +28,49 @@ namespace BrunoMikoski.AnimationSequencer
             Nothing
         }
 
-        [SerializeReference]
+        [SerializeReference] 
         private AnimationStepBase[] animationSteps = Array.Empty<AnimationStepBase>();
-        [SerializeField]
+        public AnimationStepBase[] AnimationSteps => animationSteps;
+
+        [SerializeField] 
         private UpdateType updateType = UpdateType.Normal;
-        [SerializeField]
+        [SerializeField] 
         private bool timeScaleIndependent = false;
-        [SerializeField]
+        [SerializeField] 
         private AutoplayType autoplayMode = AutoplayType.Awake;
-        [SerializeField]
+        [SerializeField] 
         protected bool startPaused;
-        [SerializeField]
+        [SerializeField] 
         private float playbackSpeed = 1f;
         public float PlaybackSpeed => playbackSpeed;
-        [SerializeField]
+        [SerializeField] 
         protected PlayType playType = PlayType.Forward;
-        [SerializeField]
+        [SerializeField] 
         private int loops = 0;
-        [SerializeField]
+        [SerializeField] 
         private LoopType loopType = LoopType.Restart;
-        [SerializeField]
+        [SerializeField] 
         private bool autoKill = true;
-        
-        [SerializeField]
+
+        [SerializeField] 
         private UnityEvent onStartEvent = new UnityEvent();
-        public UnityEvent OnStartEvent { get { return onStartEvent;} protected set {onStartEvent = value;}}
-        [SerializeField]
+
+        public UnityEvent OnStartEvent
+        {
+            get => onStartEvent;
+            protected set => onStartEvent = value;
+        }
+
+        [SerializeField] 
         private UnityEvent onFinishedEvent = new UnityEvent();
-        public UnityEvent OnFinishedEvent { get { return onFinishedEvent;} protected set {onFinishedEvent = value;}}
-        [SerializeField]
+
+        public UnityEvent OnFinishedEvent
+        {
+            get => onFinishedEvent;
+            protected set => onFinishedEvent = value;
+        }
+
+        [SerializeField] 
         private UnityEvent onProgressEvent = new UnityEvent();
         public UnityEvent OnProgressEvent => onProgressEvent;
 
@@ -77,10 +92,10 @@ namespace BrunoMikoski.AnimationSequencer
             progress = -1;
             if (autoplayMode != AutoplayType.Awake)
                 return;
-            
+
             Autoplay();
         }
-        
+
         protected virtual void OnEnable()
         {
             if (autoplayMode != AutoplayType.OnEnable)
@@ -95,12 +110,12 @@ namespace BrunoMikoski.AnimationSequencer
             if (startPaused)
                 playingSequence.Pause();
         }
-        
+
         protected virtual void OnDisable()
         {
             if (autoplayMode != AutoplayType.OnEnable)
                 return;
-            
+
             if (playingSequence == null)
                 return;
 
@@ -114,7 +129,7 @@ namespace BrunoMikoski.AnimationSequencer
         {
             ClearPlayingSequence();
         }
-        
+
         public virtual void Play()
         {
             Play(null);
@@ -123,11 +138,11 @@ namespace BrunoMikoski.AnimationSequencer
         public virtual void Play(Action onCompleteCallback)
         {
             playTypeInternal = playType;
-            
+
             ClearPlayingSequence();
-            
+
             onFinishedEvent.RemoveAllListeners();
-            
+
             if (onCompleteCallback != null)
                 onFinishedEvent.AddListener(onCompleteCallback.Invoke);
 
@@ -153,16 +168,16 @@ namespace BrunoMikoski.AnimationSequencer
         {
             if (playingSequence == null)
                 Play();
-            
+
             playTypeInternal = PlayType.Forward;
             onFinishedEvent.RemoveAllListeners();
 
             if (onCompleteCallback != null)
                 onFinishedEvent.AddListener(onCompleteCallback.Invoke);
-            
+
             if (resetFirst)
                 SetProgress(0);
-            
+
             playingSequence.PlayForward();
         }
 
@@ -170,16 +185,16 @@ namespace BrunoMikoski.AnimationSequencer
         {
             if (playingSequence == null)
                 Play();
-            
+
             playTypeInternal = PlayType.Backward;
             onFinishedEvent.RemoveAllListeners();
 
             if (onCompleteCallback != null)
                 onFinishedEvent.AddListener(onCompleteCallback.Invoke);
-            
+
             if (completeFirst)
                 SetProgress(1);
-            
+
             playingSequence.PlayBackwards();
         }
 
@@ -192,11 +207,11 @@ namespace BrunoMikoski.AnimationSequencer
             float finalProgress = Mathf.Clamp01(seconds / duration);
             SetProgress(finalProgress, andPlay);
         }
-        
+
         public virtual void SetProgress(float targetProgress, bool andPlay = true)
         {
             targetProgress = Mathf.Clamp01(targetProgress);
-            
+
             if (playingSequence == null)
                 Play();
 
@@ -261,7 +276,7 @@ namespace BrunoMikoski.AnimationSequencer
         public virtual Sequence GenerateSequence()
         {
             Sequence sequence = DOTween.Sequence();
-            
+
             // Various edge cases exists with OnStart() and OnComplete(), some of which can be solved with OnRewind(),
             // but it still leaves callbacks unfired when reversing direction after natural completion of the animation.
             // Rather than using the in-built callbacks, we simply bookend the Sequence with AppendCallback to ensure
@@ -277,7 +292,7 @@ namespace BrunoMikoski.AnimationSequencer
                     onFinishedEvent.Invoke();
                 }
             });
-            
+
             for (int i = 0; i < animationSteps.Length; i++)
             {
                 animationSteps[i].AddTweenToSequence(sequence);
@@ -286,10 +301,7 @@ namespace BrunoMikoski.AnimationSequencer
             sequence.SetTarget(this);
             sequence.SetAutoKill(autoKill);
             sequence.SetUpdate(updateType, timeScaleIndependent);
-            sequence.OnUpdate(() =>
-            {
-                onProgressEvent.Invoke();
-            });
+            sequence.OnUpdate(() => { onProgressEvent.Invoke(); });
             // See comment above regarding bookending via AppendCallback.
             sequence.AppendCallback(() =>
             {
@@ -334,41 +346,41 @@ namespace BrunoMikoski.AnimationSequencer
             DOTween.Kill(playingSequence);
             playingSequence = null;
         }
-  
+
         public void SetAutoplayMode(AutoplayType autoplayType)
         {
             autoplayMode = autoplayType;
         }
-        
+
         public void SetPlayOnAwake(bool targetPlayOnAwake)
         {
         }
-        
+
         public void SetPauseOnAwake(bool targetPauseOnAwake)
         {
             startPaused = targetPauseOnAwake;
         }
-        
+
         public void SetTimeScaleIndependent(bool targetTimeScaleIndependent)
         {
             timeScaleIndependent = targetTimeScaleIndependent;
         }
-        
+
         public void SetPlayType(PlayType targetPlayType)
         {
             playType = targetPlayType;
         }
-        
+
         public void SetUpdateType(UpdateType targetUpdateType)
         {
             updateType = targetUpdateType;
         }
-        
+
         public void SetAutoKill(bool targetAutoKill)
         {
             autoKill = targetAutoKill;
         }
-        
+
         public void SetLoops(int targetLoops)
         {
             loops = targetLoops;
@@ -378,7 +390,7 @@ namespace BrunoMikoski.AnimationSequencer
         {
             if (progress == -1.0f)
                 return;
-            
+
             SetProgress(progress);
         }
 
@@ -411,6 +423,46 @@ namespace BrunoMikoski.AnimationSequencer
 
             result = animationSteps[index] as T;
             return result != null;
+        }
+
+        public void ReplaceTarget<T>(GameObject targetGameObject) where T : GameObjectAnimationStep
+        {
+            for (int i = animationSteps.Length - 1; i >= 0; i--)
+            {
+                AnimationStepBase animationStepBase = animationSteps[i];
+                if (animationStepBase == null)
+                    continue;
+
+                if (animationStepBase is not T gameObjectAnimationStep)
+                    continue;
+
+                gameObjectAnimationStep.SetTarget(targetGameObject);
+            }
+        }
+
+        public void ReplaceTargets(params (GameObject original, GameObject target)[] replacements)
+        {
+            for (int i = 0; i < replacements.Length; i++)
+            {
+                (GameObject original, GameObject target) replacement = replacements[i];
+                ReplaceTargets(replacement.original, replacement.target);
+            }
+        }
+
+        public void ReplaceTargets(GameObject originalTarget, GameObject newTarget)
+        {
+            for (int i = animationSteps.Length - 1; i >= 0; i--)
+            {
+                AnimationStepBase animationStepBase = animationSteps[i];
+                if (animationStepBase == null)
+                    continue;
+                
+                if(animationStepBase is not GameObjectAnimationStep gameObjectAnimationStep)
+                    continue;
+
+                if (gameObjectAnimationStep.Target == originalTarget)
+                    gameObjectAnimationStep.SetTarget(newTarget);
+            }
         }
 
 #if UNITASK_ENABLED
