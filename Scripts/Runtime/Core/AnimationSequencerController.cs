@@ -295,7 +295,8 @@ namespace BrunoMikoski.AnimationSequencer
 
             for (int i = 0; i < animationSteps.Length; i++)
             {
-                animationSteps[i].AddTweenToSequence(sequence);
+                AnimationStepBase animationStepBase = animationSteps[i];
+                animationStepBase.AddTweenToSequence(sequence);
             }
 
             sequence.SetTarget(this);
