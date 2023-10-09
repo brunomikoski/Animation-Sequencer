@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 
+## [0.5.4]
+### Added
+- Added `Set` steps, this allow you to specifically set properties of your target at a certain point in your sequence, a good example is: You want to have a `In` animation and also `Out` but you want to make sure things looks correct when the animation start, you can now use this to set the properties. Right now only supports `Transform`, `RectTransform` `Graphic` and `Image` but I will extend this overtime if turns out to be useful.
+
+
 ## [0.5.3]
 ### Changed
 - Exposed the `AnimationSteps` from the `AnimationSequencerController`
@@ -16,7 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `ReplaceTarget<GameObjectAnimationStep>` that allows you to replace the target of a step by a new one, this is useful when you want to replace a step target by a prefab, or a new instance of the same object. This will replace the target of the step and all the actions that are using the same target of that specific type.
 - Add `ReplaceTargets(params (GameObject original, GameObject target)[] replacements)` that replaces all the original targets to the newTarget
 - Add `ReplaceTargets(GameObject originalTarget, GameObject newTarget)` to replace all the targets of the original target to the new target
-
 
 ## [0.5.2]
 ### Changed
@@ -214,6 +218,7 @@ Thanks for all the [suggestions](https://github.com/brunomikoski/Animation-Seque
 ### Added 
 - First initial working version
 
+[0.5.4]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.5.4
 [0.5.3]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.5.3
 [0.5.2]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.5.2
 [0.5.1]: https://github.com/brunomikoski/Animation-Sequencer/releases/tag/v0.5.1
