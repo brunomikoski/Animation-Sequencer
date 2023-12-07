@@ -36,11 +36,14 @@ namespace BrunoMikoski.AnimationSequencer
         private bool wasShowingStepsPanel;
         private bool justStartPreviewing;
 
+        private (float start, float end)[] previewingTimings;
+
         private void OnEnable()
         {
             sequencerController = target as AnimationSequencerController;
             reorderableList = new ReorderableList(serializedObject, serializedObject.FindProperty("animationSteps"), true, false, true, true);
             reorderableList.drawElementCallback += OnDrawAnimationStep;
+            reorderableList.drawElementBackgroundCallback += OnDrawAnimationStepBackground;
             reorderableList.elementHeightCallback += GetAnimationStepHeight;
             reorderableList.onAddDropdownCallback += OnClickToAddNew;
             reorderableList.onRemoveCallback += OnClickToRemove;
@@ -68,6 +71,7 @@ namespace BrunoMikoski.AnimationSequencer
         private void OnDisable()
         {
             reorderableList.drawElementCallback -= OnDrawAnimationStep;
+            reorderableList.drawElementBackgroundCallback -= OnDrawAnimationStepBackground;
             reorderableList.elementHeightCallback -= GetAnimationStepHeight;
             reorderableList.onAddDropdownCallback -= OnClickToAddNew;
             reorderableList.onRemoveCallback -= OnClickToRemove;
@@ -411,6 +415,12 @@ namespace BrunoMikoski.AnimationSequencer
                     sequencerController.Play();
                     
                     DOTweenEditorPreview.PrepareTweenForPreview(sequencerController.PlayingSequence);
+
+                    if (AnimationSequencerSettings.GetInstance().DrawTimingsWhenPreviewing)
+                        previewingTimings = DoTweenProxy.GetTimings(sequencerController.PlayingSequence,
+                            sequencerController.AnimationSteps);
+                    else
+                        previewingTimings = null;
                 }
                 else
                 {
@@ -533,7 +543,44 @@ namespace BrunoMikoski.AnimationSequencer
                     additionalInspectorGUI.Invoke();
             }
         }
-        
+
+        private void OnDrawAnimationStepBackground(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            if (Event.current.type == EventType.Repaint &&
+                DOTweenEditorPreview.isPreviewing &&
+                previewingTimings != null &&
+                index >= 0 && index < previewingTimings.Length)
+            {
+                var (start, end) = previewingTimings[index];
+
+                var progress = GetCurrentSequencerProgress();
+
+                var progressRect = new Rect(rect)
+                {
+                    xMin = Mathf.Lerp(rect.xMin, rect.xMax, start) - 1,
+                    xMax = Mathf.Lerp(rect.xMin, rect.xMax, end) + 1,
+                    height = EditorGUIUtility.singleLineHeight,
+                };
+
+                var markerRect = new Rect(rect)
+                {
+                    xMin = Mathf.Lerp(rect.xMin, rect.xMax, progress) - 1,
+                    xMax = Mathf.Lerp(rect.xMin, rect.xMax, progress) + 1,
+                    height = EditorGUIUtility.singleLineHeight,
+                };
+
+                var oldColor = GUI.color;
+
+                GUI.color = new Color(0f, 0.5f, 0f, 0.45f);
+                GUI.DrawTexture(progressRect, EditorGUIUtility.whiteTexture);
+
+                GUI.color = Color.black;
+                GUI.DrawTexture(markerRect, EditorGUIUtility.whiteTexture);
+
+                GUI.color = oldColor;
+            }
+        }
+
         private void OnDrawAnimationStep(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty element = reorderableList.serializedProperty.GetArrayElementAtIndex(index);
