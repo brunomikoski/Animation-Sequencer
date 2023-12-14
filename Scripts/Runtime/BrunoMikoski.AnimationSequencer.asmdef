@@ -23,6 +23,11 @@
             "name": "com.cysharp.unitask",
             "expression": "",
             "define": "UNITASK_ENABLED"
+        },
+        {
+            "name": "com.demigiant.dotween",
+            "expression": "",
+            "define": "DOTWEEN_ENABLED"
         }
     ],
     "noEngineReferences": false
