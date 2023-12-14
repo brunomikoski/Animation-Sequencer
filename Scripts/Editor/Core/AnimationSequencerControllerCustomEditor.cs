@@ -71,6 +71,11 @@ namespace BrunoMikoski.AnimationSequencer
             return DOTweenEditorPreview.isPreviewing;
         }
 
+        public override bool UseDefaultMargins()
+        {
+            return false;
+        }
+
         private void OnDisable()
         {
             reorderableList.drawElementCallback -= OnDrawAnimationStep;
@@ -563,35 +568,54 @@ namespace BrunoMikoski.AnimationSequencer
         private void DrawFoldoutArea(string title, ref bool foldout, Action additionalInspectorGUI,
             Action<Rect> additionalHeaderGUI = null, float additionalHeaderWidth = 0)
         {
-            using (new EditorGUILayout.VerticalScope("FrameBox"))
-            {
-                Rect rect = EditorGUILayout.GetControlRect();
-                rect.x += 10;
-                rect.width -= 10;
-                rect.y -= 4;
+            Rect rect = EditorGUILayout.GetControlRect();
 
-                var foldoutRect = new Rect(rect)
+            if (Event.current.type == EventType.Repaint)
+            {
+                GUI.skin.box.Draw(rect, false, false, false, false);
+            }
+
+            using (new EditorGUILayout.VerticalScope(AnimationSequencerStyles.InspectorSideMargins))
+            {
+                Rect rectWithMargins = new Rect(rect)
                 {
-                    xMax = rect.xMax - additionalHeaderWidth,
+                    xMin = rect.xMin + AnimationSequencerStyles.InspectorSideMargins.padding.left,
+                    xMax = rect.xMax - AnimationSequencerStyles.InspectorSideMargins.padding.right,
                 };
 
-                var additionalHeaderRect = new Rect(rect)
+                var foldoutRect = new Rect(rectWithMargins)
+                {
+                    xMax = rectWithMargins.xMax - additionalHeaderWidth,
+                };
+
+                var additionalHeaderRect = new Rect(rectWithMargins)
                 {
                     xMin = foldoutRect.xMax,
                 };
 
-                foldout = EditorGUI.Foldout(foldoutRect, foldout, title);
+                foldout = EditorGUI.Foldout(foldoutRect, foldout, title, true);
 
                 if (foldout)
                 {
                     additionalHeaderGUI?.Invoke(additionalHeaderRect);
                     additionalInspectorGUI.Invoke();
+                    GUILayout.Space(10);
                 }
             }
         }
 
         private void OnDrawAnimationStepBackground(Rect rect, int index, bool isActive, bool isFocused)
         {
+            if (Event.current.type == EventType.Repaint)
+            {
+                var titlebarRect = new Rect(rect)
+                {
+                    height = EditorGUIUtility.singleLineHeight,
+                };
+
+                AnimationSequencerStyles.InspectorTitlebar.Draw(titlebarRect, false, false, false, false);
+            }
+
             if (Event.current.type == EventType.Repaint &&
                 DOTweenEditorPreview.isPreviewing &&
                 previewingTimings != null &&
