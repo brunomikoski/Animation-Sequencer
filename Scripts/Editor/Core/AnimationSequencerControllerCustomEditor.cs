@@ -501,8 +501,10 @@ namespace BrunoMikoski.AnimationSequencer
 
             tweenProgress = GetCurrentSequencerProgress();
 
-            EditorGUILayout.LabelField("Progress");
-            tweenProgress = EditorGUILayout.Slider(tweenProgress, 0, 1);
+            var oldLabelWidth = EditorGUIUtility.labelWidth;
+            EditorGUIUtility.labelWidth = 65;
+            tweenProgress = EditorGUILayout.Slider("Progress", tweenProgress, 0, 1);
+            EditorGUIUtility.labelWidth = oldLabelWidth;
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -548,8 +550,10 @@ namespace BrunoMikoski.AnimationSequencer
             GUILayout.FlexibleSpace();
             EditorGUI.BeginChangeCheck();
             
-            EditorGUILayout.LabelField("TimeScale");
-            tweenTimeScale = EditorGUILayout.Slider(tweenTimeScale, 0, 2);
+            var oldLabelWidth = EditorGUIUtility.labelWidth;
+            EditorGUIUtility.labelWidth = 65;
+            tweenTimeScale = EditorGUILayout.Slider("TimeScale", tweenTimeScale, 0, 2);
+            EditorGUIUtility.labelWidth = oldLabelWidth;
 			
             UpdateSequenceTimeScale();
 
