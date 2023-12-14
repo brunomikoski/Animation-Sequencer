@@ -192,14 +192,17 @@ namespace BrunoMikoski.AnimationSequencer
                 SetDefaults();
             }
 
-            DrawFoldoutArea("Settings", ref showSettingsPanel, DrawSettings);
+            DrawFoldoutArea("Settings", ref showSettingsPanel, DrawSettings, DrawSettingsHeader);
             DrawFoldoutArea("Callback", ref showCallbacksPanel, DrawCallbacks);
             DrawFoldoutArea("Preview", ref showPreviewPanel, DrawPreviewControls);
             DrawFoldoutArea("Steps", ref showStepsPanel, DrawAnimationSteps, DrawAnimationStepsHeader, 50);
         }
 
-        private void DrawAnimationStepsHeader(Rect rect)
+        private void DrawAnimationStepsHeader(Rect rect, bool foldout)
         {
+            if (!foldout)
+                return;
+            
             var collapseAllRect = new Rect(rect)
             {
                 xMin = rect.xMax - 50,
@@ -255,6 +258,23 @@ namespace BrunoMikoski.AnimationSequencer
             }
             
             GUI.enabled = wasGUIEnabled;
+        }
+
+        private void DrawSettingsHeader(Rect rect, bool foldout)
+        {
+            var autoPlayModeSerializedProperty = serializedObject.FindProperty("autoplayMode");
+            var autoKillSerializedProperty = serializedObject.FindProperty("autoKill");
+
+            var autoplayMode = (AnimationSequencerController.AutoplayType) autoPlayModeSerializedProperty.enumValueIndex;
+            var autoKill = autoKillSerializedProperty.boolValue;
+
+            if (autoKill)
+                rect = DrawAutoSizedBadgeRight(rect, "Auto Kill", new Color(1f, 0.2f, 0f, 0.6f));
+
+            if (autoplayMode == AnimationSequencerController.AutoplayType.Awake)
+                rect = DrawAutoSizedBadgeRight(rect, "AutoPlay on Awake", new Color(1f, 0.7f, 0f, 0.6f));
+            else if (autoplayMode == AnimationSequencerController.AutoplayType.OnEnable)
+                rect = DrawAutoSizedBadgeRight(rect, "AutoPlay on Enable", new Color(1f, 0.7f, 0f, 0.6f));
         }
 
         private void DrawSettings()
@@ -566,7 +586,7 @@ namespace BrunoMikoski.AnimationSequencer
         }
 
         private void DrawFoldoutArea(string title, ref bool foldout, Action additionalInspectorGUI,
-            Action<Rect> additionalHeaderGUI = null, float additionalHeaderWidth = 0)
+            Action<Rect, bool> additionalHeaderGUI = null, float additionalHeaderWidth = 0)
         {
             Rect rect = EditorGUILayout.GetControlRect();
 
@@ -595,9 +615,10 @@ namespace BrunoMikoski.AnimationSequencer
 
                 foldout = EditorGUI.Foldout(foldoutRect, foldout, title, true);
 
+                additionalHeaderGUI?.Invoke(additionalHeaderRect, foldout);
+
                 if (foldout)
                 {
-                    additionalHeaderGUI?.Invoke(additionalHeaderRect);
                     additionalInspectorGUI.Invoke();
                     GUILayout.Space(10);
                 }
@@ -718,6 +739,29 @@ namespace BrunoMikoski.AnimationSequencer
                 sequencerController.SetLoops(AnimationControllerDefaults.Instance.Loops);
                 sequencerController.ResetComplete();
             }
+        }
+
+        private static Rect DrawAutoSizedBadgeRight(Rect rect, string text, Color color)
+        {
+            var style = AnimationSequencerStyles.Badge;
+            var size = style.CalcSize(EditorGUIUtility.TrTempContent(text));
+            var buttonRect = new Rect(rect)
+            {
+                xMin = rect.xMax - size.x,
+            };
+
+            if (Event.current.type == EventType.Repaint)
+            {
+                var oldColor = GUI.backgroundColor;
+                GUI.backgroundColor = color;
+                style.Draw(buttonRect, text, false, false, true, false);
+                GUI.backgroundColor = oldColor;
+            }
+
+            return new Rect(rect)
+            {
+                xMax = rect.xMax - size.x - style.margin.left,
+            };
         }
     }
 }
