@@ -12,6 +12,9 @@ namespace BrunoMikoski.AnimationSequencer
     [CustomEditor(typeof(AnimationSequencerController), true)]
     public class AnimationSequencerControllerCustomEditor : Editor
     {
+        private static readonly GUIContent CollapseAllAnimationStepsContent = new GUIContent("▸◂", "Collapse all animation steps");
+        private static readonly GUIContent ExpandAllAnimationStepsContent   = new GUIContent("◂▸", "Expand all animation steps");
+
         private ReorderableList reorderableList;
         
         private AnimationSequencerController sequencerController;
@@ -183,7 +186,32 @@ namespace BrunoMikoski.AnimationSequencer
             DrawFoldoutArea("Settings", ref showSettingsPanel, DrawSettings);
             DrawFoldoutArea("Callback", ref showCallbacksPanel, DrawCallbacks);
             DrawFoldoutArea("Preview", ref showPreviewPanel, DrawPreviewControls);
-            DrawFoldoutArea("Steps", ref showStepsPanel, DrawAnimationSteps);
+            DrawFoldoutArea("Steps", ref showStepsPanel, DrawAnimationSteps, DrawAnimationStepsHeader, 50);
+        }
+
+        private void DrawAnimationStepsHeader(Rect rect)
+        {
+            var collapseAllRect = new Rect(rect)
+            {
+                xMin = rect.xMax - 50,
+                xMax = rect.xMax - 25,
+            };
+
+            var expandAllRect = new Rect(rect)
+            {
+                xMin = rect.xMax - 25,
+                xMax = rect.xMax - 0,
+            };
+
+            if (GUI.Button(collapseAllRect, CollapseAllAnimationStepsContent, EditorStyles.miniButtonLeft))
+            {
+                SetStepsExpanded(false);
+            }
+
+            if (GUI.Button(expandAllRect, ExpandAllAnimationStepsContent, EditorStyles.miniButtonRight))
+            {
+                SetStepsExpanded(true);
+            }
         }
 
         private void DrawAnimationSteps()
@@ -518,7 +546,8 @@ namespace BrunoMikoski.AnimationSequencer
             GUILayout.FlexibleSpace();
         }
 
-        private void DrawFoldoutArea(string title,ref bool foldout, Action additionalInspectorGUI)
+        private void DrawFoldoutArea(string title, ref bool foldout, Action additionalInspectorGUI,
+            Action<Rect> additionalHeaderGUI = null, float additionalHeaderWidth = 0)
         {
             using (new EditorGUILayout.VerticalScope("FrameBox"))
             {
@@ -526,14 +555,27 @@ namespace BrunoMikoski.AnimationSequencer
                 rect.x += 10;
                 rect.width -= 10;
                 rect.y -= 4;
-                
-                foldout = EditorGUI.Foldout(rect, foldout, title);
-                
+
+                var foldoutRect = new Rect(rect)
+                {
+                    xMax = rect.xMax - additionalHeaderWidth,
+                };
+
+                var additionalHeaderRect = new Rect(rect)
+                {
+                    xMin = foldoutRect.xMax,
+                };
+
+                foldout = EditorGUI.Foldout(foldoutRect, foldout, title);
+
                 if (foldout)
+                {
+                    additionalHeaderGUI?.Invoke(additionalHeaderRect);
                     additionalInspectorGUI.Invoke();
+                }
             }
         }
-        
+
         private void OnDrawAnimationStep(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty element = reorderableList.serializedProperty.GetArrayElementAtIndex(index);
@@ -575,6 +617,15 @@ namespace BrunoMikoski.AnimationSequencer
             
             SerializedProperty element = reorderableList.serializedProperty.GetArrayElementAtIndex(index);
             return element.GetPropertyDrawerHeight();
+        }
+
+        private void SetStepsExpanded(bool expanded)
+        {
+            SerializedProperty animationStepsProperty = reorderableList.serializedProperty;
+            for (int i = 0; i < animationStepsProperty.arraySize; i++)
+            {
+                animationStepsProperty.GetArrayElementAtIndex(i).isExpanded = expanded;
+            }
         }
 
         private void SetDefaults()
