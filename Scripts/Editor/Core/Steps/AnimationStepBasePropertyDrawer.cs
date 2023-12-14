@@ -14,7 +14,7 @@ namespace BrunoMikoski.AnimationSequencer
 
             position.height = EditorGUIUtility.singleLineHeight;
             
-            property.isExpanded = EditorGUI.Foldout(position, property.isExpanded, label, EditorStyles.foldout);
+            property.isExpanded = EditorGUI.Foldout(position, property.isExpanded, label, true, EditorStyles.foldout);
 
             if (property.isExpanded)
             {
