@@ -13,6 +13,7 @@ using UnityEngine.Events;
 namespace BrunoMikoski.AnimationSequencer
 {
     [DisallowMultipleComponent]
+    [AddComponentMenu("UI/Animation Sequencer Controller", 200)]
     public class AnimationSequencerController : MonoBehaviour
     {
         public enum PlayType
