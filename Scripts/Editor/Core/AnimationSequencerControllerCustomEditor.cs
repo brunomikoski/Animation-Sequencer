@@ -39,11 +39,14 @@ namespace BrunoMikoski.AnimationSequencer
         private bool wasShowingStepsPanel;
         private bool justStartPreviewing;
 
+        private (float start, float end)[] previewingTimings;
+
         private void OnEnable()
         {
             sequencerController = target as AnimationSequencerController;
             reorderableList = new ReorderableList(serializedObject, serializedObject.FindProperty("animationSteps"), true, false, true, true);
             reorderableList.drawElementCallback += OnDrawAnimationStep;
+            reorderableList.drawElementBackgroundCallback += OnDrawAnimationStepBackground;
             reorderableList.elementHeightCallback += GetAnimationStepHeight;
             reorderableList.onAddDropdownCallback += OnClickToAddNew;
             reorderableList.onRemoveCallback += OnClickToRemove;
@@ -65,12 +68,18 @@ namespace BrunoMikoski.AnimationSequencer
 
         public override bool RequiresConstantRepaint()
         {
-            return true;
+            return DOTweenEditorPreview.isPreviewing;
+        }
+
+        public override bool UseDefaultMargins()
+        {
+            return false;
         }
 
         private void OnDisable()
         {
             reorderableList.drawElementCallback -= OnDrawAnimationStep;
+            reorderableList.drawElementBackgroundCallback -= OnDrawAnimationStepBackground;
             reorderableList.elementHeightCallback -= GetAnimationStepHeight;
             reorderableList.onAddDropdownCallback -= OnClickToAddNew;
             reorderableList.onRemoveCallback -= OnClickToRemove;
@@ -183,14 +192,17 @@ namespace BrunoMikoski.AnimationSequencer
                 SetDefaults();
             }
 
-            DrawFoldoutArea("Settings", ref showSettingsPanel, DrawSettings);
+            DrawFoldoutArea("Settings", ref showSettingsPanel, DrawSettings, DrawSettingsHeader);
             DrawFoldoutArea("Callback", ref showCallbacksPanel, DrawCallbacks);
             DrawFoldoutArea("Preview", ref showPreviewPanel, DrawPreviewControls);
             DrawFoldoutArea("Steps", ref showStepsPanel, DrawAnimationSteps, DrawAnimationStepsHeader, 50);
         }
 
-        private void DrawAnimationStepsHeader(Rect rect)
+        private void DrawAnimationStepsHeader(Rect rect, bool foldout)
         {
+            if (!foldout)
+                return;
+            
             var collapseAllRect = new Rect(rect)
             {
                 xMin = rect.xMax - 50,
@@ -246,6 +258,23 @@ namespace BrunoMikoski.AnimationSequencer
             }
             
             GUI.enabled = wasGUIEnabled;
+        }
+
+        private void DrawSettingsHeader(Rect rect, bool foldout)
+        {
+            var autoPlayModeSerializedProperty = serializedObject.FindProperty("autoplayMode");
+            var autoKillSerializedProperty = serializedObject.FindProperty("autoKill");
+
+            var autoplayMode = (AnimationSequencerController.AutoplayType) autoPlayModeSerializedProperty.enumValueIndex;
+            var autoKill = autoKillSerializedProperty.boolValue;
+
+            if (autoKill)
+                rect = DrawAutoSizedBadgeRight(rect, "Auto Kill", new Color(1f, 0.2f, 0f, 0.6f));
+
+            if (autoplayMode == AnimationSequencerController.AutoplayType.Awake)
+                rect = DrawAutoSizedBadgeRight(rect, "AutoPlay on Awake", new Color(1f, 0.7f, 0f, 0.6f));
+            else if (autoplayMode == AnimationSequencerController.AutoplayType.OnEnable)
+                rect = DrawAutoSizedBadgeRight(rect, "AutoPlay on Enable", new Color(1f, 0.7f, 0f, 0.6f));
         }
 
         private void DrawSettings()
@@ -439,6 +468,12 @@ namespace BrunoMikoski.AnimationSequencer
                     sequencerController.Play();
                     
                     DOTweenEditorPreview.PrepareTweenForPreview(sequencerController.PlayingSequence);
+
+                    if (AnimationSequencerSettings.GetInstance().DrawTimingsWhenPreviewing)
+                        previewingTimings = DoTweenProxy.GetTimings(sequencerController.PlayingSequence,
+                            sequencerController.AnimationSteps);
+                    else
+                        previewingTimings = null;
                 }
                 else
                 {
@@ -491,8 +526,10 @@ namespace BrunoMikoski.AnimationSequencer
 
             tweenProgress = GetCurrentSequencerProgress();
 
-            EditorGUILayout.LabelField("Progress");
-            tweenProgress = EditorGUILayout.Slider(tweenProgress, 0, 1);
+            var oldLabelWidth = EditorGUIUtility.labelWidth;
+            EditorGUIUtility.labelWidth = 65;
+            tweenProgress = EditorGUILayout.Slider("Progress", tweenProgress, 0, 1);
+            EditorGUIUtility.labelWidth = oldLabelWidth;
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -538,8 +575,10 @@ namespace BrunoMikoski.AnimationSequencer
             GUILayout.FlexibleSpace();
             EditorGUI.BeginChangeCheck();
             
-            EditorGUILayout.LabelField("TimeScale");
-            tweenTimeScale = EditorGUILayout.Slider(tweenTimeScale, 0, 2);
+            var oldLabelWidth = EditorGUIUtility.labelWidth;
+            EditorGUIUtility.labelWidth = 65;
+            tweenTimeScale = EditorGUILayout.Slider("TimeScale", tweenTimeScale, 0, 2);
+            EditorGUIUtility.labelWidth = oldLabelWidth;
 			
             UpdateSequenceTimeScale();
 
@@ -547,32 +586,89 @@ namespace BrunoMikoski.AnimationSequencer
         }
 
         private void DrawFoldoutArea(string title, ref bool foldout, Action additionalInspectorGUI,
-            Action<Rect> additionalHeaderGUI = null, float additionalHeaderWidth = 0)
+            Action<Rect, bool> additionalHeaderGUI = null, float additionalHeaderWidth = 0)
         {
-            using (new EditorGUILayout.VerticalScope("FrameBox"))
-            {
-                Rect rect = EditorGUILayout.GetControlRect();
-                rect.x += 10;
-                rect.width -= 10;
-                rect.y -= 4;
+            Rect rect = EditorGUILayout.GetControlRect();
 
-                var foldoutRect = new Rect(rect)
+            if (Event.current.type == EventType.Repaint)
+            {
+                GUI.skin.box.Draw(rect, false, false, false, false);
+            }
+
+            using (new EditorGUILayout.VerticalScope(AnimationSequencerStyles.InspectorSideMargins))
+            {
+                Rect rectWithMargins = new Rect(rect)
                 {
-                    xMax = rect.xMax - additionalHeaderWidth,
+                    xMin = rect.xMin + AnimationSequencerStyles.InspectorSideMargins.padding.left,
+                    xMax = rect.xMax - AnimationSequencerStyles.InspectorSideMargins.padding.right,
                 };
 
-                var additionalHeaderRect = new Rect(rect)
+                var foldoutRect = new Rect(rectWithMargins)
+                {
+                    xMax = rectWithMargins.xMax - additionalHeaderWidth,
+                };
+
+                var additionalHeaderRect = new Rect(rectWithMargins)
                 {
                     xMin = foldoutRect.xMax,
                 };
 
-                foldout = EditorGUI.Foldout(foldoutRect, foldout, title);
+                foldout = EditorGUI.Foldout(foldoutRect, foldout, title, true);
+
+                additionalHeaderGUI?.Invoke(additionalHeaderRect, foldout);
 
                 if (foldout)
                 {
-                    additionalHeaderGUI?.Invoke(additionalHeaderRect);
                     additionalInspectorGUI.Invoke();
+                    GUILayout.Space(10);
                 }
+            }
+        }
+
+        private void OnDrawAnimationStepBackground(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            if (Event.current.type == EventType.Repaint)
+            {
+                var titlebarRect = new Rect(rect)
+                {
+                    height = EditorGUIUtility.singleLineHeight,
+                };
+
+                AnimationSequencerStyles.InspectorTitlebar.Draw(titlebarRect, false, false, false, false);
+            }
+
+            if (Event.current.type == EventType.Repaint &&
+                DOTweenEditorPreview.isPreviewing &&
+                previewingTimings != null &&
+                index >= 0 && index < previewingTimings.Length)
+            {
+                var (start, end) = previewingTimings[index];
+
+                var progress = GetCurrentSequencerProgress();
+
+                var progressRect = new Rect(rect)
+                {
+                    xMin = Mathf.Lerp(rect.xMin, rect.xMax, start) - 1,
+                    xMax = Mathf.Lerp(rect.xMin, rect.xMax, end) + 1,
+                    height = EditorGUIUtility.singleLineHeight,
+                };
+
+                var markerRect = new Rect(rect)
+                {
+                    xMin = Mathf.Lerp(rect.xMin, rect.xMax, progress) - 1,
+                    xMax = Mathf.Lerp(rect.xMin, rect.xMax, progress) + 1,
+                    height = EditorGUIUtility.singleLineHeight,
+                };
+
+                var oldColor = GUI.color;
+
+                GUI.color = new Color(0f, 0.5f, 0f, 0.45f);
+                GUI.DrawTexture(progressRect, EditorGUIUtility.whiteTexture);
+
+                GUI.color = Color.black;
+                GUI.DrawTexture(markerRect, EditorGUIUtility.whiteTexture);
+
+                GUI.color = oldColor;
             }
         }
 
@@ -643,6 +739,29 @@ namespace BrunoMikoski.AnimationSequencer
                 sequencerController.SetLoops(AnimationControllerDefaults.Instance.Loops);
                 sequencerController.ResetComplete();
             }
+        }
+
+        private static Rect DrawAutoSizedBadgeRight(Rect rect, string text, Color color)
+        {
+            var style = AnimationSequencerStyles.Badge;
+            var size = style.CalcSize(EditorGUIUtility.TrTempContent(text));
+            var buttonRect = new Rect(rect)
+            {
+                xMin = rect.xMax - size.x,
+            };
+
+            if (Event.current.type == EventType.Repaint)
+            {
+                var oldColor = GUI.backgroundColor;
+                GUI.backgroundColor = color;
+                style.Draw(buttonRect, text, false, false, true, false);
+                GUI.backgroundColor = oldColor;
+            }
+
+            return new Rect(rect)
+            {
+                xMax = rect.xMax - size.x - style.margin.left,
+            };
         }
     }
 }
