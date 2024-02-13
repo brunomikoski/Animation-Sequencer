@@ -470,7 +470,7 @@ namespace BrunoMikoski.AnimationSequencer
                     DOTweenEditorPreview.PrepareTweenForPreview(sequencerController.PlayingSequence);
 
                     if (AnimationSequencerSettings.GetInstance().DrawTimingsWhenPreviewing)
-                        previewingTimings = DoTweenProxy.GetTimings(sequencerController.PlayingSequence,
+                        previewingTimings = DOTweenProxy.GetTimings(sequencerController.PlayingSequence,
                             sequencerController.AnimationSteps);
                     else
                         previewingTimings = null;

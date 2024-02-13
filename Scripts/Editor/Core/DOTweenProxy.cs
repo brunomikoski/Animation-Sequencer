@@ -1,14 +1,15 @@
-﻿namespace BrunoMikoski.AnimationSequencer
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Reflection;
-    using DG.Tweening;
-    using DG.Tweening.Core;
-    using UnityEditor;
-    using UnityEngine;
+﻿#if DOTWEEN_ENABLED
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using DG.Tweening;
+using DG.Tweening.Core;
+using UnityEditor;
+using UnityEngine;
 
-    internal static class DoTweenProxy
+namespace BrunoMikoski.AnimationSequencer
+{
+    internal static class DOTweenProxy
     {
         private static FieldInfo sequencedObjects;
         private static FieldInfo sequencedPosition;
@@ -90,3 +91,4 @@
         }
     }
 }
+#endif
