@@ -634,7 +634,10 @@ namespace BrunoMikoski.AnimationSequencer
                     height = EditorGUIUtility.singleLineHeight,
                 };
 
-                AnimationSequencerStyles.InspectorTitlebar.Draw(titlebarRect, false, false, false, false);
+                if (isActive)
+                    ReorderableList.defaultBehaviours.DrawElementBackground(rect, index, true, isFocused, false);
+                else
+                    AnimationSequencerStyles.InspectorTitlebar.Draw(titlebarRect, false, false, false, false);
             }
 
             if (Event.current.type == EventType.Repaint &&
