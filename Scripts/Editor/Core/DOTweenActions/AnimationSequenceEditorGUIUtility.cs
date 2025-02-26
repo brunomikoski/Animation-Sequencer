@@ -196,7 +196,7 @@ namespace BrunoMikoski.AnimationSequencer
             {
                 if (cachedPauseButtonGUIContent == null)
                 {
-                    cachedPauseButtonGUIContent = EditorGUIUtility.IconContent("PauseButton On");
+                    cachedPauseButtonGUIContent = EditorGUIUtility.IconContent("d_PauseButton@2x");
                     cachedPauseButtonGUIContent.tooltip = "Pause";
                 }
                 return cachedPauseButtonGUIContent;
@@ -210,7 +210,7 @@ namespace BrunoMikoski.AnimationSequencer
             {
                 if (cachedPlayButtonGUIContent == null)
                 {
-                    cachedPlayButtonGUIContent = EditorGUIUtility.IconContent("PlayButton On");
+                    cachedPlayButtonGUIContent = EditorGUIUtility.IconContent("d_PlayButton@2x");
                     cachedPlayButtonGUIContent.tooltip = "Play";
                 }
                 return cachedPlayButtonGUIContent;
