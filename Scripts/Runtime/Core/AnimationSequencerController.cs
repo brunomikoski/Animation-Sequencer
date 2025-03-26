@@ -464,12 +464,9 @@ namespace BrunoMikoski.AnimationSequencer
         }
 
 #if UNITASK_ENABLED
-        public async UniTask PlayAsync(CancellationToken cancellationTokenSource = default)
+        public async UniTask PlayAsync()
         {
-            if (cancellationTokenSource == default)
-                cancellationTokenSource = this.GetCancellationTokenOnDestroy();
-            
-            await PlayEnumerator().ToUniTask(PlayerLoopTiming.Update, cancellationTokenSource);
+            await PlayEnumerator().ToUniTask(this);
         }
 #endif
     }
