@@ -142,8 +142,6 @@ namespace BrunoMikoski.AnimationSequencer
 
             ClearPlayingSequence();
 
-            onFinishedEvent.RemoveAllListeners();
-
             if (onCompleteCallback != null)
                 onFinishedEvent.AddListener(onCompleteCallback.Invoke);
 
@@ -171,7 +169,6 @@ namespace BrunoMikoski.AnimationSequencer
                 Play();
 
             playTypeInternal = PlayType.Forward;
-            onFinishedEvent.RemoveAllListeners();
 
             if (onCompleteCallback != null)
                 onFinishedEvent.AddListener(onCompleteCallback.Invoke);
@@ -188,7 +185,6 @@ namespace BrunoMikoski.AnimationSequencer
                 Play();
 
             playTypeInternal = PlayType.Backward;
-            onFinishedEvent.RemoveAllListeners();
 
             if (onCompleteCallback != null)
                 onFinishedEvent.AddListener(onCompleteCallback.Invoke);
