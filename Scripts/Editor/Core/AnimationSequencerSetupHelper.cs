@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEditor;
+using UnityEditor.Build;
 using UnityEditor.Compilation;
 using UnityEngine;
 
@@ -37,25 +38,27 @@ namespace BrunoMikoski.AnimationSequencer
 
         private static void AddScriptingDefineSymbol()
         {
-            string scriptingDefineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
+            NamedBuildTarget namedBuildTarget = NamedBuildTarget.FromBuildTargetGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
+            string scriptingDefineSymbols = PlayerSettings.GetScriptingDefineSymbols(namedBuildTarget);
+
             if (scriptingDefineSymbols.Contains(SCRIPTING_DEFINE_SYMBOL))
                 return;
 
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup,
-                $"{scriptingDefineSymbols};{SCRIPTING_DEFINE_SYMBOL}");
-            
+            PlayerSettings.SetScriptingDefineSymbols(namedBuildTarget, $"{scriptingDefineSymbols};{SCRIPTING_DEFINE_SYMBOL}");
+
             Debug.Log($"Adding {SCRIPTING_DEFINE_SYMBOL} for {EditorUserBuildSettings.selectedBuildTargetGroup}");
         }
 
         private static void RemoveScriptingDefineSymbol()
         {
-            string scriptingDefineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
+            NamedBuildTarget namedBuildTarget = NamedBuildTarget.FromBuildTargetGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
+            string scriptingDefineSymbols = PlayerSettings.GetScriptingDefineSymbols(namedBuildTarget);
+
             if (!scriptingDefineSymbols.Contains(SCRIPTING_DEFINE_SYMBOL))
                 return;
 
             scriptingDefineSymbols = scriptingDefineSymbols.Replace(SCRIPTING_DEFINE_SYMBOL, string.Empty);
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup,
-                scriptingDefineSymbols);
+            PlayerSettings.SetScriptingDefineSymbols(namedBuildTarget, $"{scriptingDefineSymbols}");
         }
     }
 }

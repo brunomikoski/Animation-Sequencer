@@ -8,11 +8,6 @@ namespace BrunoMikoski.AnimationSequencer
     [CustomPropertyDrawer(typeof(DOTweenAnimationStep))]
     public class DOTweenAnimationStepPropertyDrawer : AnimationStepBasePropertyDrawer
     {
-        public override bool CanCacheInspectorGUI(SerializedProperty property)
-        {
-            return false;
-        }
-
         private void AddNewActionOfType(SerializedProperty actionsSerializedProperty, Type targetType)
         {
             actionsSerializedProperty.arraySize++;
