@@ -1,5 +1,8 @@
 ﻿#if DOTWEEN_ENABLED
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -92,7 +95,7 @@ namespace BrunoMikoski.AnimationSequencer
             }
         }
 
-        SerializedProperty GetParentArrayProperty(SerializedProperty property)
+         SerializedProperty GetParentArrayProperty(SerializedProperty property)
         {
             string path = property.propertyPath;
             int lastDot = path.LastIndexOf('.');
@@ -112,12 +115,97 @@ namespace BrunoMikoski.AnimationSequencer
             return int.Parse(indexStr);
         }
 
-        object CloneManagedReference(object obj)
+        FieldInfo[] GetAllFieldsIncludingBaseTypes(Type type, BindingFlags flags)
+        {
+            List<FieldInfo> fields = new List<FieldInfo>();
+            while (type != null)
+            {
+                fields.AddRange(type.GetFields(flags | BindingFlags.DeclaredOnly));
+                type = type.BaseType;
+            }
+            return fields.ToArray();
+        }
+
+        object CloneManagedReference(object obj, int depth = 2)
         {
             if (obj == null) return null;
 
-            var method = obj.GetType().GetMethod("MemberwiseClone", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-            return method.Invoke(obj, null);
+            if (depth == 0) return obj;
+
+            var type = obj.GetType();
+            object clone = System.Activator.CreateInstance(type);
+
+            var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            var fields = GetAllFieldsIncludingBaseTypes(type , flags);// type.GetFields(flags);
+
+            foreach (var field in fields)
+            {
+                // Skip private/protected fields without [SerializeField] or [SerializeReference]
+                if (!field.IsPublic)
+                {
+                    var isSeialized = field.GetCustomAttribute<SerializeField>() != null || field.GetCustomAttribute<SerializeReference>() != null;
+                    if (!isSeialized)
+                        continue;
+                }
+
+                var value = field.GetValue(obj);
+                if (field.FieldType.IsGenericType && field.FieldType.GetGenericTypeDefinition() == typeof(List<>))
+                {
+                    var list = (IList)obj;
+                    var clonedList = (IList)Activator.CreateInstance(field.FieldType);
+                    foreach (var item in list)
+                    {
+                        var clonedItem = CloneManagedReference(item, depth - 1);
+                        clonedList.Add(clonedItem);
+                    }
+                    field.SetValue(clone, clonedList);
+                }
+                else if (field.FieldType.IsArray)
+                {
+                    var elementType = field.FieldType.GetElementType();
+                    var array = (Array)value;
+                    var clonedArray = Array.CreateInstance(elementType, array.Length);
+                    for (int i = 0; i < array.Length; i++)
+                    {
+                        var clonedItem = CloneManagedReference(array.GetValue(i), depth - 1);
+                        clonedArray.SetValue(clonedItem, i);
+                    }
+                    field.SetValue(clone, clonedArray);
+                }
+                else if (IsManagedReferenceField(field))
+                {
+                    var duplicate = CloneManagedReference(value, depth - 1);
+                    field.SetValue(clone, duplicate);
+                }
+                else
+                {
+                    field.SetValue(clone, value);
+                }
+                
+            }
+
+            return clone;
+        }
+
+        bool IsManagedReferenceField(FieldInfo field)
+        {
+            var fieldType = field.FieldType;
+
+            //we are not cloning any unity object
+            if (fieldType == typeof(UnityEngine.Object))
+                return false;
+
+            // If it's object, abstract class, interface, or not sealed
+            if (fieldType == typeof(object))
+                return true;
+
+            if (fieldType.IsAbstract || fieldType.IsInterface)
+                return true;
+
+            if (!fieldType.IsSealed && !fieldType.IsValueType)
+                return true; // non-sealed class (polymorphic)
+
+            return false;
         }
     }
 }
