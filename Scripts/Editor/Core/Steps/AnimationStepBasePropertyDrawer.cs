@@ -10,6 +10,11 @@ namespace BrunoMikoski.AnimationSequencer
     {
         protected void DrawBaseGUI(Rect position, SerializedProperty property, GUIContent label, params string[] excludedPropertiesNames)
         {
+            if (GUI.Button(new Rect(position.width - 40, position.y+2, 80, EditorGUIUtility.singleLineHeight - 1), "Duplicate"))
+            {
+                DuplicateProperty(property);
+            }
+
             float originY = position.y;
 
             position.height = EditorGUIUtility.singleLineHeight;
@@ -63,6 +68,56 @@ namespace BrunoMikoski.AnimationSequencer
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             return property.GetPropertyDrawerHeight();
+        }
+
+        void DuplicateProperty(SerializedProperty property)
+        {
+            var parentArray = GetParentArrayProperty(property);
+            if (parentArray != null && parentArray.isArray)
+            {
+                int index = GetIndexInArray(property);
+
+                object sourceObject = property.managedReferenceValue;
+                object clonedObject = CloneManagedReference(sourceObject);
+
+                if (clonedObject != null)
+                {
+                    parentArray.InsertArrayElementAtIndex(index);
+
+                    var newElement = parentArray.GetArrayElementAtIndex(index + 1);
+                    newElement.managedReferenceValue = clonedObject;
+
+                    property.serializedObject.ApplyModifiedProperties();
+                }
+            }
+        }
+
+        SerializedProperty GetParentArrayProperty(SerializedProperty property)
+        {
+            string path = property.propertyPath;
+            int lastDot = path.LastIndexOf('.');
+            if (lastDot < 0)
+                return null;
+
+            string arrayPath = path.Substring(0, lastDot);
+            return property.serializedObject.FindProperty(arrayPath);
+        }
+
+        int GetIndexInArray(SerializedProperty property)
+        {
+            var path = property.propertyPath;
+            var start = path.IndexOf("[") + 1;
+            var end = path.IndexOf("]");
+            var indexStr = path.Substring(start, end - start);
+            return int.Parse(indexStr);
+        }
+
+        object CloneManagedReference(object obj)
+        {
+            if (obj == null) return null;
+
+            var method = obj.GetType().GetMethod("MemberwiseClone", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            return method.Invoke(obj, null);
         }
     }
 }
