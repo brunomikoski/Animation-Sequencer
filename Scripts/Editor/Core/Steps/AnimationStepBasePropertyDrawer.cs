@@ -1,4 +1,4 @@
-﻿#if DOTWEEN_ENABLED
+﻿
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -59,7 +59,8 @@ namespace BrunoMikoski.AnimationSequencer
                 if (EditorGUI.EndChangeCheck())
                     property.serializedObject.ApplyModifiedProperties();
             }
-            
+
+
             property.SetPropertyDrawerHeight(position.y - originY + EditorGUIUtility.singleLineHeight);
         }
         
@@ -95,7 +96,7 @@ namespace BrunoMikoski.AnimationSequencer
             }
         }
 
-         SerializedProperty GetParentArrayProperty(SerializedProperty property)
+        SerializedProperty GetParentArrayProperty(SerializedProperty property)
         {
             string path = property.propertyPath;
             int lastDot = path.LastIndexOf('.');
@@ -209,4 +210,3 @@ namespace BrunoMikoski.AnimationSequencer
         }
     }
 }
-#endif

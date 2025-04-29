@@ -1,4 +1,4 @@
-﻿#if DOTWEEN_ENABLED
+﻿
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -471,4 +471,3 @@ namespace BrunoMikoski.AnimationSequencer
 #endif
     }
 }
-#endif

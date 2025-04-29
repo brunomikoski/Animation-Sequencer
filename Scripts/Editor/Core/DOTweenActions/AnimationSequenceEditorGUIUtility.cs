@@ -1,4 +1,4 @@
-﻿#if DOTWEEN_ENABLED
+﻿
 using System;
 using System.Collections.Generic;
 using UnityEditor;
@@ -117,7 +117,7 @@ namespace BrunoMikoski.AnimationSequencer
         }
 
         private static GUIContent cachedBackButtonGUIContent;
-        internal static GUIContent BackButtonGUIContent
+        public static GUIContent BackButtonGUIContent
         {
             get
             {
@@ -132,7 +132,7 @@ namespace BrunoMikoski.AnimationSequencer
         }
         
         private static GUIContent cachedStepBackGUIContent;
-        internal static GUIContent StepBackGUIContent
+        public static GUIContent StepBackGUIContent
         {
             get
             {
@@ -147,7 +147,7 @@ namespace BrunoMikoski.AnimationSequencer
         }
         
         private static GUIContent cachedStepNextGUIContent;
-        internal static GUIContent StepNextGUIContent
+        public static GUIContent StepNextGUIContent
         {
             get
             {
@@ -162,7 +162,7 @@ namespace BrunoMikoski.AnimationSequencer
         }
         
         private static GUIContent cachedStopButtonGUIContent;
-        internal static GUIContent StopButtonGUIContent
+        public static GUIContent StopButtonGUIContent
         {
             get
             {
@@ -176,7 +176,7 @@ namespace BrunoMikoski.AnimationSequencer
         }
         
         private static GUIContent cachedForwardButtonGUIContent;
-        internal static GUIContent ForwardButtonGUIContent
+        public static GUIContent ForwardButtonGUIContent
         {
             get
             {
@@ -190,7 +190,7 @@ namespace BrunoMikoski.AnimationSequencer
         }
         
         private static GUIContent cachedPauseButtonGUIContent;
-        internal static GUIContent PauseButtonGUIContent
+        public static GUIContent PauseButtonGUIContent
         {
             get
             {
@@ -204,7 +204,7 @@ namespace BrunoMikoski.AnimationSequencer
         }
         
         private static GUIContent cachedPlayButtonGUIContent;
-        internal static GUIContent PlayButtonGUIContent
+        public static GUIContent PlayButtonGUIContent
         {
             get
             {
@@ -218,7 +218,7 @@ namespace BrunoMikoski.AnimationSequencer
         }
         
         private static GUIContent cachedSaveAsDefaultGUIContent;
-        internal static GUIContent SaveAsDefaultButtonGUIContent
+        public static GUIContent SaveAsDefaultButtonGUIContent
         {
             get
             {
@@ -232,4 +232,3 @@ namespace BrunoMikoski.AnimationSequencer
         }
     }
 }
-#endif

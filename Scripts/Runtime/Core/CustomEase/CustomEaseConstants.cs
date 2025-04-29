@@ -1,5 +1,4 @@
-﻿#if DOTWEEN_ENABLED
-using DG.Tweening;
+﻿using DG.Tweening;
 
 namespace BrunoMikoski.AnimationSequencer
 {
@@ -42,4 +41,3 @@ namespace BrunoMikoski.AnimationSequencer
         public static CustomEase InOutFlash => new CustomEase(Ease.InOutFlash);
     }
 }
-#endif

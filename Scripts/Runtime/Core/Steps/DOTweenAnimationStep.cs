@@ -1,5 +1,4 @@
-﻿#if DOTWEEN_ENABLED
-using System;
+﻿using System;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
@@ -86,4 +85,3 @@ namespace BrunoMikoski.AnimationSequencer
         }
     }
 }
-#endif

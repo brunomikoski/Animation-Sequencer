@@ -1,5 +1,4 @@
-﻿#if DOTWEEN_ENABLED
-using System;
+﻿using System;
 using DG.DOTweenEditor;
 using DG.Tweening;
 using UnityEditor;
@@ -768,4 +767,3 @@ namespace BrunoMikoski.AnimationSequencer
         }
     }
 }
-#endif

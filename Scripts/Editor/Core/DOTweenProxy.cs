@@ -1,4 +1,4 @@
-﻿#if DOTWEEN_ENABLED
+﻿
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace BrunoMikoski.AnimationSequencer
 {
-    internal static class DOTweenProxy
+    public static class DOTweenProxy
     {
         private static FieldInfo sequencedObjects;
         private static FieldInfo sequencedPosition;
@@ -91,4 +91,3 @@ namespace BrunoMikoski.AnimationSequencer
         }
     }
 }
-#endif

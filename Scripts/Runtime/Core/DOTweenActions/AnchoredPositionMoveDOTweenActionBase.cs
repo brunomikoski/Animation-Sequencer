@@ -1,5 +1,4 @@
-﻿#if DOTWEEN_ENABLED
-using System;
+﻿using System;
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
@@ -55,4 +54,3 @@ namespace BrunoMikoski.AnimationSequencer
         }
     }
 }
-#endif

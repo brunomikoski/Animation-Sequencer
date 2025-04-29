@@ -1,5 +1,4 @@
-﻿#if DOTWEEN_ENABLED
-using DG.Tweening;
+﻿using DG.Tweening;
 using UnityEngine;
 
 namespace BrunoMikoski.AnimationSequencer
@@ -64,4 +63,3 @@ namespace BrunoMikoski.AnimationSequencer
         public int Loops => loops;
     }
 }
-#endif

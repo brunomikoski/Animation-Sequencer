@@ -20,5 +20,9 @@
     "name": "Bruno Mikoski",
     "url": "https://www.brunomikoski.com"
   },
-  "type": "library"
+  "type": "library",
+  "publishConfig": {
+    "registry": "https://package.openupm.com"
+  },
+  "_fingerprint": "243cdf05289f3d2d1ff1c0c5d676ae7246295fa2"
 }

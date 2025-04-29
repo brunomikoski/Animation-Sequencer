@@ -1,4 +1,4 @@
-﻿#if DOTWEEN_ENABLED
+﻿
 using DG.Tweening;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
@@ -79,4 +79,3 @@ namespace BrunoMikoski.AnimationSequencer
         }
     }
 }
-#endif

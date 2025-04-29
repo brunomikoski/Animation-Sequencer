@@ -1,5 +1,4 @@
-﻿#if DOTWEEN_ENABLED
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -19,4 +18,3 @@ namespace BrunoMikoski.AnimationSequencer
         }
     }
 }
-#endif
