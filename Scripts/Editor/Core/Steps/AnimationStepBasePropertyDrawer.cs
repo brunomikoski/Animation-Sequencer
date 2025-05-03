@@ -4,7 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
+using UnityEditor.Events;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace BrunoMikoski.AnimationSequencer
 {
@@ -171,6 +173,40 @@ namespace BrunoMikoski.AnimationSequencer
                         clonedArray.SetValue(clonedItem, i);
                     }
                     field.SetValue(clone, clonedArray);
+                }
+                else if (typeof(UnityEventBase).IsAssignableFrom(field.FieldType))
+                {
+                    var originalEvent = (UnityEventBase)value;
+                    var clonedEvent = Activator.CreateInstance(field.FieldType) as UnityEventBase;
+
+                    if (originalEvent is UnityEvent originalUnityEvent && clonedEvent is UnityEvent clonedUnityEvent)
+                    {
+                        int count = originalUnityEvent.GetPersistentEventCount();
+                        for (int i = 0; i < count; i++)
+                        {
+                            var target = originalUnityEvent.GetPersistentTarget(i);
+                            var methodName = originalUnityEvent.GetPersistentMethodName(i);
+
+                            if (target != null && !string.IsNullOrEmpty(methodName))
+                            {
+                                var method = target.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                                if (method != null)
+                                {
+                                    var action = Delegate.CreateDelegate(typeof(UnityAction), target, method, false) as UnityAction;
+                                    if (action != null)
+                                    {
+                                        UnityEventTools.AddPersistentListener(clonedUnityEvent, action);
+                                    }
+                                }
+                            }
+                        }
+
+                        field.SetValue(clone, clonedUnityEvent);
+                    }
+                    else
+                    {
+                        field.SetValue(clone, clonedEvent);
+                    }
                 }
                 else if (IsManagedReferenceField(field))
                 {
