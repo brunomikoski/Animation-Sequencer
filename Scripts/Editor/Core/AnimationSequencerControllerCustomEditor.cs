@@ -442,8 +442,8 @@ namespace BrunoMikoski.AnimationSequencer
             if (!sequencerController.IsPlaying)
                 PlaySequence();
             
-            sequencerController.PlayingSequence.Goto((sequencerController.PlayingSequence.ElapsedPercentage() -
-                                                      0.01f) * sequencerController.PlayingSequence.Duration());
+            sequencerController.PlayingSequence.GotoWithCallbacks((sequencerController.PlayingSequence.ElapsedPercentage() -
+                                                                   0.01f) * sequencerController.PlayingSequence.Duration());
         }
 
         private void StepNext()
@@ -451,8 +451,8 @@ namespace BrunoMikoski.AnimationSequencer
             if (!sequencerController.IsPlaying)
                 PlaySequence();
 
-            sequencerController.PlayingSequence.Goto((sequencerController.PlayingSequence.ElapsedPercentage() +
-                                                      0.01f) * sequencerController.PlayingSequence.Duration());
+            sequencerController.PlayingSequence.GotoWithCallbacks((sequencerController.PlayingSequence.ElapsedPercentage() +
+                                                                   0.01f) * sequencerController.PlayingSequence.Duration());
         }
 
         private void PlaySequence()
@@ -550,7 +550,7 @@ namespace BrunoMikoski.AnimationSequencer
             if (!sequencerController.IsPlaying)
                 PlaySequence();
 
-            sequencerController.PlayingSequence.Goto(tweenProgress *
+            sequencerController.PlayingSequence.GotoWithCallbacks(tweenProgress *
                                                      sequencerController.PlayingSequence.Duration());
         }
 
@@ -566,7 +566,7 @@ namespace BrunoMikoski.AnimationSequencer
 
         private void SetCurrentSequenceProgress(float progress)
         {
-            sequencerController.PlayingSequence.Goto(progress *
+            sequencerController.PlayingSequence.GotoWithCallbacks(progress *
                                                      sequencerController.PlayingSequence.Duration());
         }
 

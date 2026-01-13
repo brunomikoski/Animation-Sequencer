@@ -10,6 +10,9 @@ namespace BrunoMikoski.AnimationSequencer
     public sealed class InvokeCallbackAnimationStep : AnimationStepBase
     {
         [SerializeField]
+        [Tooltip("Controls whether this callback should be invoked during calls to AnimationSequencerController's Complete() function")]
+        private bool invokeOnSkipToEnd = false;
+        [SerializeField]
         private UnityEvent callback = new UnityEvent();
         public UnityEvent Callback
         {
@@ -18,13 +21,20 @@ namespace BrunoMikoski.AnimationSequencer
         }
 
         public override string DisplayName => "Invoke Callback";
-        
+
+        public bool AllowCallbacks { get; set; } = true;
 
         public override void AddTweenToSequence(Sequence animationSequence)
         {
             Sequence sequence = DOTween.Sequence();
             sequence.SetDelay(Delay);
-            sequence.AppendCallback(() => callback.Invoke());
+            sequence.AppendCallback(() =>
+            {
+                if (AllowCallbacks && !IsSkippingToEnd || invokeOnSkipToEnd)
+                {
+                    callback.Invoke();
+                }
+            });
             
             if (FlowType == FlowType.Append)
                 animationSequence.Append(sequence);

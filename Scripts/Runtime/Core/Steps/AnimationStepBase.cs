@@ -26,6 +26,8 @@ namespace BrunoMikoski.AnimationSequencer
         {
             return $"{index}. {this}";
         }
+
+        public bool IsSkippingToEnd { get; set; }
     }
 }
 #endif
