@@ -244,8 +244,31 @@ namespace BrunoMikoski.AnimationSequencer
         {
             if (playingSequence == null)
                 return;
+            
+            // Prepare for Complete().
+            for (int i = 0; i < animationSteps.Length; i++)
+            {
+                AnimationStepBase animationStepBase = animationSteps[i];
+                animationStepBase.IsSkippingToEnd = true;
+                if (animationStepBase is InvokeCallbackAnimationStep invokeCallbackStep)
+                {
+                    invokeCallbackStep.AllowCallbacks = withCallbacks;
+                }
+            }
 
-            playingSequence.Complete(withCallbacks);
+            // Always fire callbacks so the Set steps are always fired.
+            playingSequence.Complete(withCallbacks: true);
+
+            // Reset.
+            for (int i = 0; i < animationSteps.Length; i++)
+            {
+                AnimationStepBase animationStepBase = animationSteps[i];
+                animationStepBase.IsSkippingToEnd = false;
+                if (animationStepBase is InvokeCallbackAnimationStep invokeCallbackStep)
+                {
+                    invokeCallbackStep.AllowCallbacks = true;
+                }
+            }
         }
 
         public virtual void Rewind(bool includeDelay = true)
