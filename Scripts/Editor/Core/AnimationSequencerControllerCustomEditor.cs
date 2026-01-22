@@ -442,6 +442,7 @@ namespace BrunoMikoski.AnimationSequencer
             if (!sequencerController.IsPlaying)
                 PlaySequence();
             
+            // Always uses GotoWithCallbacks() rather than GoTo() to ensure Set steps work as intended.
             sequencerController.PlayingSequence.GotoWithCallbacks((sequencerController.PlayingSequence.ElapsedPercentage() -
                                                                    0.01f) * sequencerController.PlayingSequence.Duration());
         }
@@ -451,6 +452,7 @@ namespace BrunoMikoski.AnimationSequencer
             if (!sequencerController.IsPlaying)
                 PlaySequence();
 
+            // Always uses GotoWithCallbacks() rather than GoTo() to ensure Set steps work as intended.
             sequencerController.PlayingSequence.GotoWithCallbacks((sequencerController.PlayingSequence.ElapsedPercentage() +
                                                                    0.01f) * sequencerController.PlayingSequence.Duration());
         }
@@ -550,6 +552,7 @@ namespace BrunoMikoski.AnimationSequencer
             if (!sequencerController.IsPlaying)
                 PlaySequence();
 
+            // Always uses GotoWithCallbacks() rather than GoTo() to ensure Set steps work as intended.
             sequencerController.PlayingSequence.GotoWithCallbacks(tweenProgress *
                                                      sequencerController.PlayingSequence.Duration());
         }
@@ -566,6 +569,7 @@ namespace BrunoMikoski.AnimationSequencer
 
         private void SetCurrentSequenceProgress(float progress)
         {
+            // Always uses GotoWithCallbacks() rather than GoTo() to ensure Set steps work as intended.
             sequencerController.PlayingSequence.GotoWithCallbacks(progress *
                                                      sequencerController.PlayingSequence.Duration());
         }

@@ -195,15 +195,22 @@ namespace BrunoMikoski.AnimationSequencer
             playingSequence.PlayBackwards();
         }
 
-        public virtual void SetTime(float seconds, bool andPlay = true)
+        public virtual void SetTime(float seconds, bool andPlay = true, bool withCallbacks = false)
         {
             if (playingSequence == null)
                 Play();
+            
+            // Prepare for GotoWithCallbacks().
+            PrepareStepsForTimeChange(withCallbacks: withCallbacks, isSkippingToEnd: false);
 
-            playingSequence.Goto(seconds, andPlay);
+            // Always uses GotoWithCallbacks() rather than GoTo() to ensure Set steps work as intended.
+            playingSequence.GotoWithCallbacks(seconds, andPlay);
+            
+            // Reset.
+            ResetStepsAfterTimeChange();
         }
 
-        public virtual void SetProgress(float targetProgress, bool andPlay = true)
+        public virtual void SetProgress(float targetProgress, bool andPlay = true, bool withCallbacks = false)
         {
             if (playingSequence == null)
                 Play();
@@ -212,7 +219,7 @@ namespace BrunoMikoski.AnimationSequencer
             
             float duration = playingSequence.Duration();
             float finalTime = targetProgress * duration;
-            SetTime(finalTime, andPlay);
+            SetTime(finalTime, andPlay, withCallbacks);
         }
 
         public virtual void TogglePause()
@@ -246,29 +253,31 @@ namespace BrunoMikoski.AnimationSequencer
                 return;
             
             // Prepare for Complete().
-            for (int i = 0; i < animationSteps.Length; i++)
-            {
-                AnimationStepBase animationStepBase = animationSteps[i];
-                animationStepBase.IsSkippingToEnd = true;
-                if (animationStepBase is InvokeCallbackAnimationStep invokeCallbackStep)
-                {
-                    invokeCallbackStep.AllowCallbacks = withCallbacks;
-                }
-            }
+            PrepareStepsForTimeChange(withCallbacks: withCallbacks, isSkippingToEnd: true);
 
             // Always fire callbacks so the Set steps are always fired.
             playingSequence.Complete(withCallbacks: true);
 
             // Reset.
+            ResetStepsAfterTimeChange();
+        }
+
+        private void PrepareStepsForTimeChange(bool withCallbacks, bool isSkippingToEnd)
+        {
             for (int i = 0; i < animationSteps.Length; i++)
             {
                 AnimationStepBase animationStepBase = animationSteps[i];
-                animationStepBase.IsSkippingToEnd = false;
+                animationStepBase.IsSkippingToEnd = isSkippingToEnd;
                 if (animationStepBase is InvokeCallbackAnimationStep invokeCallbackStep)
                 {
-                    invokeCallbackStep.AllowCallbacks = true;
+                    invokeCallbackStep.AllowCallbacks = withCallbacks;
                 }
             }
+        }
+
+        private void ResetStepsAfterTimeChange()
+        {
+            PrepareStepsForTimeChange(withCallbacks: true, isSkippingToEnd: false);
         }
 
         public virtual void Rewind(bool includeDelay = true)
