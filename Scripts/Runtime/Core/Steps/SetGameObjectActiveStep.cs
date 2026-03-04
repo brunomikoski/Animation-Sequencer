@@ -31,9 +31,6 @@ namespace BrunoMikoski.AnimationSequencer
         public override void AddTweenToSequence(Sequence animationSequence)
         {
             wasActive = targetGameObject.activeSelf;
-            if (wasActive == active)
-                return;
-
             Sequence behaviourSequence = DOTween.Sequence();
             behaviourSequence.SetDelay(Delay);
 
